@@ -1,0 +1,156 @@
+mat-card {
+  width: 100%;
+}
+
+.btnfield .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btnfield .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.btnfield:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
+.btnfield {
+  color: blue;
+  background-color: white;
+  width: 13% !important;
+  margin-top: -11% !important;
+  margin-left: 85% !important;
+  background-color: white;
+  height: 10% !important;
+  width: 15% !important;
+  border-color: black;
+}
+
+.title {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.deco {
+  color: green;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.decbtn {
+  background-color: blue;
+  color: white;
+  margin-left: 82% !important;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.fontsty {
+  font-size: 20px;
+  line-height: 1.6;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  outline: none;
+}
+
+.example-card {
+  max-width: 400px;
+  margin: 3px;
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.example-form {
+  min-width: 100px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+mat-icon {
+  cursor: pointer;
+  font-size: 1rem;
+  outline: none;
+}
+
+.maincard {
+  box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.15);
+  border-radius: 22px;
+  clear: both;
+  // background-color: red !important;
+}
+
+.addcountry {
+  float: right;
+}
+
+.zsoonimg {
+  border-radius: 50%;
+}
+
+.img{
+  margin-left: 12% !important;
+}
+
+// .cardborder{
+//   border-style: ridge;
+// }
+
+.marginclass{
+//  background-color: blue;
+}
+
+i {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 768px) {
+  .addcountry {
+    background-color: red;
+  }
+}
+.example-action-button {
+  margin-top: 16px;
+}
+
+@media (min-width: 1200px) {
+  .form-inline .form-group{
+
+  }
+ }
+
+// @media only screen and (max-width: 1901px) {
+//   .form-control{
+//     // background: red;
+//     width: 70% !important;
+//   }
+// }

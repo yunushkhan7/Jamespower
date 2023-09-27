@@ -1,0 +1,161 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid" *ngIf="addToken == false ">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2 class="user">Accredify API</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="addcountry" (click)="AddToken()">
+            <i class="fa fa-plus"></i> Create Token
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('appName')"> App Name&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('appID')"> App Id&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('lastUpdatedDate')"> Created On&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('lastUpdatedBy')"> Created By&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('lastusedon')"> Last Used On&nbsp;<i class="fa fa-sort"></i></th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let tokendetail of tokens
+                | paginate: { itemsPerPage: pageno, currentPage: q }
+                | filter: searchText | orderBy: key: !reverse">
+                  <td>{{tokendetail.appName}}</td>
+                  <td>{{tokendetail.appID}}</td>
+                  <td>{{tokendetail.lastUpdatedDate}}</td>
+                  <td>{{tokendetail.lastUpdatedBy}}</td>
+                  <td>{{tokendetail.lastusedon}}</td>
+                  <td>
+                    <i class="fa fa-trash text-danger ml-1" title="delete" (click)="DeleteToken(tokendetail.id)"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!tokens?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- adduser starts -->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="addToken == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Add Accridify API Details</h2>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label> App Name</mat-label>
+              <input matInput placeholder="Enter App Name" type="text" [formControl]="AppName"
+                [errorStateMatcher]="matcher" [(ngModel)]="insertapi.appName" name="appName" />
+              <mat-error *ngIf="AppName.hasError('required')">App name is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Remarks</mat-label>
+              <input matInput placeholder="Enter Remarks" type="text" [formControl]="Remarks"
+                [errorStateMatcher]="matcher" [(ngModel)]="insertapi.remarks" name="remarks" />
+              <mat-error *ngIf="Remarks.hasError('required')">remarks is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <br><br>
+      <div class="text-right">
+        <button color="primary" class="m-1" mat-raised-button (click)="openDialogWithTemplateRef(insertapi, myDialog1)">
+          Save </button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- adduser ends -->
+
+
+<!-- Create Token Popup -->
+<ng-template #myDialog1>
+  <mat-dialog-content style="width: 650px; height: 750px;">
+    <span matDialogClose style="float: right;"><i class="fa fa-times" aria-hidden="true"></i></span>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <br><br>
+          <h1 class="title"><b>Create Token</b></h1>
+          <h4 class="deco"><b>Token created Successfully</b></h4>
+          <p class="fontsty">Please make a note of this token as it will be only time that you will be able to view it.
+            After this, it will be stored as a hash for your protection </p>
+          <br><br><br>
+          <h5>Token Value</h5>
+          <input class="form-control  input--textfield" type="text" value="copy" [(ngModel)]="apiTokenValue" #copyvalue
+            readonly>
+            <div (mouseover)='over()' (mouseout)='out()'>
+              <button #tooltip="matTooltip" matTooltip="{{msg}}"
+              aria-label="Button that displays a tooltip when focused or hovered" class="btn btnfield" tooltip="Text"
+               (click)="copyInputMessage(copyvalue,tooltip)">
+              <i class="fa fa-clipboard" style="color: blue;" aria-hidden="true"></i>
+            </button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <br><br>
+    <div>
+      <button class="decbtn" mat-raised-button matDialogClose> Ok, got it </button>
+    </div>
+  </mat-dialog-content>
+</ng-template>
+<!-- Create Token popup end -->

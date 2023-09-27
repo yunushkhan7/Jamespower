@@ -1,0 +1,159 @@
+.img {
+    margin-left: 30% !important;
+}
+
+.decbtn {
+    background-color: white;
+    border-color: black;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 100% !important;
+    margin-top: 25% !important;
+    width: 23% !important;
+}
+
+input {
+    box-shadow: none !important
+}
+
+input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.error {
+    border-color: red !important;
+}
+
+.adjimg {
+    width: 296px;
+    height: 400px !important;
+}
+
+// mat-dialog-content{
+//   background-color: rgba(255, 255, 255, 0.7) !important;
+// }
+.xyz {
+    transform: none;
+    background: transparent;
+}
+
+.adj {
+    // margin-top: 40% !important;
+    margin-left: -100% !important;
+    zoom: 1.5 !important;
+}
+
+// .col-form-label {
+//     width: 35%;
+// }
+// .form-control {
+//     width: 60%;
+// }
+.maincard {
+    box-shadow: 0 6px 10px -4px rgba(0, 0, 0, .15);
+    border-radius: 18px;
+    clear: both;
+}
+
+.url {
+    height: 211px !important;
+    width: 85% !important;
+    border-radius: 70%;
+    position: relative;
+    bottom: 14px;
+    left: 21px;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25) !important;
+    cursor: pointer;
+}
+
+.url:hover.con {
+    background-color: red
+}
+
+button {
+    outline: none !important;
+}
+
+.con {
+    background-color: red;
+    visibility: hidden;
+}
+
+.correct {
+    color: green !important;
+    font-size: 11px;
+}
+
+.correct:before {
+    color: green !important;
+    position: relative;
+    left: -35px;
+    content: "✔";
+    width: 600 !important;
+    padding-left: 30px;
+    margin: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 11px;
+}
+
+.wrong {
+    color: #dc3545 !important;
+    font-size: 11px;
+}
+
+.wrong:before {
+    position: relative;
+    color: #dc3545 !important;
+    left: -35px;
+    content: "✖";
+    width: 600 !important;
+    padding-left: 30px;
+    margin: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 11px;
+}
+
+.maincards {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 18px;
+}
+
+.btn2 {
+    position: relative;
+    top: 78px;
+    float: right;
+}
+
+// .description {
+//     position: absolute;
+//     z-index: 4;
+//     margin-top: 50px;
+// }
+@media (min-width: 768px) {
+    .form-group {
+        margin-top: 8px;
+    }
+}
+
+@media (min-width: 576px) {
+    .form-group {
+        margin-top: 8px;
+    }
+}
+
+@media (min-width: 1199.98px) {
+    .space-y {
+        margin-top: 15px;
+    }
+}
+
+ ::ng-deep mat-dialog-container {
+    background-color: transparent !important;
+}

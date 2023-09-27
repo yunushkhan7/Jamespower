@@ -1,0 +1,85 @@
+<ngx-spinner> </ngx-spinner>
+<div class="container-fluid">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>SMTP Settings</h2>
+                </div>
+                <div class="col-lg-6">
+                    <button mat-raised-button color="primary" class="test" (click)="SendTestEmail()">Send Test Email</button>
+                </div>
+                <!-- <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="sendemail" (click)="SendTestEmail()">
+            Send Test Email
+          </button>
+        </div> -->
+
+            </div>
+            <hr />
+
+            <form [formGroup]="DeleteAgeform">
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h3>Hostname</h3>
+                        <input type="text" formControlName="patientReg" class="form-control" name="hostName" [(ngModel)]="retention.hostName" placeholder="Enter Hostname" [ngClass]="{ 'is-invalid': submitted && f.patientReg.errors }">
+                        <div *ngIf="submitted && f.patientReg.errors" class="invalid-feedback">
+                            <div *ngIf="f.patientReg.errors.required">Hostname is required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h3>Port No</h3>
+                        <input type="text" formControlName="userlog" class="form-control" maxlength="5" name="portNO" [(ngModel)]="retention.portNO" placeholder="Enter Portno" (keypress)="keyPressContact($event)" [ngClass]="{ 'is-invalid': submitted && f.userlog.errors }">
+                        <div *ngIf="submitted && f.userlog.errors" class="invalid-feedback">
+                            <div *ngIf="f.userlog.errors.required">Portno is required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h3>From Email</h3>
+                        <input type="text" formControlName="systemlogs" [(ngModel)]="retention.fromEmail" name="fromEmail" class="form-control" placeholder="Enter Email" [ngClass]="{ 'is-invalid': submitted && f.systemlogs.errors }">
+                        <div *ngIf="submitted && f.systemlogs.errors" class="invalid-feedback">
+                            <div *ngIf="f.systemlogs.errors.required">Email is required</div>
+                            <div *ngIf="f.systemlogs.errors.email">Enter valid email ex: abc@gmail.com</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h3>Send Username</h3>
+                        <input type="text" formControlName="Username" [(ngModel)]="retention.senderName" name="senderName" class="form-control" placeholder="Enter Username" [ngClass]="{ 'is-invalid': submitted && f.Username.errors }">
+                        <div *ngIf="submitted && f.Username.errors" class="invalid-feedback">
+                            <div *ngIf="f.Username.errors.required">Username is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h3> Password </h3>
+                        <input type="password" formControlName="Password" [type]="hide ? 'password' : 'text'" [(ngModel)]="retention.passwordMail" name="passwordMail" class="form-control" placeholder="Enter Password" [ngClass]="{ 'is-invalid': submitted && f.Password.errors }">
+                        <i class="fa fa-eye" (click)="hide = !hide" *ngIf="!hide"></i>
+                        <i class="fa fa-eye-slash" *ngIf="hide" (click)="hide = !hide"></i>
+                        <i></i>
+                        <div *ngIf="submitted && f.Password.errors" class="invalid-feedback">
+                            <div *ngIf="f.Password.errors.required">Password is required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="buttons">
+                            <button mat-raised-button color="primary" class="mr-1" (click)="Submit(retention)">Submit</button>
+                            <button mat-raised-button color="info" class="ml-1" (click)="Reset()">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </mat-card>
+</div>

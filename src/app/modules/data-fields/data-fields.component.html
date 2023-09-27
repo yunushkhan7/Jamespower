@@ -1,0 +1,260 @@
+<ngx-spinner></ngx-spinner>
+<!-- table starts -->
+<div class="container-fluid" *ngIf="editlocation == false && addlocation == false">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h2>Data Fields</h2>
+                </div>
+                <div class="col-12 col-md-6">
+                    <!-- <button mat-raised-button color="primary" class="addcustomer" (click)="AddLocation()">
+            <i class="fa fa-plus"></i> Add Data Fields
+          </button> -->
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+                </div>
+                <div class="col-12 col-md-3 ml-auto">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label><i class="fa fa-search"></i> Search</mat-label>
+                            <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText" autocomplete="off" />
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-stripped table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <th (click)="sort('id')">No &nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('dataField')">Data field&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('isMandatory')">Is Mandatory&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('isVisible')">Is Visible&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('lastEditedBy')">Last Edited By&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('lastEditedOn')">Last Edit On&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" *ngFor="let data of dataList
+                  | paginate: { itemsPerPage: pageno, currentPage: q }
+                  | filter: searchText  | orderBy: key: !reverse; let i=index;">
+                                    <td>{{data.id}}</td>
+                                    <td>{{data.dataField}}</td>
+                                    <td *ngIf="data.isMandatory">Y</td>
+                                    <td *ngIf="!data.isMandatory">N</td>
+
+                                    <td *ngIf="data.isVisible">Y</td>
+                                    <td *ngIf="!data.isVisible">N</td>
+
+                                    <td>{{data.lastEditedBy | date:'dd/MM/yyyy'}}</td>
+                                    <td>{{data.lastEditedOn | date:'dd/MM/yyyy'}}</td>
+                                    <td>
+
+                                        <i class="fa fa-edit text-primary " disabled title="edit" (click)="EditLocation(data)"></i>
+                                        <!-- <i class="fa fa-trash text-danger ml-1" title="delete" (click)="deleteDataFeild(data.id)"></i> -->
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="20">
+                                        <div *ngIf="!dataList?.length" style="text-align: center">
+                                            No records found
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- add location starts -->
+<mat-card class="maincard" *ngIf="addlocation == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Add Location</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Data Field</mat-label>
+                        <input matInput placeholder="Enter Name" name="name" [formControl]="Name" [errorStateMatcher]="matcher" [(ngModel)]="insertlocation.dataField" type="text" />
+                        <mat-error *ngIf="Name.hasError('required')">Location is required</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Is Mandatory</mat-label>
+                        <mat-select [(ngModel)]="insertlocation.isMandatory" name="isMandatory" (selectionChange)="mandatoryChange($event.value)">
+                            <mat-option *ngFor="let boolean of booleanList" value="{{boolean.value}}">
+                                {{boolean.name}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <input matInput placeholder="Enter Contact" name="address" [formControl]="Address" [errorStateMatcher]="matcher" [(ngModel)]="updatelocatiion.isMandatory" type="text" /> -->
+                        <mat-error *ngIf="Address.hasError('required')"> address is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Is Visible</mat-label>
+                        <mat-select [(ngModel)]="insertlocation.isVisible" name="isVisible" (selectionChange)="visibleChange($event.value)">
+                            <mat-option *ngFor="let boolean of booleanList" value="{{boolean.value}}">
+                                {{boolean.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Name.hasError('required')">Location is required</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Last Edited By</mat-label>
+                        <input matInput placeholder="Enter Contact" name="address" [formControl]="Address" [errorStateMatcher]="matcher" [(ngModel)]="insertlocation.lastEditedBy" type="date" />
+                        <mat-error *ngIf="Address.hasError('required')"> address is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Last Edited On</mat-label>
+                        <input matInput placeholder="Enter the remarks" name="remarks" [formControl]="Remarks" [errorStateMatcher]="matcher" [(ngModel)]="insertlocation.lastEditedOn" type="date" />
+                        <mat-error *ngIf="Remarks.hasError('required')"> Remark is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <!-- <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Default Email</mat-label>
+            <input matInput placeholder="Enter the email" name="email" [formControl]="Email"
+              [errorStateMatcher]="matcher" [(ngModel)]="insertlocation.email" type="text" />
+            <mat-error *ngIf="Email.hasError('pattern')"> Enter Valid Email </mat-error>
+          </mat-form-field>
+        </form>
+      </div> -->
+        </div>
+
+
+
+        <div class="text-right">
+            <button mat-raised-button color="primary" class="m-1" (click)="SaveLocation(insertlocation)">Save</button>
+            <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+        </div>
+    </div>
+</mat-card>
+
+<!-- edit location -->
+<mat-card class="maincard" *ngIf="editlocation == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Edit Location</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Data Field</mat-label>
+                        <input matInput placeholder="Enter Name" name="name" [formControl]="Name" [errorStateMatcher]="matcher" [(ngModel)]="updatelocatiion.dataField" type="text" />
+                        <mat-error *ngIf="Name.hasError('required')">Location is required</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Is Mandatory</mat-label>
+                        <mat-select [(ngModel)]="updatelocatiion.isMandatory" name="isMandatory">
+                            <mat-option *ngFor="let boolean of booleanList" [value]="boolean.value">
+                                {{boolean.name}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <input matInput placeholder="Enter Contact" name="address" [formControl]="Address" [errorStateMatcher]="matcher" [(ngModel)]="updatelocatiion.isMandatory" type="text" /> -->
+                        <mat-error *ngIf="Address.hasError('required')"> address is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Is Visible</mat-label>
+                        <mat-select [(ngModel)]="updatelocatiion.isVisible" name="isVisible">
+                            <mat-option *ngFor="let boolean of booleanList" [value]="boolean.value">
+                                {{boolean.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Name.hasError('required')">Location is required</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Last Edited By</mat-label>
+                        <input matInput placeholder="Enter Contact" name="lastEditedBy" [formControl]="Address" [errorStateMatcher]="matcher" [(ngModel)]="updatelocatiion.lastEditedBy" type="date" />
+                        <mat-error *ngIf="Address.hasError('required')"> address is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Last Edited On</mat-label>
+                        <input matInput placeholder="Enter Contact" name="lastEditedOn" [(ngModel)]="updatelocatiion.lastEditedOn" type="date" />
+                        <!-- <mat-error *ngIf="Remarks.hasError('required')"> Remark is required </mat-error> -->
+                    </mat-form-field>
+                </form>
+            </div>
+
+        </div>
+
+
+    </div>
+    <div class="text-right">
+        <button mat-raised-button color="primary" class="m-1" (click)="UpdateLocation(updatelocatiion)">Update</button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+    </div>
+</mat-card>

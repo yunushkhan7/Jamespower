@@ -1,0 +1,380 @@
+// accordion tab starts
+.accordion-tab>label {
+    display: block;
+    position: relative;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 17.7px;
+    font-family: "Roboto", sans-serif;
+    // transition: all .4s;
+}
+
+.accordion-tab .ul {
+    padding: 11px;
+    margin: -14px;
+    margin-top: -24px;
+}
+
+.accordion-tab .a {
+    margin: 30px;
+}
+
+.accordion-tab .a:hover {
+    color: #e84118;
+    text-decoration: none;
+}
+
+.accordion-tab>label:hover {
+    background: linear-gradient(to left, rgba(40, 82, 122), rgba(21, 151, 187));
+    // background-color: #e84118;
+    color: white;
+    outline: none;
+}
+
+.accordion-tab>.accordion-content {
+    max-height: 0;
+    transition: all 0.5s;
+    overflow: hidden;
+}
+
+.accordion-tab>.accordion-toggle:checked~.accordion-content {
+    max-height: 50vh;
+    // padding: 5px;
+}
+
+.accordion-tab .accordion-toggle {
+    display: none;
+}
+
+.accordion-tab>label:after {
+    content: "\f078";
+    font-family: fontawesome;
+    position: absolute;
+    top: 11px;
+    right: 14px;
+    transform: rotate(-90deg);
+    transition: transform 0.3s;
+    font-size: 10px;
+}
+
+.accordion-tab>.accordion-toggle:checked~label:after {
+    transform: rotate(4deg);
+}
+
+.accordion-tab .circle {
+    font-size: 7px;
+    position: relative;
+    bottom: 3px;
+}
+
+// accordion tab ends
+.label a {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 0.97rem;
+}
+
+.label a:hover {
+    background-color: #e84118;
+    color: white;
+}
+
+.accordion-tab1>label {
+    display: block;
+    outline: none;
+    position: relative;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 17.7px;
+}
+
+.accordion-tab1>label:hover {
+    background-color: #e84118;
+    color: #fff;
+    outline: none;
+}
+
+// dashboard
+a {
+    text-decoration: none;
+    color: black;
+    font-weight: 400;
+    font-size: 0.97rem;
+    text-transform: none;
+}
+
+i {
+    padding: 5px;
+}
+
+// a:hover{
+//   color: #e84118;
+// }
+li {
+    list-style-type: none;
+    outline: none;
+    cursor: pointer;
+}
+
+li:hover {
+    color: #e84118;
+}
+
+// li:hover{
+//   color: #e84118;
+// }
+// dashboard
+//  accordion tab 4 starts
+.accordion-tab4>label {
+    display: block;
+    position: relative;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 17.7px;
+}
+
+.accordion-tab4>label:hover {
+    background-color: #e84118;
+    color: white;
+    outline: none;
+}
+
+.accordion-tab4>.accordion-content {
+    max-height: 0;
+    transition: all 0.5s;
+    overflow: hidden;
+}
+
+.accordion-tab4>.accordion-toggle:checked~.accordion-content {
+    max-height: 50vh;
+}
+
+.accordion-tab4 .accordion-toggle {
+    display: none;
+}
+
+.accordion-tab4>label:after {
+    content: "\f078";
+    font-family: fontawesome;
+    position: absolute;
+    top: 15px;
+    right: 14px;
+    transform: rotate(-90deg);
+    transition: transform 0.3s;
+    font-size: 10px;
+}
+
+.accordion-tab4>.accordion-toggle:checked~label:after {
+    transform: rotate(4deg);
+}
+
+.accordion-tab4 .ul {
+    padding: 11px;
+    margin: -14px;
+    margin-top: -24px;
+}
+
+.accordion-tab4 .a {
+    margin: 30px;
+}
+
+.accordion-tab4 .a:hover {
+    color: #e84118;
+}
+
+.accordion-tab4 .circle {
+    font-size: 7px;
+    position: relative;
+    bottom: 3px;
+}
+
+// accordion tab 4 ends
+// operator
+.accordion-tab3>label {
+    display: block;
+    position: relative;
+    padding: 12px 31px;
+    cursor: pointer;
+    top: -13px;
+    font-weight: 400;
+    font-size: 17.7px;
+}
+
+.accordion-tab3>label:hover {
+    // background-color: #e84118;
+    color: #e84118;
+    outline: none;
+}
+
+.accordion-tab3>.accordion-content {
+    max-height: 0;
+    transition: all 0.5s;
+    overflow: hidden;
+}
+
+.accordion-tab3>.accordion-toggle:checked~.accordion-content {
+    max-height: 70vh;
+    // padding: 5px;
+}
+
+.accordion-tab3 .accordion-toggle {
+    display: none;
+}
+
+.accordion-tab3>label:after {
+    content: "\f078";
+    font-family: fontawesome;
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    transform: rotate(-90deg);
+    transition: transform 0.3s;
+    font-size: 10px;
+}
+
+.accordion-tab3>.accordion-toggle:checked~label:after {
+    transform: rotate(4deg);
+}
+
+.label a {
+    padding: 12px 12px;
+    cursor: pointer;
+    font-size: 0.97rem;
+}
+
+.label a:hover {
+    background-color: #e84118;
+    color: white;
+}
+
+// accordion-tab5 starts
+.accordion-tab5>label {
+    display: block;
+    outline: none;
+    position: relative;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 17.7px;
+}
+
+.accordion-tab5>label:hover {
+    background-color: #e84118;
+    color: #fff;
+    outline: none;
+}
+
+.accordion-tab5>.accordion-content {
+    max-height: 0;
+    transition: all 0.5s;
+    overflow: hidden;
+}
+
+.accordion-tab5>.accordion-toggle:checked~.accordion-content {
+    max-height: 50vh;
+    // padding: 5px;
+}
+
+.accordion-tab5 .accordion-toggle {
+    display: none;
+}
+
+.accordion-tab5>label:after {
+    content: "\f078";
+    font-family: fontawesome;
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    transform: rotate(-90deg);
+    transition: transform 0.3s;
+    font-size: 10px;
+}
+
+.accordion-tab5>.accordion-toggle:checked~label:after {
+    transform: rotate(4deg);
+}
+
+.accordion-tab5 .ul {
+    padding: 11px;
+    margin: -14px;
+    margin-top: -24px;
+}
+
+.accordion-tab5 .a {
+    margin: 30px;
+}
+
+.accordion-tab5 .a:hover {
+    color: #e84118;
+}
+
+.accordion-tab5 .circle {
+    font-size: 7px;
+    position: relative;
+    bottom: 3px;
+}
+
+// accordion tab5 ends
+.label a {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 0.97rem;
+}
+
+.label a:hover {
+    background-color: #e84118;
+    color: white;
+}
+
+//  media queries  starts
+@media screen and (max-width: 700px) {
+    .ul {
+        margin-left: -1%;
+    }
+    .a {
+        font-size: 12px;
+        font-family: sans-serif;
+    }
+    .name {
+        font-size: 13px;
+        font-family: sans-serif;
+    }
+    .icon {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .a {
+        font-size: 8px;
+    }
+    .icon {
+        font-size: 10px;
+    }
+    .label {
+        margin-left: -8%;
+    }
+    .list {
+        margin-left: -8%;
+    }
+}
+
+@media screen and (max-width: 355px) {
+    .ul {
+        margin-left: -17%;
+    }
+    .a {
+        margin-left: 12px;
+    }
+    .list {
+        margin-left: -12%;
+    }
+    .name {
+        font-size: 10px;
+    }
+}
+
+//  media queries ends

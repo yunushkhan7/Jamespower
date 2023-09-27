@@ -1,0 +1,60 @@
+.button {
+  color: transparent;
+  cursor: pointer;
+}
+
+.column1 {
+  float: left;
+  width: 70%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+.column2 {
+  float: left;
+  width: 25%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.details {
+  margin: 10px;
+}
+
+.adj {
+  margin-left: 86%;
+}
+
+.text-image-content{
+
+  border: 2px solid #979797;
+    border-radius: 8px;
+    padding: 0 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    height: 300px;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    width: 650px;
+    height: 458px;
+
+// border: 1px solid #979797;
+//   border-radius: 8px;
+//   padding: 0 10px;
+//   margin-left:20px;
+//   margin-right:20px;
+//   height: 300px;
+//   overflow-y: scroll;
+//   overflow-x: scroll;
+//   scrollbar-width: thin;
+}
+
+.zoomBtn {
+  zoom: 1.5 !important;
+}

@@ -1,0 +1,119 @@
+<ngx-spinner> </ngx-spinner>
+
+<!-- <section class="bg">
+    <div class="content">
+        <div class="from-content1">
+            <div class="text-center img">
+                <img src="assets/pp logo blue.png" alt="" class="zsoonimg" />
+                <p class="text-center" style="font-size: 20px;">{{bindingvalue}}</p>
+            </div>
+            <form [formGroup]="otpForm">
+                <div class="container mt-5">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <div id="divOuter">
+                                <div id="divInner">
+                                  <input id="partitioned" #myinput type="text" formControlName="Otp" class="mt-2" name="otp" [(ngModel)]="addOtp.otp" maxlength="4" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-5 mt-3">
+                            <h5 class="expire">OTP will expire in:</h5>
+                        </div>
+                        <div class="col-md-2 mt-3">
+                            <div *ngIf="OTP">
+                                <countdown #cn (event)="handleEvent($event)" [config]="{leftTime: 60, demand: false, format: 'mm:ss'}" class="count"></countdown>
+                                <br><br>
+                                <input *ngIf="resendbtn==true" class="design" id="btn" type="button" value="Resend Otp" (click)="cn.restart(); resendotp(resend);" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-block butn" mat-raised-button color="primary" (click)="SubmitOtp(addOtp)" [disabled]="isDisabled">Submit</button>
+                <br><br>
+                <div>
+                    <h4 align="center" *ngIf="firstshow==true" style="color: green;color: green;
+                    position: relative;
+                    top: 15px;">A OTP has been sent to *******{{last3}}</h4>
+                    <h4 align="center" *ngIf="secondshow==true" style="color: green;">OTP was resent sucessfully to *******{{last3}}</h4>
+                    <h4 align="center" *ngIf="expires==true" style="color: red;">OTP has expired. Please generate a new OTP and try again</h4>
+                </div>
+            </form>
+            <div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-5">
+      <section id="sec"></section>
+    </div>
+    <div class="col-7">
+      <div class="from-content mt-2">
+        <div class="img">
+          <!-- <img src="assets/pp logo blue.png" alt="" class="zsoonimg" /> -->
+          <!-- <p class="text-center" style="font-size: 22px;">{{bindingvalue}}</p> -->
+          <p class="" style="font-size: 22px;">mapletrees's</p>
+          <h4>Visitor Registration System St James Power Station
+          </h4>
+        </div>
+        <form [formGroup]="otpForm">
+          <!-- <p class="text-center mt-5">Enter the otp that was sent to *****0798</p> -->
+          <div class="container mt-5">
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <div id="divOuter">
+                  <div id="divInner">
+                    <input id="partitioned" (keypress)="keyPressContact($event)" #myinput type="text"
+                      formControlName="Otp" class="mt-2" name="otp" [(ngModel)]="addOtp.otp" maxlength="4" />
+                  </div>
+                </div>
+                <mat-error *ngIf="Error" class="mt-5  otp">Incorrect OTP!</mat-error>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4"></div>
+              <div class="col-md-5 mt-3">
+                <h5 class="expire">OTP will expire in:</h5>
+              </div>
+              <div class="col-md-2 mt-3">
+                <div *ngIf="OTP">
+                  <countdown #cn (event)="handleEvent($event)"
+                    [config]="{leftTime: timerSeconds, demand: false, format: 'mm:ss'}" class="count"></countdown>
+                  <br><br>
+                  <input *ngIf="resendbtn==true" class="design" id="btn" type="button" value="Resend OTP"
+                    (click)="cn.restart(); resendotp(resend);" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn-block butn" mat-raised-button color="primary" (click)="SubmitOtp(addOtp)"
+            [disabled]="isDisabled">Submit</button>
+          <!-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="false" *ngIf="modal">
+
+          </div> -->
+          <br><br>
+          <div>
+            <h4 align="center" *ngIf="firstshow==true" class="Sent1">
+              OTP has been sent to {{Email}}
+            </h4>
+            <h4 align="center" *ngIf="secondshow==true" class="Sent">
+              OTP sent to {{Email}}
+            </h4>
+            <h4 align="center" *ngIf="expires==true" class="text-danger">
+              OTP has expired. Please generate new OTP and try again
+            </h4>
+          </div>
+        </form>
+        <!-- <h5 class=" ver">version:v1.1.0</h5> -->
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2 class="user">Validate Certificates</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button class="approve" (click)="Approve()">
+            Approve
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('eventName')">Name&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('eventTest')">ID&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('eventTest')">Vaccination On&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('currency')">UploadedBy&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('price')">UploadedOn&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('mandatory')">UploadedFrom&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('mandatory')">Certificate&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th>Select All <input class="av" type="checkbox" name="all" [checked]="isAllChecked()"
+                      (change)="checkAll($event)" /> </th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let record of vaccinationRecords
+                | paginate: { itemsPerPage: pageno, currentPage: q }
+                | filter: searchText | orderBy: key: !reverse; let i=index;">
+                  <td>{{record.name}}</td>
+                  <td>{{record.nric}}</td>
+                  <td>{{record.vaccinationOn}}</td>
+                  <td>{{record.uploadedBy}}</td>
+                  <td>{{record.uploadedAt}}</td>
+                  <td>{{record.uploadedDevice}}</td>
+                  <td>
+                    <button type="button" class="btn_img" (click)="addItem(record,myDialog1)">
+                      <img size="10" class="img1" src="{{record.vaccinationImg}}">
+                    </button>
+                  </td>
+                  <td> <input type="checkbox" class="av" name="sizecb[]" value="{{record.id}}"
+                      [(ngModel)]="record.state" (change)="yourfunc($event, record.id)" /> </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!vaccinationRecords?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+
+<ng-template #myDialog1>
+  <mat-dialog-content style="width: 750px; height: 830px;">
+    <span matDialogClose style="float: right;"><i class="fa fa-times" aria-hidden="true"></i></span>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <app-image-zoom [ImageSrc]="ImageSrc" [CanvasHeight]="750" [CanvasWidth]="650" ></app-image-zoom>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+</ng-template>
+
+
+<!-- <ng-template #myDialog1>
+  <mat-dialog-content style="width: 650px; height: 750px;">
+    <span matDialogClose style="float: right;"><i class="fa fa-times" aria-hidden="true"></i></span>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <img src="{{ImageSrc}}" class="showImage" alt="">
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+</ng-template> -->

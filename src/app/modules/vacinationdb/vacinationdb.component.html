@@ -1,0 +1,299 @@
+<ngx-spinner> </ngx-spinner>
+<!-- table  starts-->
+<div class="container-fluid" *ngIf="!editvac">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2>Vaccination DB</h2>
+        </div>
+
+        <div class="col-md-12 adjbtn">
+          <div class="buttons">
+            <button mat-raised-button class="btn-downloadtemp" [formTarget]="next" (click)="DownloadTemp()">
+              Download Template </button>
+            <button mat-raised-button (click)="file.click()" class="ml-3 btn-upload" type="button">
+              <i class="fa fa-plus"></i> Upload DB File </button>
+            <input type="file" #file placeholder="Choose File" (change)="uploadFile(file.files,myDialog1)"
+              style="display:none;"
+              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+          </div>
+        </div>
+      </div>
+      <hr>
+
+      <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" (closed)="panelOpenState = false" hideToggle>
+          <mat-expansion-panel-header #panelH (click)="panelH._toggle()">
+            <mat-panel-title> Filters </mat-panel-title>
+            <mat-icon matTooltip="refresh" (click)="Refresh()" class="mat-icon adj">refresh</mat-icon>
+            <mat-icon matTooltip="expand_more" *ngIf="!panelOpenState" (click)="panelH._toggle()">expand_more</mat-icon>
+            <mat-icon matTooltip="expand_less" *ngIf="panelOpenState" (click)="panelH._toggle()">expand_less</mat-icon>
+          </mat-expansion-panel-header>
+
+          <form>
+            <div class="row mb-2">
+              <!-- <div class="col-md-3">
+                <input type="text" name="passportno" [(ngModel)]="filtervaccination.passportno"
+                  placeholder="Passport Number" class="form-control">
+              </div> -->
+              <div class="col-md-3">
+                <input type="text" name="idNumber" [(ngModel)]="filtervaccination.idNumber" placeholder="Id Number"
+                  class="form-control">
+              </div>
+              <div class="col-md-3">
+                <input type="text" name="name" [(ngModel)]="filtervaccination.name" placeholder="Name"
+                  class="form-control">
+              </div>
+              <div class="col-md-3">
+                <input type="text" [owlDateTime]="dt" [owlDateTimeTrigger]="dt" name="dose1"
+                  [(ngModel)]="filtervaccination.dose1" placeholder="Dose_1" class="form-control">
+                <owl-date-time #dt [pickerType]="'calendar'"></owl-date-time>
+              </div>
+              <div class="col-md-3">
+                <input type="text" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" name="dose2"
+                  [(ngModel)]="filtervaccination.dose2" placeholder="Dose_2" class="form-control">
+                <owl-date-time #dt2 [pickerType]="'calendar'"></owl-date-time>
+              </div>
+              <!-- <div class="col-md">
+                <button mat-raised-button color="primary" (click)="SearchFilter(filtervaccination)"> Search
+                </button>
+              </div> -->
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <input type="text" [owlDateTime]="dt3" [owlDateTimeTrigger]="dt3" name="validDate"
+                  [(ngModel)]="filtervaccination.validDate" placeholder="vax valid date" class="form-control">
+                <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
+              </div>
+              <button mat-raised-button color="primary" class="filter" (click)="SearchFilter(filtervaccination)"> Search
+              </button>
+            </div>
+          </form>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <hr />
+
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <!-- <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select> -->
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label> <i class="fa fa-search"></i> Search </mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('idNumber ')">ID Number#&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('name ')">Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('dose1 ')">Dose_1&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('dose2 ')">Dose_2&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('validDate ')">vax valid date &nbsp;<i class="fa fa-sort"></i></th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let vaccination of vaccinationDetails
+                | filter: searchText | orderBy: key: !reverse">
+                  <td>{{vaccination.idNumber}}</td>
+                  <td>{{vaccination.name}}</td>
+                  <td>{{vaccination.dose1}}</td>
+                  <td>{{vaccination.dose2}}</td>
+                  <td>{{vaccination.validDate}}</td>
+                  <td>
+                    <i class="fa fa-edit text-primary file" title="edit" (click)="EditVaccinationDB(vaccination)"></i>
+                    <i class="fa fa-trash text-danger file ml-1" title="delete"
+                      (click)="DeleteVacciantionDB(vaccination.vaccinationId)"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!vaccinationDetails?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <mat-paginator #paginator [length]="paginationDetails?.totalDocs" [pageSize]="paginationData?.limit"
+              [pageSizeOptions]="[5,10,25,50,75]" (page)="pageChanged($event)">
+            </mat-paginator>
+            <!-- <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="editvac == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Edit Vacciantion DB</h2>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Id Number</mat-label>
+              <input matInput placeholder="Enter Id Number" name="idNumber" [formControl]="IdNumber"
+                [errorStateMatcher]="matcher" [(ngModel)]="updatevaccination.idNumber" type="text" />
+              <mat-error *ngIf="IdNumber.hasError('required')"> Id Number is required </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Name</mat-label>
+              <input matInput placeholder="Enter Name" name="name" [formControl]="PatName" [errorStateMatcher]="matcher"
+                [(ngModel)]="updatevaccination.name" type="text" />
+              <mat-error *ngIf="PatName.hasError('required')"> Price is required </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Dose_1</mat-label>
+              <input matInput [owlDateTime]="dt1" [formControl]="DoseNo1" [owlDateTimeTrigger]="dt1"
+                [errorStateMatcher]="matcher" [(ngModel)]="updatevaccination.dose1" name="dose1"
+                (ngModelChange)="dateChange($event)">
+              <owl-date-time #dt1 [pickerType]="'calendar'"></owl-date-time>
+              <mat-error *ngIf="DoseNo1.hasError('required')"> dose_1 is required </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Dose_2</mat-label>
+              <input matInput [owlDateTime]="dt2" [formControl]="DoseNo2" [owlDateTimeTrigger]="dt2"
+                [errorStateMatcher]="matcher" [(ngModel)]="updatevaccination.dose2" name="dose2">
+              <owl-date-time #dt2 [pickerType]="'calendar'"></owl-date-time>
+              <mat-error *ngIf="DoseNo1.hasError('required')"> dose_2 is required </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Vax valid date</mat-label>
+              <input matInput [owlDateTime]="dt3" [formControl]="validDate" name="validDate"
+                [errorStateMatcher]="matcher" [(ngModel)]="updatevaccination.validDate" [readonly]="true"
+                [disabled]="!editable">
+              <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
+              <mat-error *ngIf="validDate.hasError('required')"> dose_2 is required </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <button color="primary" class="m-1" mat-raised-button
+          (click)="UpdateVaccination(updatevaccination)">Save</button>
+        <button mat-raised-button color="warn" (click)="Close()">Cancel</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<!-- <ng-template #myDialog1>
+  <mat-dialog-content style="width: 550px; height: 280px;">
+
+    <div>
+      {{fm}}
+    </div>
+
+    <br><br>
+    <div class="container">
+      <div class="btn-design">
+        <button mat-raised-button color="info" class="mr-1" matDialogClose (click)="Cancel()">Cancel</button>
+        <button mat-raised-button (click)="Next()" matDialogClose class="ml-1 bgbtncol">Next</button>
+      </div>
+    </div>
+  </mat-dialog-content>
+</ng-template> -->
+
+
+
+
+
+
+
+
+
+<!-- <ng-template #myDialog1>
+  <mat-dialog-content style="width: 550px; min-height: 280px;" *ngIf="keshava">
+    <div class="container uploadrec">
+      <h2>Upload New Records</h2>
+    </div>
+    <div class="container fontsty">
+      <p>I fully understand that this action will delete all existing vaccination records </p>
+    </div>
+    <br>
+    <div class="container">
+      <p style="color: gray;"> Type `UPLOAD` to Continue</p>
+      <div class="col-md-9">
+        <input type="text" class="form-control" [(ngModel)]="Upload" style="margin-left: -8%;" placeholder="UPLOAD"
+          [ngStyle]="{ 'color' : notvalid ? 'red' : '' }" (click)="clicked()" style="text-transform:uppercase"
+          (keypress)="keyPressAlphaNumeric($event)">
+      </div>
+    </div>
+    <hr style="background-color: black;" />
+    <p style="color: red;">{{errormsg}} </p>
+    <div class="buttons1">
+      <button mat-raised-button class="mr-1" (click)="Confirmation(myDialog2)">Confirm</button>
+      <button mat-raised-button color="info" class="ml-1" matDialogClose (click)="Cancel()">Cancel</button>
+    </div>
+
+  </mat-dialog-content>
+</ng-template> -->
+
+<!-- <ng-template #myDialog2>
+  <mat-dialog-content style="width: 550px; height: 280px;">
+    <div class="container uploadrec">
+      <h2>Upload New Records</h2>
+    </div>
+    <div class="container fontsty">
+      <h3><b>Uploading records , please wait…</b></h3>
+    </div>
+    <br>
+    <br>
+    <div class="container text-center">
+      <p>Excel Data Import</p>
+      <h4><b>Updating...</b></h4>
+    </div>
+  </mat-dialog-content>
+</ng-template> -->

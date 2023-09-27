@@ -1,0 +1,46 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+body {
+    overflow-y: hidden;
+}
+
+.img {
+    font-size: 2rem;
+}
+
+th {
+    white-space: nowrap;
+    overflow: hidden;
+    width: 150px;
+    height: 25px;
+    text-align: center
+}
+
+td {
+    white-space: nowrap;
+    overflow: hidden;
+    width: 150px;
+    height: 25px;
+    text-align: center
+}
+
+// * {
+//     -webkit-touch-callout: none;
+//     -webkit-user-select: none;
+//     -khtml-user-select: none;
+//     -moz-user-select: none;
+//     -ms-user-select: none;
+//     user-select: none;
+// }

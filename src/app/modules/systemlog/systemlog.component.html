@@ -1,0 +1,433 @@
+<ngx-spinner> </ngx-spinner>
+<!-- table starts -->
+<div class="container-fluid" *ngIf="editoperator == false && addoperator == false">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h2>System Log</h2>
+
+                </div>
+                <div class="col-12 col-md-6">
+                    <button mat-raised-button color="primary" class="addoperator" (click)="DownloadExcel()">
+                        Download
+                    </button>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <select class="form-control entries" (change)="onChange($event.target.value)">
+                        <option>Select Entries</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+
+                      </select>
+                </div>
+                <div class="col-12 col-md-3 ml-auto">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label><i class="fa fa-search"></i> Search</mat-label>
+                            <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText" autocomplete="off" />
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-stripped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>System Type</th>
+
+                                    <th>Module Name</th>
+                                    <th>Activity On</th>
+                                    <th>Information</th>
+                                    <th>User Email</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let activity of activitylogs | paginate: { itemsPerPage: pageno, currentPage: q }   | filter: searchText ">
+                                    <td>{{activity.systemType}}</td>
+                                    <td>{{activity.module}}</td>
+                                    <td>{{activity.activityOn}}</td>
+                                    <td>{{activity.otherInfo}}</td>
+                                    <td>{{activity.email}}</td>
+
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="20">
+                                        <div *ngIf="!activitylogs?.length" style="text-align: center">
+                                            No records found
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- add operator  starts-->
+<mat-card class="maincard" *ngIf="addoperator == true">
+    <div class="container">
+        <mat-horizontal-stepper>
+            <mat-step label="Personal Details">
+                <!-- <p>shipping</p> -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>Personal Details *</h4>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label> Name</mat-label>
+                                    <input matInput placeholder="Enter The Name" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Role</mat-label>
+                                    <input matInput placeholder="Enter The Role" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 2nd row -->
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>ID.Number</mat-label>
+                                    <input matInput placeholder="Enter The Id Number" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Description</mat-label>
+                                    <input matInput placeholder="Enter The Description" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 2nd row ends -->
+                    <!-- 3rd row -->
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Mail Address</mat-label>
+                                    <input matInput placeholder="Enter The Mail Address" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Contact</mat-label>
+                                    <input matInput placeholder="Enter The Contact Number" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 3rd row ends -->
+                    <!-- 4th row -->
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Address</mat-label>
+                                    <textarea matInput placeholder="Enter The Address"></textarea>
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 4th row ends -->
+                    <div>
+                        <button color="warn" mat-raised-button matStepperNext>Next</button>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step label="Additional Details">
+                <!-- <p>shipping</p> -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>Additional Details *</h4>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label> Name</mat-label>
+                                    <input matInput placeholder="Enter The Name" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Role</mat-label>
+                                    <input matInput placeholder="Enter The Role" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 2nd row -->
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>ID.Number</mat-label>
+                                    <input matInput placeholder="Enter The Id Number" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Description</mat-label>
+                                    <input matInput placeholder="Enter The Description" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 2nd row ends -->
+                    <!-- 3rd row -->
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Mail Address</mat-label>
+                                    <input matInput placeholder="Enter The Mail Address" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Contact</mat-label>
+                                    <input matInput placeholder="Enter The Contact Number" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 3rd row ends -->
+                    <!-- 4th row -->
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Address</mat-label>
+                                    <textarea matInput placeholder="Enter The Address"></textarea>
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 4th row ends -->
+                    <div>
+                        <button color="primary" class="m-1" mat-raised-button matStepperPrevious>
+              Previous
+            </button>
+                        <button color="warn" mat-raised-button matStepperNext>Next</button>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step label="Others">
+                <!-- <p>shipping</p> -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>Others *</h4>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-5">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label> Name</mat-label>
+                                    <input matInput placeholder="Enter The Name" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-7">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Role</mat-label>
+                                    <input matInput placeholder="Enter The Role" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 2nd row -->
+                    <div class="row">
+                        <div class="col-12 col-md-5">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>ID.Number</mat-label>
+                                    <input matInput placeholder="Enter The Id Number" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-7">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Description</mat-label>
+                                    <input matInput placeholder="Enter The Description" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 2nd row ends -->
+                    <!-- 3rd row -->
+                    <div class="row">
+                        <div class="col-12 col-md-5">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Mail Address</mat-label>
+                                    <input matInput placeholder="Enter The Mail Address" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                        <div class="col-12 col-md-7">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Contact</mat-label>
+                                    <input matInput placeholder="Enter The Contact Number" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 3rd row ends -->
+                    <!-- 4th row -->
+                    <div class="row">
+                        <div class="col-12 col-md-5">
+                            <form class="example-form">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Address</mat-label>
+                                    <textarea matInput placeholder="Enter The Address"></textarea>
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 4th row ends -->
+                    <div>
+                        <button color="primary" class="m-1" mat-raised-button matStepperPrevious>
+              Previous
+            </button>
+                    </div>
+                </div>
+            </mat-step>
+        </mat-horizontal-stepper>
+        <div class="text-right">
+            <button mat-raised-button color="primary" class="m-1">Save</button>
+            <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+        </div>
+    </div>
+</mat-card>
+<!-- add operator ends -->
+
+<!-- edit operator -->
+<mat-card class="maincard" *ngIf="editoperator == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Edit Operator</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Name</mat-label>
+                        <input matInput placeholder="Enter The Name" />
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Role</mat-label>
+                        <input matInput placeholder="Enter The Role" />
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Id</mat-label>
+                        <input matInput placeholder="Enter The Name" />
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Description</mat-label>
+                        <input matInput placeholder="Enter The Description" />
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Mail</mat-label>
+                        <input matInput placeholder="Enter The Mail" />
+                    </mat-form-field>
+                </form>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Contact</mat-label>
+                        <input matInput placeholder="Enter The Contact" />
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Adress</mat-label>
+                        <textarea matInput placeholder="Enter The Adress"></textarea>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="text-right">
+        <button mat-raised-button color="primary" class="m-1">Save</button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+    </div>
+</mat-card>
+
+<!-- edit  operator-->

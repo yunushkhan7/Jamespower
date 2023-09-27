@@ -1,0 +1,23 @@
+<!-- <p>image-zoom works!</p> -->
+<div class="row">
+  <div class="adj">
+    <a class="zoomBtn" (click)="zoomIn()">
+      <i class="fa fa-search-plus" aria-hidden="true"></i>
+    </a>
+    <a class="zoomBtn" (click)="zoomOut()">
+      <i class="fa fa-search-minus" aria-hidden="true"></i>
+    </a>
+  </div>
+
+  <div class="text-image-content">
+    <div class="column1">
+        <div style="position: relative;">
+            <canvas #layer1 id="layer1" (click)="fun1()" (dblclick)="fun2()"
+            style="position: absolute; left: 0; top: 0; z-index: 0;">
+          </canvas>
+        </div>
+    </div>
+    </div>
+<!-- <button class="zoomBtn" (click)="zoomIn()">Zoom in</button>
+<button class="zoomBtn" (click)="zoomOut()">Zoom out</button> -->
+</div>

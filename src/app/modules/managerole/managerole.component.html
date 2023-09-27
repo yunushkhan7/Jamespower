@@ -1,0 +1,213 @@
+<ngx-spinner> </ngx-spinner>
+<div class="container-fluid" *ngIf="editrole == false && addrole == false">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2>Manage Role</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="addrole" (click)="AddRole()">
+            <i class="fa fa-plus"></i> Add Role
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option value="5">Select Entries</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label> <i class="fa fa-search"></i> Search </mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr
+                  *ngFor="let role of rolearr | paginate: { itemsPerPage: pageno,  currentPage: q } | filter:searchText">
+                  <td>{{role.roleName}}</td>
+                  <td>{{role.roleDescription}}</td>
+                  <td>
+                    <mat-icon color="accent" class="m-1" matTooltip="Edit" (click)="EditRole(role)">
+                      border_color</mat-icon>
+                    <mat-icon color="warn" matTooltip="Delete" (click)="deleteRole(role.roleId)">delete</mat-icon>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!rolearr?.length" style="text-align: center;">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right;" (pageChange)="q = $event"></pagination-controls>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<!-- add role starts -->
+
+<mat-card class="maincard" *ngIf="addrole == true">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="m-1 p-1">Add Role</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-5">
+        <mat-card class="maincard">
+          <form class="example-form">
+
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Enter Role</mat-label>
+              <input matInput placeholder="Enter Role" name="roleName" [formControl]="RoleName"
+                [errorStateMatcher]="matcher" [(ngModel)]="roledata.roleName" />
+              <mat-error *ngIf="RoleName.hasError('required')">
+                Role name is required
+              </mat-error>
+              <mat-error *ngIf="RoleName.hasError('pattern')">
+                Please Enter Valid Name
+              </mat-error>
+
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <mat-label style="font-size: 16px">Enter Description </mat-label>
+              <textarea matInput placeholder="Enter Description" [formControl]="RoleDescription"
+                [errorStateMatcher]="matcher" [(ngModel)]="roledata.roleDescription" name="roleDescription"></textarea>
+              <mat-error *ngIf="RoleDescription.hasError('required')">
+                Role description is required
+              </mat-error>
+              <mat-error *ngIf="RoleDescription.hasError('pattern')">
+                Role description is accept only accept alph-acharacters
+              </mat-error>
+
+            </mat-form-field>
+          </form>
+        </mat-card>
+      </div>
+      <div class="col-12 col-md-7">
+        <mat-card class="maincard">
+          <h3>Permission</h3>
+          <ngx-treeview [config]="config" [items]="items" (selectedChange)="onSelectedChange($event)"
+            (filterChange)="onFilterChange($event)">
+          </ngx-treeview>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="text-right p-1">
+          <button mat-raised-button color="primary" class="m-1" (click)="saveRole(roledata)">Save</button>
+          <button mat-raised-button color="warn" (click)="Cancel()" class="m-1">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-card>
+<!-- add role ends -->
+
+<!-- edit role starts-->
+
+<mat-card class="maincard" *ngIf="editrole == true">
+  <!-- <div class="mat-card"> -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="m-1 p-1">Edit Role</h2>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-12 col-md-5">
+        <mat-card class="maincard">
+          <form class="example-form">
+
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Enter Role</mat-label>
+              <input matInput placeholder="Enter Role" [formControl]="RoleName" [errorStateMatcher]="matcher"
+                [(ngModel)]="editroledata.roleName" name="roleName" />
+              <mat-error *ngIf="RoleName.hasError('required')">
+                Role name is required
+              </mat-error>
+              <mat-error *ngIf="RoleName.hasError('pattern')">
+                Please Enter Valid Name
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Enter Description</mat-label>
+              <textarea matInput placeholder="Enter Description" [formControl]="RoleDescription"
+                [errorStateMatcher]="matcher" [(ngModel)]="editroledata.roleDescription"
+                name="roleDescription"></textarea>
+              <mat-error *ngIf="RoleDescription.hasError('required')">
+                Role description is required
+              </mat-error>
+              <mat-error *ngIf="RoleDescription.hasError('pattern')">
+                Role description is accept only accept alpha-characters
+              </mat-error>
+            </mat-form-field>
+          </form>
+        </mat-card>
+      </div>
+      <div class="col-12 col-md-7">
+        <mat-card class="maincard">
+          <h3>Permission</h3>
+          <ngx-treeview [config]="config" [items]="items3" (selectedChange)="onSelectedChange($event)"
+            (filterChange)="onFilterChange($event)">
+          </ngx-treeview>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="text-right p-1">
+          <button mat-raised-button color="primary" class="m-1" (click)="updateRole(editroledata)">Update</button>
+          <button mat-raised-button color="warn" (click)="Cancel()" class="m-1">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- </div> -->
+</mat-card>
+<!-- edit role ends -->

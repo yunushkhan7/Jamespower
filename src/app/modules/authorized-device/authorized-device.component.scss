@@ -1,0 +1,137 @@
+mat-card {
+    width: 100%;
+}
+
+button {
+    outline: none;
+    // border-radius: 18px;
+}
+
+.example-card {
+    max-width: 400px;
+    // border-radius: 22px;
+    margin: 3px;
+    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.buttonaut {
+    visibility: hidden;
+    /* width: 19%; */
+    position: absolute;
+    font-size: 95px;
+    top: -23px;
+    width: 58px;
+    right: 36px;
+}
+
+.buttonpend {
+    visibility: visible;
+    // visibility: hidden;
+    /* width: 19%; */
+    position: absolute;
+    // background-color: transparent;
+    font-size: 95px;
+    top: -23px;
+    width: 58px;
+    right: 36px;
+}
+
+.authorized {
+    color: #32cd32;
+    position: relative;
+    // background-color: red;
+    top: -26px;
+    left: 14px;
+}
+
+.pending1 {
+    visibility: hidden;
+}
+
+.authorized1 {
+    visibility: hidden;
+}
+
+.pending {
+    background-color: red;
+    color: white;
+    left: 5px;
+}
+
+.offline {
+    color: red;
+}
+
+i {
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.Online {
+    // background-color: #32cd32;
+    color: #32cd32;
+    border-radius: 22px;
+}
+
+// .td {
+//     width: 50%;
+//     margin-left: 12%;
+// }
+.example-form {
+    min-width: 100px;
+    // max-width: 400px;
+    width: 100%;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+table {
+    width: 100%;
+}
+
+mat-icon {
+    cursor: pointer;
+    font-size: 1rem;
+    outline: none;
+}
+
+.maincard {
+    box-shadow: 0 6px 10px -4px rgba(0, 0, 0, .15);
+    border-radius: 22px;
+    clear: both;
+}
+
+// .maincard:hover {
+//     box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+//     transform: translateY(-1px);
+//     transition: 0.6s;
+// }
+.addteam {
+    float: right;
+}
+
+.zsoonimg {
+    border-radius: 50%;
+}
+
+.btn {
+    margin-top: 28px;
+    left: 225%;
+}
+
+.btn1 {
+    background-color: #388E3C;
+    color: white;
+    bottom: 36px;
+    float: right;
+}
+
+.shadow-input {
+    position: absolute;
+    top: 22px;
+    width: 0px;
+    height: 0px;
+    border: none;
+}

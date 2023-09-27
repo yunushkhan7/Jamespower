@@ -1,0 +1,59 @@
+<div class="container-fluid">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('name')"> State&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('timestamp')"> Lab Profile Order Id&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('courseCode')"> Time Stamp&nbsp;<i class="fa fa-sort"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center">
+                  <td>3810njdjfsd</td>
+                  <td>11110</td>
+                  <td>26-10-2021 </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <!-- <td colspan="20">
+                    <div *ngIf="!healthcerts?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td> -->
+                </tr>
+              </tfoot>
+            </table>
+            <!-- <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

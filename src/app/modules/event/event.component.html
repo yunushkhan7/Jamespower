@@ -1,0 +1,254 @@
+<ngx-spinner> </ngx-spinner>
+<!-- table starts -->
+<div class="container-fluid" *ngIf="addevent == false && editEvent == false">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2>Event</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="addcustomer" (click)="AddEvent()">
+            <i class="fa fa-plus"></i> Add Event
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange1($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="searchText" [(ngModel)]="searchText" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr>
+                  <th class="text-center" (click)="sort('name')">Event Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th class="text-center" (click)="sort('remarks')">Remarks&nbsp;<i class="fa fa-sort"></i></th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let event of events
+                | paginate: { itemsPerPage: pageno, currentPage: q }
+                | filter: searchText | orderBy: key: !reverse ">
+                  <td class="text-center">{{event.name}}</td>
+                  <td class="text-center">{{event.remarks}}</td>
+
+                  <td class="text-center">
+                    <i class="fa fa-edit text-primary" title="edit" (click)="EditEvent(event)"></i>
+                    <i class="fa fa-trash text-danger ml-1" title="delete" (click)="delete(event.id)"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!events?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- event add starts-->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="addevent == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Add Event Details</h2>
+        </div>
+      </div>
+      <form>
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Enter  the name" name="name" [formControl]="Name"
+                  [errorStateMatcher]="matcher" [(ngModel)]="addEvents.name" type="text" />
+                <mat-error *ngIf="Name.hasError('required')">
+                  name is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Remarks</mat-label>
+                <input matInput placeholder="Enter  the renarks" name="remarks" [formControl]="Remarks"
+                  [errorStateMatcher]="matcher" [(ngModel)]="addEvents.remarks" type="text" />
+                <mat-error *ngIf="Remarks.hasError('required')"> Remarks is required </mat-error>
+              </mat-form-field>
+            </form>
+            <!-- <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>eOrdering Clinic HCI</mat-label>
+                <mat-select [(ngModel)]="addEvents.clinicId" name="clinicId"
+                 [formControl]="ClinicHCI" [errorStateMatcher]="matcher">
+                  <mat-option *ngFor="let clinic of clinics" [value]="clinic.id">
+                    {{clinic.clinicHCI}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="ClinicHCI.hasError('required')"> Client HCI is required </mat-error>
+              </mat-form-field>
+            </form> -->
+          </div>
+        </div>
+<!--
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>eOrdering Doctor Code</mat-label>
+                <mat-select [(ngModel)]="addEvents.doctorId" name="doctorId"
+                 [formControl]="DoctorCode" [errorStateMatcher]="matcher">
+                  <mat-option *ngFor="let doctor of doctors" [value]="doctor.id">
+                    {{doctor.doctorCode}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="DoctorCode.hasError('required')"> Doctor code is required </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Remarks</mat-label>
+                <input matInput placeholder="Enter  the renarks" name="remarks" [formControl]="Remarks"
+                  [errorStateMatcher]="matcher" [(ngModel)]="addEvents.remarks" type="text" />
+                <mat-error *ngIf="Remarks.hasError('required')"> Remarks is required </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+        </div> -->
+        <div class="text-right">
+          <button mat-raised-button color="primary" class="m-1" (click)="Save(addEvents)">Save</button>
+          <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>
+<!-- event add ends -->
+
+
+<!-- edit event starts-->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="editEvent">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Edit Event Details</h2>
+        </div>
+      </div>
+      <form>
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Enter  the visit date" name="name" type="text" [formControl]="Name"
+                  [errorStateMatcher]="matcher" [(ngModel)]="editEvents.name" />
+                <mat-error *ngIf="Name.hasError('required')">
+                  name is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Remarks</mat-label>
+                <input matInput placeholder="Enter  the remarks" name="remarks" [formControl]="Remarks"
+                  [errorStateMatcher]="matcher" [(ngModel)]="editEvents.remarks" type="text" />
+                <mat-error *ngIf="Remarks.hasError('required')">
+                  Remarks is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+            <!-- <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>eOrdering Clinic HCI</mat-label>
+                <mat-select  [(ngModel)]="editEvents.clinicId" name="clinicId"
+                 [formControl]="ClinicHCI" [errorStateMatcher]="matcher">
+                  <mat-option *ngFor="let clinic of clinics" [value]="clinic.id">
+                    {{clinic.clinicHCI}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="ClinicHCI.hasError('required')"> Client Hci is required </mat-error>
+              </mat-form-field>
+            </form> -->
+          </div>
+        </div>
+<!--
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>eOrdering Doctor Code</mat-label>
+                <mat-select  [(ngModel)]="editEvents.doctorId" name="doctorId"
+                [formControl]="DoctorCode" [errorStateMatcher]="matcher">
+                  <mat-option *ngFor="let doctor of doctors" [value]="doctor.id">
+                    {{doctor.doctorCode}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="DoctorCode.hasError('required')"> Doctor code is required </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Remarks</mat-label>
+                <input matInput placeholder="Enter  the remarks" name="remarks" [formControl]="Remarks"
+                  [errorStateMatcher]="matcher" [(ngModel)]="editEvents.remarks" type="text" />
+                <mat-error *ngIf="Remarks.hasError('required')">
+                  Remarks is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+        </div> -->
+
+        <div class="text-right">
+          <button mat-raised-button color="primary" class="m-1" (click)="UpdateEvent(editEvents)">
+            Update
+          </button>
+          <button mat-raised-button color="warn" (click)="Cancel()">
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>
+<!-- edit general sends -->

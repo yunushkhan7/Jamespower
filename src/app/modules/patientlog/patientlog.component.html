@@ -1,0 +1,167 @@
+<div *ngIf="novisProj">
+    <ngx-spinner> </ngx-spinner>
+    <div class="container-fluid" *ngIf="editzone == false && addzone == false">
+        <mat-card class="maincard">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <h2>Patient Registrations</h2>
+                    </div>
+                </div>
+                <hr>
+
+                <mat-accordion class="example-headers-align" multi>
+                    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" (closed)="panelOpenState = false" hideToggle>
+                        <mat-expansion-panel-header #panelH (click)="panelH._toggle()">
+                            <mat-panel-title> Filters </mat-panel-title>
+                            <mat-icon matTooltip="refresh" (click)="Refresh()" class="mat-icon adj">refresh</mat-icon>
+                            <mat-icon matTooltip="download" (click)="DownloadExcel(filterpatients)" class="mat-icon">file_download
+                            </mat-icon>
+                            <mat-icon matTooltip="expand_more" *ngIf="!panelOpenState" (click)="panelH._toggle()">expand_more
+                            </mat-icon>
+                            <mat-icon matTooltip="expand_less" *ngIf="panelOpenState" (click)="panelH._toggle()">expand_less
+                            </mat-icon>
+                        </mat-expansion-panel-header>
+
+                        <form>
+                            <div class="row mb-2">
+                                <div class="col-md-3">
+                                    <input type="text" name="patientName" [(ngModel)]="filterpatients.patientName" placeholder="Name" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="id" [(ngModel)]="filterpatients.id" placeholder="Id" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="passport" [(ngModel)]="filterpatients.passport" placeholder="Passport" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <input [owlDateTime]="dt2" [max]="dobmax" [owlDateTimeTrigger]="dt2" placeholder="Date of Birth" class="form-control" [(ngModel)]="filterpatients.dateofbirth" name="dateofbirth">
+                                    <owl-date-time #dt2 [pickerType]="'calendar'"></owl-date-time>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-md-3">
+                                    <input type="text" name="location" [(ngModel)]="filterpatients.location" placeholder="Location" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="event" [(ngModel)]="filterpatients.event" placeholder="Event" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="deviceName" [(ngModel)]="filterpatients.deviceName" placeholder="Device Name" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <input [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" placeholder="Registration Time" class="form-control" [(ngModel)]="filterpatients.registrationTime" name="registrationTime">
+                                    <owl-date-time #dt1></owl-date-time>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-md-3">
+                                    <input type="text" name="email" [(ngModel)]="filterpatients.email" placeholder="Patient Email" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="mobileNo" [(ngModel)]="filterpatients.mobileNo" placeholder="Patient MobileNo" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="vehicleNo" [(ngModel)]="filterpatients.vehicleNo" placeholder="Vehicle No" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="agencyName" [(ngModel)]="filterpatients.agencyName" placeholder="Agency Name" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="text" name="medicalTests" [(ngModel)]="filterpatients.medicalTests" placeholder="Medical Tests" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="gender" [(ngModel)]="filterpatients.gender" placeholder="Gender" class="form-control">
+                                </div>
+                                <button mat-raised-button color="primary" class="filter" (click)="SearchFilter(filterpatients)"> Search
+                </button>
+                            </div>
+                        </form>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <hr />
+
+                <div class="row">
+                    <div class="col-12 col-md-3 ml-auto">
+                        <form class="example-form">
+                            <mat-form-field class="example-full-width">
+                                <mat-label> <i class="fa fa-search"></i> Search </mat-label>
+                                <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText" autocomplete="off" />
+                            </mat-form-field>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-stripped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th (click)="sort('patientDetailsId')">Application Id&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('patientFullName ')">Name&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('id')">ID #&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('Passport')">Passport #&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('dob')"> Date Of Birth&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('location')">Location&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('eventName')">Event&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('deviceName')">Device Name&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('registrationDateTime')">Registration Time&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('registeredBy')">Registration By&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('patientEmail ')">Patient Email&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('patientMobileNo ')">Patient MobileNo&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('vehicleNo')">Vehicle No&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('agencyName')">Agency Name&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('testresults')">Medical Tests&nbsp;<i class="fa fa-sort"></i></th>
+                                        <th (click)="sort('gender')">Gender&nbsp;<i class="fa fa-sort"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let patient of patients
+                      | filter: searchText | orderBy: key: !reverse">
+                                        <td>{{patient.patientDetailsId}}</td>
+                                        <td>{{patient.patientFullName}}</td>
+                                        <td>{{patient.id}}</td>
+                                        <td>{{patient.passport}}</td>
+                                        <td>{{patient.dateofbirth}}</td>
+                                        <td>{{patient.location}}</td>
+                                        <td>{{patient.eventName}}</td>
+                                        <td>{{patient.deviceName}}</td>
+                                        <td>{{patient.registrationDateTime}}</td>
+                                        <td>{{patient.registeredBy}}</td>
+                                        <td>{{patient.patientEmail}}</td>
+                                        <td>{{patient.patientMobileNo}}</td>
+                                        <td>{{patient.vehicleNo}}</td>
+                                        <td>{{patient.agencyName}}</td>
+                                        <td>
+                                            <ul>
+                                                <li *ngFor="let test of patient.testresults.split(',')">{{test}}</li>
+                                            </ul>
+                                        </td>
+                                        <td>{{patient.gender}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="20">
+                                            <div *ngIf="!patients?.length" style="text-align: center">
+                                                No records found
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <mat-paginator #paginator [length]="paginationDetails?.totalDocs" [pageSize]="paginationData?.limit" [pageSizeOptions]="[5,10,25,50,75]" (page)="pageChanged($event)">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

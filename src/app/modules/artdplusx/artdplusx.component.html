@@ -1,0 +1,69 @@
+<ngx-spinner> </ngx-spinner>
+<div class="container-fluid">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2>ART D+X Settings</h2>
+        </div>
+      </div>
+      <hr />
+
+      <form [formGroup]="DeleteAgeform">
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Mandatory Test Date</label>
+          <div class="col-sm-3">
+            <input [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" formControlName="patientReg" class="form-control"
+              [(ngModel)]="updated_dplus.mandatoryTestDate" name="mandatoryTestDate" placeholder="Mandatory Test Date"
+              [ngClass]="{ 'is-invalid': submitted && f.patientReg.errors }">
+            <owl-date-time #dt1 [pickerType]="'calendar'"></owl-date-time>
+            <div *ngIf="submitted && f.patientReg.errors" class="invalid-feedback">
+              <div *ngIf="f.patientReg.errors.required">Mandatory Test Date is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">X-Value</label>
+          <div class="col-sm-3">
+            <input type="text" [(ngModel)]="updated_dplus.artValidatyPeriod" name="artValidatyPeriod"
+              class="form-control" formControlName="userlog" placeholder="X-Value"
+              [ngClass]="{ 'is-invalid': submitted && f.userlog.errors }" disabled>
+            <div *ngIf="submitted && f.userlog.errors" class="invalid-feedback">
+              <div *ngIf="f.userlog.errors.required">X-Value</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Entry/No Entry</label>
+          <div class="col-sm-3">
+            <select class="form-control" formControlName="Entry" [(ngModel)]="updated_dplus.entryCheck"
+              name="entryCheck">
+              <option value="true">Enable</option>
+              <option value="false">Disable</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Vaccination Days</label>
+          <div class="col-sm-3">
+            <input type="text" [(ngModel)]="updated_dplus.vaxDays" name="vaxDays"
+              class="form-control" formControlName="vaxDays" placeholder="Vaccination Days"
+              [ngClass]="{ 'is-invalid': submitted && f.vaxDays.errors }">
+            <div *ngIf="submitted && f.vaxDays.errors" class="invalid-feedback">
+              <div *ngIf="f.vaxDays.errors.required">Vaccination is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="buttons">
+              <button mat-raised-button color="primary" class="mr-1" (click)="Submit(updated_dplus)">Submit</button>
+              <button mat-raised-button color="info" class="ml-1" (click)="Reset()">Reset</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>

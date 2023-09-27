@@ -1,0 +1,181 @@
+<ngx-spinner> </ngx-spinner>
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h2 style="color: red;">eOrdering System</h2>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="container-fluid">
+      <mat-card class="maincard">
+        <div class="container-fluid">
+          <form [formGroup]="EOrderingForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>eOrdering Oauth Token URL</h3>
+                    <input type="text" class="form-control" formControlName="TokenUrl"
+                      [(ngModel)]="eorderform.tokenUrl" name="tokenUrl" placeholder="Enter e-Orderning Oauth Token URL"
+                      [ngClass]="{ 'is-invalid': submitted && f.TokenUrl.errors }">
+                    <div *ngIf="submitted && f.TokenUrl.errors" class="invalid-feedback">
+                      <div *ngIf="f.TokenUrl.errors.required">Token url is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>NOVIS Client Id</h3>
+                    <input type="text" class="form-control" formControlName="NovisClientId" name="portNO"
+                      [(ngModel)]="eorderform.clientId" name="clientId" placeholder="Enter NOVIS Client Id"
+                      [ngClass]="{ 'is-invalid': submitted && f.NovisClientId.errors }" />
+                    <div *ngIf="submitted && f.NovisClientId.errors" class="invalid-feedback">
+                      <div *ngIf="f.NovisClientId.errors.required">Novis clientId required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>NOVIS Private key</h3>
+                    <textarea type="text" class="form-control" formControlName="NovisPrivateKey"
+                      placeholder="Enter NOVIS Private key" [(ngModel)]="eorderform.privateKey" name="privateKey"
+                      [ngClass]="{ 'is-invalid': submitted && f.NovisPrivateKey.errors }">
+                    </textarea>
+                    <div *ngIf="submitted && f.NovisPrivateKey.errors" class="invalid-feedback">
+                      <div *ngIf="f.NovisPrivateKey.errors.required">Novis private key required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>eOrdering API Gateway URL</h3>
+                    <input type="text" class="form-control" formControlName="ApiGatewayUrl"
+                      [(ngModel)]="eorderform.gateWayUrl" name="gateWayUrl" placeholder="e-Ordering API Gateway URL"
+                      [ngClass]="{ 'is-invalid': submitted && f.ApiGatewayUrl.errors }">
+                    <div *ngIf="submitted && f.ApiGatewayUrl.errors" class="invalid-feedback">
+                      <div *ngIf="f.ApiGatewayUrl.errors.required">gateway url is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>Novis Client Secret</h3>
+                    <input type="text" class="form-control" name="portNO" formControlName="ClientSecret"
+                      [(ngModel)]="eorderform.clientSecret" name="clientSecret" placeholder="Enter Novis Clent Secret"
+                      [ngClass]="{ 'is-invalid': submitted && f.ClientSecret.errors }" />
+                    <div *ngIf="submitted && f.ClientSecret.errors" class="invalid-feedback">
+                      <div *ngIf="f.ClientSecret.errors.required">Novis client secret required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>eOrdering Public key</h3>
+                    <textarea type="text" class="form-control" formControlName="PublicKey"
+                      [(ngModel)]="eorderform.publicKey" name="publicKey" placeholder="Enter e-Ordering Public key"
+                      [ngClass]="{ 'is-invalid': submitted && f.PublicKey.errors }"></textarea>
+                    <div *ngIf="submitted && f.PublicKey.errors" class="invalid-feedback">
+                      <div *ngIf="f.PublicKey.errors.required"> public key is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br><br>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="buttons">
+                  <button mat-raised-button color="primary" class="mr-1" (click)="UpdateEorderDetais(eorderform)">
+                    Update
+                  </button>
+                  <button mat-raised-button color="info" class="ml-1" (click)="Reset()">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </mat-card>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+<hr>
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h2 class="user" style="color:red">eOrdering Logs</h2>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="container-fluid">
+      <mat-card class="maincard">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12 col-md-2">
+              <select class="form-control entries" (change)="onChange($event.target.value)">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="25">25</option>
+                <option [ngValue]="50">50</option>
+                <option [ngValue]="75">75</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-3 ml-auto">
+              <form class="example-form">
+                <mat-form-field class="example-full-width">
+                  <mat-label><i class="fa fa-search"></i> Search</mat-label>
+                  <input matInput placeholder="Enter Value" value="" name="search" autocomplete="off" />
+                </mat-form-field>
+              </form>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <div class="table-responsive">
+                <table class="table table-stripped table-bordered">
+                  <thead>
+                    <tr class="text-center">
+                      <th (click)="sort('modifiedDate')"> Date and Time&nbsp;<i class="fa fa-sort"></i> </th>
+                      <th (click)="sort('endPoint')"> Endpoint&nbsp;<i class="fa fa-sort"></i></th>
+                      <th (click)="sort('result')"> Result&nbsp;<i class="fa fa-sort"></i></th>
+                      <th (click)="sort('message')"> Message&nbsp;<i class="fa fa-sort"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center" *ngFor="let data of eorderinglogs
+                    | paginate: { itemsPerPage: pageno, currentPage: q }
+                    | filter: searchText | orderBy: key: reverse">
+                      <td>{{data.modifiedDate}}</td>
+                      <td>{{data.endPoint}}</td>
+                      <td>{{data.result}}</td>
+                      <td>{{data.message}}</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="20">
+                        <div *ngIf="!eorderinglogs?.length" style="text-align: center">
+                          No records found
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+                <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

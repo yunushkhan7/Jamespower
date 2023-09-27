@@ -1,0 +1,39 @@
+<ngx-spinner> </ngx-spinner>
+<div class="container-fluid" *ngIf="editstand == false && addstand == false && viewstand == false">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h2>Update Settings</h2>
+                </div>
+            </div>
+            <hr />
+
+            <form [formGroup]="DeleteAgeform">
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h3>Password Expiration Policy</h3>
+                        <input type="number" formControlName="patientReg" (keypress)="keyPressContact($event)" class="form-control" name="policyDays" [(ngModel)]="retention.policyDays" placeholder="Enter number of days" [ngClass]="{ 'is-invalid': submitted && f.patientReg.errors }">
+                        <div *ngIf="submitted && f.patientReg.errors" class="invalid-feedback">
+                            <div *ngIf="f.patientReg.errors.required">Password Expiration Policy</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="buttons">
+                            <button mat-raised-button color="primary" class="mr-1" [disabled]="loading" (click)="Submit(retention)">
+                Submit
+              </button>
+                            <button mat-raised-button color="info" class="ml-1" (click)="Reset()">
+                Reset
+              </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </mat-card>
+</div>

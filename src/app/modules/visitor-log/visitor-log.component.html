@@ -1,0 +1,182 @@
+<ngx-spinner> </ngx-spinner>
+<div *ngIf="novisProj">
+  <div class="container-fluid" *ngIf="editzone == false && addzone == false">
+    <mat-card class="maincard">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <h2>Visitor Access Logs</h2>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="hide_show">
+              <button *ngIf="!Show" mat-raised-button color="primary" class="adduser" (click)="HideandShow()">
+                Hide/Show Column
+              </button>
+              <button *ngIf="Show" mat-raised-button color="warn" class="adduser rounded-pill" (click)="HideandShow()">
+                <mat-icon>close</mat-icon>
+              </button>
+              <ng-container *ngIf="Show">
+                <mat-card class="mat-card-container">
+                  <section class="example-section">
+                    <h4>Select your Column(s):</h4>
+                    <div *ngFor="let item of ShowandHideArray">
+                      <p class="mat_checkbox">
+                        <mat-checkbox [(ngModel)]="item.ischecked">{{item.name}}</mat-checkbox>
+                      </p>
+                    </div>
+                  </section>
+                </mat-card>
+              </ng-container>
+            </div>
+
+          </div>
+        </div>
+        <hr>
+
+        <mat-accordion class="example-headers-align" multi>
+          <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" (closed)="panelOpenState = false"
+            hideToggle>
+            <mat-expansion-panel-header #panelH (click)="panelH._toggle()">
+              <mat-panel-title> Filters </mat-panel-title>
+              <mat-icon matTooltip="refresh" (click)="Refresh()" class="mat-icon adj">refresh</mat-icon>
+              <mat-icon matTooltip="download" (click)="DownloadExcel(filtervisitor)" class="mat-icon">
+                file_download
+              </mat-icon>
+              <mat-icon matTooltip="expand_more" *ngIf="!panelOpenState" (click)="panelH._toggle()">expand_more
+              </mat-icon>
+              <mat-icon matTooltip="expand_less" *ngIf="panelOpenState" (click)="panelH._toggle()">expand_less
+              </mat-icon>
+            </mat-expansion-panel-header>
+
+
+            <form>
+              <div class="row mb-2">
+                <div class="col-md-3">
+                  <input type="text" name="name" [(ngModel)]="filtervisitor.name" placeholder="Name"
+                    class="form-control" [disabled]="!ShowandHideArray[1].ischecked">
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="email" [(ngModel)]="filtervisitor.email" placeholder="Visitor Email"
+                    class="form-control" [disabled]="!ShowandHideArray[2].ischecked">
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="phone" [(ngModel)]="filtervisitor.phone" placeholder="Visitor Phone No"
+                    class="form-control" [disabled]="!ShowandHideArray[3].ischecked">
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="location" [(ngModel)]="filtervisitor.location" placeholder="Location"
+                    class="form-control" [disabled]="!ShowandHideArray[4].ischecked">
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-md-3">
+                  <input type="text" name="bookingcode" [(ngModel)]="filtervisitor.bookingcode"
+                    placeholder="Booking Code" class="form-control" [disabled]="!ShowandHideArray[5].ischecked">
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="pax" [(ngModel)]="filtervisitor.pax" placeholder="Pax"
+                    (keypress)="keyPressContact($event)" class="form-control"
+                    [disabled]="!ShowandHideArray[6].ischecked">
+                </div>
+                <div class="col-md-3">
+                  <input [readonly]="!ShowandHideArray[7].ischecked" class="shadow-input1" name="eventtime"
+                    [(ngModel)]="filtervisitor.eventtime" [owlDateTime]="dt1"
+                    [disabled]="!ShowandHideArray[7].ischecked" />
+                  <input [readonly]="!ShowandHideArray[7].ischecked" [owlDateTimeTrigger]="dt1" name="eventtime"
+                    placeholder="Event Date & Time" type="text"
+                    class="date-picker date-field hasDatepicker form-control"
+                    [disabled]="!ShowandHideArray[7].ischecked"
+                    [value]="filtervisitor.eventtime | dateFilter: 'dd/MM/yyyy hh:mm'" />
+                  <owl-date-time #dt1 [disabled]="!ShowandHideArray[7].ischecked"></owl-date-time>
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="eventtype" [(ngModel)]="filtervisitor.eventtype" placeholder="Event Type"
+                    class="form-control" [disabled]="!ShowandHideArray[8].ischecked">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-3 ml-auto">
+                  <button mat-raised-button color="primary" class="filter mt-2" (click)="SearchFilter(filtervisitor)">
+                    Search
+                  </button>
+                </div>
+              </div>
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <hr />
+
+        <div class="row">
+          <div class="col-12 col-md-3 ml-auto">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label> <i class="fa fa-search"></i> Search </mat-label>
+                <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                  autocomplete="off" />
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="table-responsive">
+              <table class="table table-stripped table-bordered">
+                <thead>
+                  <tr class="text-center">
+                    <th *ngIf="ShowandHideArray[0].ischecked" (click)="sort('id')">Id&nbsp;<i class="fa fa-sort"></i>
+                    </th>
+                    <th *ngIf="ShowandHideArray[1].ischecked" (click)="sort('name ')">Name&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[2].ischecked" (click)="sort('email')">Visitor Email&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[3].ischecked" (click)="sort('phone')">Visitor Phone&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[4].ischecked" (click)="sort('location')">Location&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[5].ischecked" (click)="sort('bookingCode')">Booking Code&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[6].ischecked" (click)="sort('pax')">Pax&nbsp;<i class="fa fa-sort"></i>
+                    </th>
+                    <th *ngIf="ShowandHideArray[7].ischecked" (click)="sort('eventTime')">Event Date & Time&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[8].ischecked" (click)="sort('eventType')">Event Type&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="text-center" *ngFor="let patient of patients
+                      | filter: searchText | orderBy: key: !reverse">
+                    <td *ngIf="ShowandHideArray[0].ischecked">{{patient.id}}</td>
+                    <td *ngIf="ShowandHideArray[1].ischecked">{{patient.name}}</td>
+                    <td *ngIf="ShowandHideArray[2].ischecked">{{patient.email}}</td>
+                    <td *ngIf="ShowandHideArray[3].ischecked">{{patient.phone}}</td>
+                    <td *ngIf="ShowandHideArray[4].ischecked">{{patient.location}}</td>
+                    <td *ngIf="ShowandHideArray[5].ischecked">{{patient.bookingCode}}</td>
+                    <td *ngIf="ShowandHideArray[6].ischecked">{{patient.pax}}</td>
+                    <td *ngIf="ShowandHideArray[7].ischecked">{{patient.eventTime}}</td>
+                    <td *ngIf="ShowandHideArray[8].ischecked">{{patient.eventType}}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="20">
+                      <div *ngIf="!patients?.length" style="text-align: center">
+                        No records found
+                      </div>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <mat-paginator #paginator [length]="paginationDetails?.totalDocs" [pageSize]="paginationData?.limit"
+              [pageSizeOptions]="[5,10,25,50,75]" (page)="pageChanged($event)">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

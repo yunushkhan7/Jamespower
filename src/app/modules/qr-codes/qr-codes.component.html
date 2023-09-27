@@ -1,0 +1,60 @@
+<ngx-spinner> </ngx-spinner>
+<div class="container-fluid">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h2>QR Codes Settings</h2>
+                </div>
+                <!-- <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="sendemail" (click)="SendTestEmail()">
+            Send Test Email
+          </button>
+        </div> -->
+            </div>
+            <hr />
+
+            <form [formGroup]="DeleteAgeform">
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h3>QR Code Salt Password</h3>
+                        <input type="text" formControlName="userlog" class="form-control" name="qrCodeSalt" [(ngModel)]="qrcodesetting.qrCodeSalt" placeholder="Enter Qr Code Salt" [ngClass]="{ 'is-invalid': submitted && f.userlog.errors }">
+                        <div *ngIf="submitted && f.userlog.errors" class="invalid-feedback">
+                            <div *ngIf="f.userlog.errors.required">Qr Code Salt required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h3> Accept visitors with QR codes earlier than (1-10 minutes) </h3>
+                        <input type="number" formControlName="Password" [(ngModel)]="qrcodesetting.allowEarlier" min="1" max="10" name="allowEarlier" class="form-control" placeholder="Enter QR Code Earlier" (keypress)="keyPressContact($event)" maxlength="2" [ngClass]="{ 'is-invalid': submitted && f.Password.errors }">
+                        <div *ngIf="submitted && f.Password.errors" class="invalid-feedback">
+                            <div *ngIf="f.Password.errors.required">QR Code Earlier is required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h3>Daily Maximum Booking</h3>
+                        <input type="text" formControlName="systemlogs" [(ngModel)]="qrcodesetting.dailyBookings" name="dailyBookings" class="form-control" placeholder="Enter Daily Maximum Bookings" (keypress)="keyPressContact($event)" [ngClass]="{ 'is-invalid': submitted && f.systemlogs.errors }">
+                        <div *ngIf="submitted && f.systemlogs.errors" class="invalid-feedback">
+                            <div *ngIf="f.systemlogs.errors.required">Daily Maximum Bookings is required</div>
+                            <!-- <div *ngIf="f.systemlogs.errors.email">Enter valid email ex: abc@gmail.com</div> -->
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="buttons">
+                            <button mat-raised-button color="primary" class="mr-1 cancel" (click)="Reset()">Reset</button>
+                            <button mat-raised-button color="primary" class="ml-1" (click)="Submit(qrcodesetting)">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </mat-card>
+</div>

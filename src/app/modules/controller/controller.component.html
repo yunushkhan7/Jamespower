@@ -1,0 +1,101 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2>Controller Management</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="addcustomer" (click)="Refresh()">
+            <i class="fa fa-plus"></i> Refresh
+          </button>
+        </div>
+      </div>
+      <hr />
+
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('name')">File name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('address')">Uploaded At&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('remarks')">Uploaded By&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('remarks')">Status&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('remarks')">In-Valid Count&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('remarks')">Valid Count&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('remarks')">Error Status&nbsp;<i class="fa fa-sort"></i></th>
+
+                  <!-- <th>Actions</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let control of controllers">
+                  <td>{{control.fileName}}</td>
+                  <td>{{control.uploadedAt}}</td>
+                  <td>{{control.uploadedBy}}</td>
+                  <td>
+                    <p class="{{control.progress}}" *ngIf="control.progress == 'File Uploaded'">
+                      File Uploaded
+                    </p>
+
+                    <p class="{{control.progress}}" *ngIf="control.progress == 'Sanity Check'">
+                      Sanity Check
+                    </p>
+
+                    <p class="{{control.progress}}" *ngIf="control.progress == 'Processing File'">
+                      Processing File
+                    </p>
+
+                    <button *ngIf="control.progress == 'Ready for Review'" class="btn-rfr" mat-raised-button
+                      (click)="ReadyForReview()">
+                      ReadyforReview
+                    </button>
+
+                    <button *ngIf="control.progress == 'PreConfirm'" class="btn-pre-confirm" mat-raised-button
+                      (click)="Precofirm()">
+                      Precofirm
+                    </button>
+
+                    <p class="{{control.progress}}" *ngIf="control.progress == 'Cancelled'">
+                      Cancelled
+                    </p>
+
+                    <p class="{{control.progress}}" *ngIf="control.progress == 'Completed'">
+                      Completed
+                    </p>
+                  </td>
+                  <td>{{control.errorRecords}}</td>
+                  <td>{{control.correctRecords}}</td>
+                  <td>
+                    <a *ngIf="downloadbool" (click)="downloadStatus(control.errorStatus)" [formTarget]="next"
+                      style="color:blue; cursor:pointer">
+                      <i class="fa fa-download" aria-hidden="true"></i>
+                    </a>
+                    <!-- <p *ngIf="!downloadbool">{{control.errorStatus}}</p> -->
+                    <a *ngIf="!downloadbool">{{control.errorStatus}}</a>
+
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!controllers?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <mat-paginator #paginator [length]="paginationDetails?.totalDocs" [pageSize]="paginationData?.limit"
+              [pageSizeOptions]="[5,10,25,50,75]" (page)="pageChanged($event)">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

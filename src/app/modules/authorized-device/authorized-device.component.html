@@ -1,0 +1,242 @@
+<!-- table starts -->
+<div class="container-fluid" *ngIf="editdriver == false">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2>Authorized Devices</h2>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange1($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="searchText" [(ngModel)]="searchText" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive" *ngIf="table1 == true">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr>
+                  <th class="text-center" (click)="sort('deviceName')">Name&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th class="text-center" (click)="sort('location')">Location&nbsp;<i class="fa fa-sort"></i></th>
+                  <th class="text-center" (click)="sort('event')">Event&nbsp;<i class="fa fa-sort"></i> <br> <br></th>
+                  <th class="text-center" (click)="sort('deviceUUID')">Device Username&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th class="text-center" (click)="sort('deviceStatus')">Device Status&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th class="text-center" (click)="sort('lastEditBy')">Last Edited By&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th class="text-center" (click)="sort('lastEditDate')">Last Edited Date&nbsp;<i
+                      class="fa fa-sort"></i></th>
+                  <th class="text-center" (click)="sort('authorizedDate')">Authorization Date&nbsp;<i
+                      class="fa fa-sort"></i></th>
+                  <th class="text-center" (click)="sort('authoriziedBy')">Authorization By&nbsp;<i
+                      class="fa fa-sort"></i></th>
+                  <th class="text-center" (click)="sort('remarks')">Remarks&nbsp;<i class="fa fa-sort"></i></th>
+                  <th class="text-center" (click)="sort('authorizedStatus')">Authorization Status&nbsp;<i
+                      class="fa fa-sort"></i></th>
+                  <th class="text-center">Action </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let device of devices
+                  | paginate: { itemsPerPage: pageno, currentPage: q }
+                  | filter: searchText  | orderBy: key: !reverse">
+                  <td class="text-center">{{device.deviceName}}</td>
+                  <td class="text-center">{{device.location}}</td>
+                  <td class="text-center">{{device.event}}</td>
+                  <td class="text-center">{{device.deviceUUID}}</td>
+                  <td class="text-center"
+                    [ngClass]="{'Online': device.deviceStatus === 'Online', 'offline' : device.deviceStatus === 'Offline'}">
+                    {{device.deviceStatus}}</td>
+                  <td class="text-center">{{device.lastEditBy}}</td>
+                  <td class="text-center">{{device.lastEditDate}}</td>
+                  <td class="text-center">{{device.authorizedDate}}</td>
+                  <td class="text-center">{{device.authoriziedBy}}</td>
+                  <td class="text-center">{{device.remarks}}</td>
+                  <td>
+
+                    <button mat-raised-button class="td"
+                      [ngClass]="{'pending' : device.authorizedStatus === 'Pending','pending1':device.authorizedStatus === 'Authorized'}"
+                      (click)="checkBox(device)" matTooltip="approve">
+                      {{device.authorizedStatus}}
+                    </button>
+
+                    <label class="text-center"
+                      [ngClass]="{'authorized': device.authorizedStatus === 'Authorized','authorized1': device.authorizedStatus === 'Pending'}">
+                      {{device.authorizedStatus}}
+                    </label>
+                  </td>
+                  <td class="text-center">
+                    <i class="fa fa-edit text-primary" title="edit" (click)="editmtdd(device)"></i>
+                    <i class="fa fa-trash text-danger" title="delete" (click)="deletedevice(device.deviceId)"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!devices?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <div *ngIf="paginate">
+              <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<div class="container-fluid" *ngIf="editdriver == true">
+  <mat-card class="maincard" >
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Edit Details</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Location</mat-label>
+              <mat-select [(ngModel)]="editauthorized.locationId" name="locationId">
+                <mat-option *ngFor="let location of alllocation" [value]=location.id>
+                  {{location.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Event</mat-label>
+              <mat-select name="eventId" [(ngModel)]="editauthorized.eventId">
+                <mat-option *ngFor="let event of allevents" [value]="event.id">{{event.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Remarks</mat-label>
+              <input matInput placeholder="remarks" [(ngModel)]="editauthorized.remarks" name="remarks" type="text" />
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Name</mat-label>
+              <input matInput placeholder="Name" [(ngModel)]="editauthorized.deviceName" name="deviceName" type="text"
+                disabled />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Authorization Date</mat-label>
+              <input matInput placeholder="Namekjh" name="authorizedDate" [(ngModel)]="editauthorized.authorizedDate"
+                type="text" disabled />
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Device UUID</mat-label>
+              <input matInput placeholder="Namekjh" name="deviceUUID" [(ngModel)]="editauthorized.deviceUUID"
+                type="text" disabled />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Device Username</mat-label>
+              <input matInput placeholder="Namekjh" name="deviceUUID" [(ngModel)]="editauthorized.deviceUUID"
+                type="text" disabled />
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Last Edited By</mat-label>
+              <input matInput placeholder="Namekjh" name="lastEditBy" [(ngModel)]="editauthorized.lastEditBy"
+                type="text" disabled />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Last Edited On</mat-label>
+              <input matInput placeholder="Namekjh" name="lastEditDate" [(ngModel)]="editauthorized.lastEditDate"
+                type="text" disabled />
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Authorization By</mat-label>
+              <input matInput placeholder="Namekjh" name="authoriziedBy" [(ngModel)]="editauthorized.authoriziedBy"
+                type="text" disabled />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-right">
+      <button mat-raised-button color="primary" class="m-1" (click)="UpdateAuthorized(editauthorized)" *ngIf="update">
+        Update
+      </button>
+      <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+    </div>
+  </mat-card>
+</div>

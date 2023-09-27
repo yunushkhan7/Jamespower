@@ -1,0 +1,111 @@
+<mat-dialog-content style="width: 1255px; min-height: 580px;">
+  <mat-card class="maincard">
+    <!-- <div class="row">
+      <div class="col-12">
+        <div class="container">
+
+        </div>
+      </div>
+    </div> -->
+    <div class="container-fluid">
+      <!-- <div class="row"> -->
+      <!-- <div> -->
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <a routerLink="/controller" class="adj-arrow"><i class="fa fa-arrow-circle-o-left fa-lg"
+              aria-hidden="true"></i></a>
+          <h2 class="user">Compare Data</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="btn-design">
+
+            <button mat-raised-button class="btn-align" (click)="ApproveDB()" >
+              <i class="fa fa-check-circle adjplus"></i>Approve All Vaccination DB
+            </button>
+            <button mat-raised-button class="adduser ml-1 btn-downloadtemp" (click)="ApproveExcel()">
+              <i class="fa fa-check-circle adjplus"></i> Approve All Excel DB
+            </button>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="table-responsive">
+            <table *ngFor="let item of records1" class="table table-stripped table-bordered">
+              <thead class="head-design">
+                <tr class="text-center ">
+                  <th (click)="sort('source')">Source&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('idNumber')">ID Number#&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('passportNumber')">Passport&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('name')">Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('dose1')">Dose1&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('dose2')">Dose2&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('validDate')">Vax Valid&nbsp;<i class="fa fa-sort"></i></th>
+                  <th>
+                    Select
+                    <!-- <input class="av avborder" type="checkbox" name="all" [checked]="isAllChecked()"
+                        (change)="checkAll($event)" /> -->
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr class="text-center" *ngFor="let record1 of item">
+                  <td>{{record1.source}}</td>
+                  <td>{{record1.idNumber}}</td>
+                  <td>{{record1.passportNumber}}</td>
+                  <td>{{record1.name}}</td>
+                  <td>{{record1.dose1}}</td>
+                  <td>{{record1.dose2}}</td>
+                  <td>{{record1.validDate}}</td>
+                  <td> <input type="checkbox" class="av" name="sizecb[]" value="{{record1}}"
+                      [(ngModel)]="record1.ischecked" (change)="yourfunc1($event, record1)" /> </td>
+                </tr>
+              </tbody>
+              <tfoot></tfoot>
+            </table>
+            <mat-paginator #paginator [length]="paginationDetails?.totalDocs" [pageSize]="paginationData?.limit"
+              [pageSizeOptions]="[5,10,25,50,75]" (page)="pageChanged($event)">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- </div> -->
+  </mat-card>
+</mat-dialog-content>
+
+
+<!-- <mat-dialog-content style="width: 1255px; min-height: 580px;">
+  <mat-card>
+    <mat-horizontal-stepper>
+      <mat-step label="Step 1" state="phone">
+        Table one
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step label="Step 2" state="chat">
+        <p>Table two</p>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step label="Step 3">
+        <p>You're welcome.</p>
+      </mat-step>
+
+      <ng-template matStepperIcon="phone">
+        <mat-icon>call_end</mat-icon>
+      </ng-template>
+      <ng-template matStepperIcon="chat">
+        <mat-icon>forum</mat-icon>
+      </ng-template>
+    </mat-horizontal-stepper>
+  </mat-card>
+</mat-dialog-content> -->

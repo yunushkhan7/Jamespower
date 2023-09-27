@@ -1,0 +1,340 @@
+<ngx-spinner> </ngx-spinner>
+<!-- table starts -->
+<div class="container-fluid" *ngIf="editauthorized == false && addauthorized == false && viewfleet == false">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2>Scheduled Reports</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="addcustomer ml-1" (click)="AddEmails()">
+            Add Scheduled Reports
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive" *ngIf="table1 == true">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr>
+                  <th *ngFor="let cn of ColumnList" class="text-center" (click)="sort('userName')">
+                    {{ cn.columnName }}<i class="fa fa-sort"></i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="
+                    let e of Emails
+                    | paginate: { itemsPerPage: pageno, currentPage: q }
+                    | filter: searchText
+                    | orderBy: key:reverse">
+                  <td class="text-center">{{ e.reportName }}</td>
+                  <td class="text-center">{{ e.frequency }}</td>
+                  <td class="text-center">{{ e.type }}</td>
+                  <td class="text-center">{{ e.format }}</td>
+                  <td class="text-center"
+                    [ngClass]="{'Online': e.passpordProtected === true,'offline': e.passpordProtected === false}">
+                  </td>
+                  <td class="text-center">{{ e.subject }} </td>
+                  <td>
+                    <ul>
+                      <li class="blueclr" *ngFor="let ema of e.dupmail.split(',')">{{ema}}</li>
+                    </ul>
+                  </td>
+                  <td class="text-center">
+                    <i class="fa fa-edit text-primary" title="edit" (click)="EditEmail(e)"></i>
+                    <i class="fa fa-trash text-danger ml-1" title="delete" (click)="delete(e.scheduledReportsId)"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!Emails?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="addauthorized == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Add Emails</h2>
+        </div>
+      </div>
+      <form>
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Subject</mat-label>
+                <input matInput placeholder="Enter Subject" type="text" name="subject" [formControl]="Subject"
+                  [errorStateMatcher]="matcher" [(ngModel)]="addEmail.subject" />
+                <mat-error *ngIf="Subject.hasError('required')">
+                  subject is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Report Name</mat-label>
+                <input matInput placeholder="Enter Report Name" type="text" name="reportName" [formControl]="Report"
+                  [errorStateMatcher]="matcher" [(ngModel)]="addEmail.reportName" />
+                <mat-error *ngIf="Report.hasError('required')">
+                  report is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Frequency</mat-label>
+                <mat-select name="frequency" [(ngModel)]="addEmail.frequency" [formControl]="freq"
+                  [errorStateMatcher]="matcher">
+                  <mat-option *ngFor="let freq of FreqList" [value]="freq.FreqCode">{{freq.Frequency}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="freq.hasError('required')">
+                  frequency is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Type</mat-label>
+                <mat-select [formControl]="Types" name="type" [(ngModel)]="addEmail.type" [errorStateMatcher]="matcher">
+                  <mat-option *ngFor="let type of TypesList" [value]="type.TypeCode">{{type.Type}}</mat-option>
+
+                </mat-select>
+                <mat-error *ngIf="Types.hasError('required')">
+                  type is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Format</mat-label>
+                <mat-select [formControl]="Format" name="format" [(ngModel)]="addEmail.format"
+                  [errorStateMatcher]="matcher">
+                  <mat-option *ngFor="let for of FormatList" [value]="for.FormatCode">{{for.Format}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="Format.hasError('required')">
+                  format is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Pwd Protected</mat-label>
+                <mat-select name="passpordProtected" [(ngModel)]="addEmail.passpordProtected" [formControl]="pwd"
+                  [errorStateMatcher]="matcher">
+                  <mat-option *ngFor="let pwd of PwdList" [value]="pwd.PwdCode">{{pwd.Pwd}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="pwd.hasError('required')">
+                  pwd is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form [formGroup]="rulesForm" class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-chip-list #chipList formArrayName="validateemails" aria-label="Fruit selection">
+                  <!-- Selectable -->
+                  <mat-chip [color]="(chip.invalid)?'warn':''" selected *ngFor="let chip of chips;  let i=index"
+                    [selectable]="true" [removable]="removable" (removed)="remove(chip)" required name="chips">
+                    {{chip.email}}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                  </mat-chip>
+                  <!-- Addonblur -->
+                  <input placeholder="Add email" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true "
+                    (matChipInputTokenEnd)="add($event)" [(ngModel)]="addEmail.emails" name="emails">
+                </mat-chip-list>
+              </mat-form-field>
+              <mat-error *ngIf="showerror">At least one email recipient is required</mat-error>
+            </form>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <button mat-raised-button color="primary" class="m-1" (click)="SaveData(addEmail)"> Save </button>
+          <button mat-raised-button color="warn" (click)="Cancel()"> Close </button>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>
+
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="editauthorized == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Edit Emails</h2>
+        </div>
+      </div>
+      <form>
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Subject</mat-label>
+                <input matInput placeholder="Enter Subject" type="text" name="subject" [formControl]="Subject"
+                  [errorStateMatcher]="matcher" [(ngModel)]="editEmail.subject" />
+                <mat-error *ngIf="Subject.hasError('required')">
+                  subject is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Report Name</mat-label>
+                <input matInput placeholder="Enter Report Name" type="text" name="reportName" [formControl]="Report"
+                  [errorStateMatcher]="matcher" [(ngModel)]="editEmail.reportName" />
+                <mat-error *ngIf="Report.hasError('required')">
+                  report is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Frequency</mat-label>
+                <mat-select name="frequency" [formControl]="freq" [errorStateMatcher]="matcher"
+                  [(ngModel)]="editEmail.frequency">
+                  <mat-option *ngFor="let freq of FreqList" [value]="freq.FreqCode">{{freq.Frequency}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="freq.hasError('required')">
+                  frequency is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Type</mat-label>
+                <input matInput placeholder="Enter type" type="text" name="type" [(ngModel)]="editEmail.type"
+                  disabled />
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Format</mat-label>
+                <input matInput placeholder="Enter Format" type="text" name="format" [(ngModel)]="editEmail.format"
+                  disabled />
+              </mat-form-field>
+            </form>
+          </div>
+          <div class="col-12 col-md-6">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label>Pwd Protected</mat-label>
+                <mat-select name="passpordProtected" [(ngModel)]="editEmail.passpordProtected"
+                  [errorStateMatcher]="matcher" [formControl]="pwd">
+                  <mat-option *ngFor="let pwd of PwdList" [value]="pwd.PwdCode">{{pwd.Pwd}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="pwd.hasError('required')">
+                  report is required
+                </mat-error>
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <form class="example-form" [formGroup]="rulesForm">
+              <mat-form-field class="example-full-width">
+                <mat-chip-list #chipList formArrayName="validateemails" aria-label="Fruit selection">
+                  <mat-chip [color]="(chip.invalid)?'warn':''" selected *ngFor="let chip of chips; let i=index"
+                    [selectable]="true" [removable]="removable" (removed)="remove(chip)" required name="chips">
+                    {{chip.email}}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                  </mat-chip>
+                  <input placeholder="Add email" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="add($event)" [(ngModel)]="editEmail.emails" name="emails">
+                </mat-chip-list>
+              </mat-form-field>
+              <mat-error *ngIf="showerror">At least one email recipient is required</mat-error>
+            </form>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <button mat-raised-button color="primary" class="m-1" (click)="update(editEmail)">
+            Update
+          </button>
+          <button mat-raised-button color="warn" (click)="Cancel()">
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </mat-card>
+</div>

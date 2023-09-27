@@ -1,0 +1,304 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid" *ngIf="addcountries == false && editcountries == false">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2 class="user">Countries</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="addcountry" (click)="AddCountry()">
+            <i class="fa fa-plus"></i> Add Country
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <!-- <option>Select Entries</option> -->
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr>
+                  <th (click)="sort('iso3_code')">ISO 3-Code&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('iso2_code')">ISO 2-Code<br>(eOrdering)&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('countryName')">Country Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('phonePrefix')">Country Phone prefix&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('mobileAppDesc')">Novis Citizenship&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('eorderingDesc')">eOrdering Citizenship&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('defaultRaceName')">Defalut Country Race&nbsp;<i class="fa fa-sort"></i></th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let country of countries
+                | paginate: { itemsPerPage: pageno, currentPage: q }
+                | filter: searchText | orderBy: key: !reverse" >
+                  <td>{{country.iso3_code}}</td>
+                  <td>{{country.iso2_code}}</td>
+                  <td>{{country.countryName}}</td>
+                  <td>{{country.phonePrefix}}</td>
+                  <td>{{country.mobileAppDesc}}</td>
+                  <td>{{country.eorderingDesc}}</td>
+                  <td>{{country.defaultRaceName}}</td>
+                  <td>
+                    <i class="fa fa-edit text-primary" title="edit" (click)="EditCountry(country)"></i>
+                    <i class="fa fa-trash text-danger ml-1" title="delete" (click)="DeleteCountry(country.id)"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!countries?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- addcountries starts -->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="addcountries == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Add Country Details</h2>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>ISO-3 Code</mat-label>
+              <input matInput placeholder="Enter iso-3 code" type="text" [formControl]="ISO3Code" [errorStateMatcher]="matcher"
+              [(ngModel)]="insertcountry.iso3_code" name="iso3_code" />
+              <mat-error *ngIf="ISO3Code.hasError('required')">Iso-3 code is required</mat-error>
+              <!-- <mat-error *ngIf="ISO3Code.hasError('pattern')">Enter Valid Name</mat-error> -->
+              <!-- <mat-error *ngIf="ISO3Code.hasError('whitespace') && !ISO3Code.hasError('required')">spaces is not accept</mat-error> -->
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>ISO-2 Code</mat-label>
+              <input matInput placeholder="Enter iso-2 code" type="text" [formControl]="ISO2Code" [errorStateMatcher]="matcher"
+              [(ngModel)]="insertcountry.iso2_code" name="iso2_code" />
+              <mat-error *ngIf="ISO2Code.hasError('required')">Iso-2 code is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Country Name</mat-label>
+              <input matInput placeholder="Enter Country Name"  [formControl]="CountryName" [errorStateMatcher]="matcher"
+              [(ngModel)]="insertcountry.countryName" name="countryName" (keypress)="keyPressAlphaNumeric($event)"/>
+              <mat-error *ngIf="CountryName.hasError('required')">Country name is required</mat-error>
+              <!-- <mat-error *ngIf="CountryName.hasError('pattern')">Enter Valid Name</mat-error> -->
+              <!-- <mat-error *ngIf="CountryName.hasError('whitespace') && !FirstName.hasError('required')">spaces is not allowed</mat-error> -->
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Country Phone prefix</mat-label>
+              <input matInput placeholder="Enter phone prefix" maxlength="4" [formControl]="PhonePrefix" [errorStateMatcher]="matcher"
+              [(ngModel)]="insertcountry.phonePrefix" name="phonePrefix" />
+              <mat-error *ngIf="PhonePrefix.hasError('required')">Phone prefix is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Novis Citizenship</mat-label>
+              <input matInput placeholder="Enter citizenship" [formControl]="MobileAppDesc" [errorStateMatcher]="matcher"
+              [(ngModel)]="insertcountry.mobileAppDesc" name="mobileAppDesc"/>
+              <mat-error *ngIf="MobileAppDesc.hasError('required')">citizenship is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>eOrdering Citizenship</mat-label>
+              <input matInput placeholder="Enter citizenship" [formControl]="eOrderingDesc" [errorStateMatcher]="matcher"
+              [(ngModel)]="insertcountry.eorderingDesc" name="eorderingDesc"/>
+              <mat-error *ngIf="eOrderingDesc.hasError('required')">citizenship is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Defalut Country Race</mat-label>
+              <mat-select [formControl]="DefalutRace" [errorStateMatcher]="matcher"
+              [(ngModel)]="insertcountry.defaultRaceId" name="defaultRaceId">
+                <mat-option *ngFor="let race of races"  [value]="race.id">{{race.raceCode}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="DefalutRace.hasError('required')">default country race is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <!-- 4th row ends -->
+      <div class="text-right">
+        <button color="primary" class="m-1" mat-raised-button (click)="SaveCountry(insertcountry)"> Save </button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- adduser ends -->
+
+<!-- edit user starts -->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="editcountries == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Edit Country Details</h2>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>ISO-3 Code</mat-label>
+              <input matInput placeholder="Enter iso-3 code" type="text" [formControl]="ISO3Code" [errorStateMatcher]="matcher"
+              [(ngModel)]="updatecountry.iso3_code" name="iso3_code" />
+              <mat-error *ngIf="ISO3Code.hasError('required')">Iso-3 code is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>ISO-2 Code</mat-label>
+              <input matInput placeholder="Enter iso-2 code" type="text" [formControl]="ISO2Code" [errorStateMatcher]="matcher"
+               [(ngModel)]="updatecountry.iso2_code" name="iso2_code"/>
+               <mat-error *ngIf="ISO2Code.hasError('required')">Iso-2 code is required</mat-error>
+            </mat-form-field>
+          </form>
+
+        </div>
+      </div>
+      <!-- 2nd row -->
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Country Name</mat-label>
+              <input matInput placeholder="Enter Country Name" [formControl]="CountryName" [errorStateMatcher]="matcher"
+               [(ngModel)]="updatecountry.countryName" name="countryName" />
+               <mat-error *ngIf="CountryName.hasError('required')">country name is required</mat-error>
+               <!-- <mat-error *ngIf="CountryName.hasError('pattern')">Enter Valid Name</mat-error> -->
+               <!-- <mat-error *ngIf="CountryName.hasError('whitespace') && !FirstName.hasError('required')">spaces is not allowed</mat-error> -->
+              </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Country Phone prefix</mat-label>
+              <input matInput maxlength="4" placeholder="Enter phone prefix" [formControl]="PhonePrefix" [errorStateMatcher]="matcher"
+               [(ngModel)]="updatecountry.phonePrefix" name="phonePrefix"/>
+               <mat-error *ngIf="PhonePrefix.hasError('required')">Phone prefix is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <!-- 2nd row ends -->
+
+      <!-- 3rd row starts -->
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Novis Citizenship</mat-label>
+              <input matInput placeholder="Enter citizenship" [formControl]="MobileAppDesc" [errorStateMatcher]="matcher"
+               [(ngModel)]="updatecountry.mobileAppDesc" name="mobileAppDesc"/>
+               <mat-error *ngIf="MobileAppDesc.hasError('required')">citizenship is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>eOrdering Citizenship</mat-label>
+              <input matInput placeholder="Enter citizenship" [formControl]="eOrderingDesc" [errorStateMatcher]="matcher"
+               [(ngModel)]="updatecountry.eorderingDesc" name="eorderingDesc" />
+               <mat-error *ngIf="eOrderingDesc.hasError('required')">citizenship is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <!-- 3rd row ends -->
+      <!-- 4th row -->
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Defalut Country Race</mat-label>
+              <mat-select [formControl]="DefalutRace" [errorStateMatcher]="matcher"
+                [(ngModel)]="updatecountry.defaultRaceId" name="defaultRaceId">
+                <mat-option *ngFor="let race of races"  [value]="race.id">
+                  {{race.raceCode}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="DefalutRace.hasError('required')">default country race is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+
+      </div>
+      <!-- 4th row ends -->
+      <div class="text-right">
+        <button color="primary" class="m-1" mat-raised-button (click)="UpdateCountry(updatecountry)"> Update </button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- edit user ends -->

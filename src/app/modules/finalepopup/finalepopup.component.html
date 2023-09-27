@@ -1,0 +1,45 @@
+<mat-dialog-content style="width: 550px; height: 280px;">
+  <div class="container uploadrec">
+    <h2>Upload Records</h2>
+  </div>
+  <div class="container fontsty">
+    <p>Are you sure you want to update vaccianation DB file with the new changes</p>
+    <!-- <p>I fully understand that this action will delete all existing vaccination records </p> -->
+  </div>
+  <br>
+  <div class="container">
+    <p style="color: gray;"> Type `CONFIRM` to Proceed</p>
+    <div class="col-md-9">
+      <input type="text" class="form-control" [(ngModel)]="Confirm" style="margin-left: -8%;" placeholder="CONFIRM"
+        [ngStyle]="{ 'color' : notvalid ? 'red' : '' }" (click)="clicked()" style="text-transform:uppercase"
+        (keypress)="keyPressAlphaNumeric($event)">
+    </div>
+  </div>
+  <hr style="background-color: black;" />
+  <p style="color: red;">{{errormsg}} </p>
+  <div class="buttons1">
+    <button mat-raised-button class="mr-1 bgbtncol" matDialogClose (click)="Confirmation()">Confirm</button>
+    <button mat-raised-button color="info" class="ml-1" matDialogClose (click)="Cancel()">Cancel</button>
+  </div>
+</mat-dialog-content>
+
+<!-- <mat-dialog-content style="width: 550px; height: 280px;">
+  <div class="container uploadrec">
+    <h2>Upload New Records</h2>
+  </div>
+  <div class="container fontsty">
+    <h3 class="text-center"><b>Uploading Process Complete</b></h3>
+  </div>
+  <div class="container">
+    <i class="fa fa-check-circle"></i>
+    <p class="alignp fontsty">{{successRes}} records were successfully created</p>
+  </div>
+  <div class="container">
+    <i class="fa fa-times-circle"></i>
+    <p class="alignp fontsty">{{failedRes}} records failed</p>
+  </div>
+  <br><br>
+  <div class="container">
+    <button mat-raised-button color="info" class="ml-1" matDialogClose (click)="Close()">Close</button>
+  </div>
+</mat-dialog-content> -->

@@ -1,0 +1,254 @@
+<ngx-spinner></ngx-spinner>
+<!-- table starts -->
+<div class="container-fluid" *ngIf="adddoor == false && editdoor == false">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h2>Doors</h2>
+                </div>
+                <div class="col-12 col-md-6">
+                    <button mat-raised-button color="primary" class="addcustomer" (click)="AddLocation()">
+            <i class="fa fa-plus"></i> Add Door
+          </button>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+                </div>
+                <div class="col-12 col-md-3 ml-auto">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label><i class="fa fa-search"></i> Search</mat-label>
+                            <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText" autocomplete="off" />
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-stripped table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <th (click)="sort('address')">Name&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('remarks')">Location&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('name')">Direction&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('address')">QR Readers&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('remarks')">Ethernet I/O Box&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" *ngFor="let door of doorList
+                  | paginate: { itemsPerPage: pageno, currentPage: q }
+                  | filter: searchText  | orderBy: key: !reverse; let i=index">
+                                    <td>{{door.name}}</td>
+                                    <td>{{door.locationName}}</td>
+                                    <td>{{door.direction}}</td>
+                                    <td>{{door.qrReaderName}}</td>
+                                    <td>{{door.ethernetName}}</td>
+                                    <td>
+                                        <i class="fa fa-lock text-danger ml-1" title="open door" (click)="unlockDoor(door.id)" *ngIf="storage==1  || storage==9"></i>
+
+                                        <i class="fa fa-edit text-primary " disabled title="edit" (click)="EditDoor(door)" *ngIf="storage==1 || !storage==9 "></i>
+                                        <i class="fa fa-trash text-danger ml-1" title="delete" (click)="deleteDoors(door.id)" *ngIf="storage==1 || !storage==9"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="20">
+                                        <div *ngIf="!doorList?.length" style="text-align: center">
+                                            No records found
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- add door starts -->
+<mat-card class="maincard" *ngIf="adddoor == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Add Door</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Door Name</mat-label>
+                        <input matInput placeholder="Enter Door Name" name="name" [formControl]="DoorName" [errorStateMatcher]="matcher" [(ngModel)]="insertDoors.name" type="text" />
+                        <mat-error *ngIf="DoorName.hasError('required')">Door name is required</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Direction</mat-label>
+                        <mat-select name="direction" [formControl]="Direction" [errorStateMatcher]="matcher" [(ngModel)]="insertDoors.direction">
+                            <mat-option *ngFor="let dir of directions" [value]="dir.direction">
+                                {{ dir.direction }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Direction.hasError('required')"> Direction is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>QR Reader</mat-label>
+                        <mat-select name="qrReaderId" [formControl]="QrReader" [errorStateMatcher]="matcher" [(ngModel)]="insertDoors.qrReaderId">
+                            <mat-option *ngFor="let reader of qrreaders" [value]="reader.id">
+                                {{ reader.name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="QrReader.hasError('required')"> Qr reader is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Ethernet I/O Box</mat-label>
+                        <mat-select name="ethernetId" [formControl]="Ethernet" [errorStateMatcher]="matcher" [(ngModel)]="insertDoors.ethernetId">
+                            <mat-option *ngFor="let eth of ethernets" [value]="eth.id">
+                                {{ eth.name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Ethernet.hasError('required')"> Ethernet I/O Box is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Location</mat-label>
+                        <mat-select name="locationId" [formControl]="Location" [errorStateMatcher]="matcher" [(ngModel)]="insertDoors.locationId">
+                            <mat-option *ngFor="let location of locationarr" [value]="location.id">
+                                {{ location.locationName }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Location.hasError('required')"> Location is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <button mat-raised-button color="primary" class="m-1" (click)="SaveDoor(insertDoors)">Save</button>
+            <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+        </div>
+    </div>
+</mat-card>
+
+<!-- edit door starts -->
+<mat-card class="maincard" *ngIf="editdoor == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Edit Door</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Door Name</mat-label>
+                        <input matInput placeholder="Enter Door Name" name="name" [formControl]="DoorName" [errorStateMatcher]="matcher" [(ngModel)]="updateDoors.name" type="text" />
+                        <mat-error *ngIf="DoorName.hasError('required')">Door name is required</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Direction</mat-label>
+                        <mat-select name="direction" [formControl]="Direction" [errorStateMatcher]="matcher" [(ngModel)]="updateDoors.direction">
+                            <mat-option *ngFor="let dir of directions" [value]="dir.direction">
+                                {{ dir.direction }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Direction.hasError('required')"> Direction is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>QR Reader</mat-label>
+                        <mat-select name="qrReaderId" [formControl]="QrReader" [errorStateMatcher]="matcher" [(ngModel)]="updateDoors.qrReaderId">
+                            <mat-option *ngFor="let reader of qrreaders" [value]="reader.id">
+                                {{ reader.name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="QrReader.hasError('required')"> Qr reader is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Ethernet I/O Box</mat-label>
+                        <mat-select name="ethernetId" [formControl]="Ethernet" [errorStateMatcher]="matcher" [(ngModel)]="updateDoors.ethernetId">
+                            <mat-option *ngFor="let eth of ethernets" [value]="eth.id">
+                                {{ eth.name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Ethernet.hasError('required')"> Ethernet I/O Box is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Location</mat-label>
+                        <mat-select name="locationId" [formControl]="Location" [errorStateMatcher]="matcher" [(ngModel)]="updateDoors.locationId">
+                            <mat-option *ngFor="let location of locationarr" [value]="location.id">
+                                {{ location.locationName }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Location.hasError('required')"> Location is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <button mat-raised-button color="primary" class="m-1" (click)="UpdateDoor(updateDoors)">Update</button>
+            <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+        </div>
+    </div>
+</mat-card>

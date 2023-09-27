@@ -1,0 +1,128 @@
+<ngx-spinner> </ngx-spinner>
+
+<!-- table  starts-->
+<div class="container-fluid">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h2>Patient Profiles</h2>
+                </div>
+            </div>
+            <hr>
+
+            <mat-accordion class="example-headers-align" multi>
+                <!-- #enddocregion multi -->
+                <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" (closed)="panelOpenState = false" hideToggle>
+                    <mat-expansion-panel-header #panelH (click)="panelH._toggle()">
+                        <mat-panel-title> Filters</mat-panel-title>
+                        <mat-icon matTooltip="refresh" (click)="Refresh()" class="mat-icon adj">refresh</mat-icon>
+                        <!-- <mat-icon matTooltip="download" (click)="DownloadExcel(filterjson)" class="mat-icon">file_download</mat-icon> -->
+                        <mat-icon matTooltip="expand_more" *ngIf="!panelOpenState" (click)="panelH._toggle()">expand_more</mat-icon>
+                        <mat-icon matTooltip="expand_less" *ngIf="panelOpenState" (click)="panelH._toggle()">expand_less</mat-icon>
+                    </mat-expansion-panel-header>
+
+                    <form>
+                        <div class="row mb-2">
+                            <div class="col-md-3">
+                                <input type="text" [(ngModel)]="filterjson.name" name="name" placeholder="Name" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" [(ngModel)]="filterjson.passport" name="passport" placeholder="Passport" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" [(ngModel)]="filterjson.id" name="id" placeholder="Id" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <input [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" [(ngModel)]="filterjson.dob" name="dob" placeholder="Date of Birth" class="form-control" name="dateofbirth">
+                                <owl-date-time #dt2 [pickerType]="'calendar'"></owl-date-time>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="text" [(ngModel)]="filterjson.gender" name="gender" placeholder="Gender" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" [(ngModel)]="filterjson.email" name="email" placeholder="Email" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <button mat-raised-button color="primary" class="filter" (click)="SearchFilter(filterjson)"> Search </button>
+                            </div>
+                        </div>
+                    </form>
+
+                </mat-expansion-panel>
+            </mat-accordion>
+
+            <!-- <mat-card class="maincard">
+        <h4 class="mb-1 ml-1"> Filters </h4>
+
+      </mat-card> -->
+            <hr />
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+                </div>
+                <div class="col-12 col-md-3 ml-auto">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label> <i class="fa fa-search"></i> Search </mat-label>
+                            <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText" autocomplete="off" />
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-stripped table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <th (click)="sort('name')">Name&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('name')">#Passport&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('id')">Id#&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('dateofbirth')">Date Of Birth&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('gender')">Gender&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('patientEmail')">Email&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" *ngFor="let profile of patientprofiles
+                | paginate: { itemsPerPage: pageno, currentPage: q }
+                | filter: searchText | orderBy: key: !reverse">
+                                    <td>{{profile.patientFullName}}</td>
+                                    <td>{{profile.passport}}</td>
+                                    <td>{{profile.id}}</td>
+                                    <td>{{profile.dateofbirth}}</td>
+                                    <td>{{profile.gender}}</td>
+                                    <td>{{profile.patientEmail}}</td>
+                                    <td><a [routerLink]="['/patientprofile',profile.id]"><i class="fa fa-eye" title="edit"></i></a></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="20">
+                                        <div *ngIf="!patientprofiles?.length" style="text-align: center">
+                                            No records found
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<!-- table ends -->

@@ -1,0 +1,100 @@
+<div class="container-fluid">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <!-- <div class="row">
+              <div class="col-12 col-md-6">
+                <h2 class="user">Registration Logs</h2>
+              </div>
+            </div> -->
+
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('id')"> App Id&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('patientFullName')"> Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('dateofbirth')"> DOB&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('location')"> Location&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('eventName')"> Event&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('deviceName')"> Device Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('registrationTime')"> Reg. Time&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('registeredBy')"> Reg. By&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('patientEmail')"> Email&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('patientMobileNo')"> Mobile&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('vehicleNo')"> Vehicle no&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('agencyName')"> Agency Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('testresults')"> Medical Tests&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('gender')"> Gender&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('isVaccinated')"> Is Vaccinated&nbsp;<i class="fa fa-sort"></i></th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let reg of patientReg
+                      | paginate: { itemsPerPage: pageno, currentPage: q }
+                      | filter: searchText | orderBy: key: !reverse">
+                  <td>{{reg.patientDetailsId}}</td>
+                  <td>{{reg.patientFullName}}</td>
+                  <td>{{reg.dateofbirth}}</td>
+                  <td>{{reg.location}}</td>
+                  <td>{{reg.eventName}}</td>
+                  <td>{{reg.deviceName}}</td>
+                  <td>{{reg.registrationTime}}</td>
+                  <td>{{reg.registeredBy}}</td>
+                  <td>{{reg.patientEmail}}</td>
+                  <td>{{reg.patientMobileNo}}</td>
+                  <td>{{reg.vehicleNo}}</td>
+                  <td>{{reg.agencyName}}</td>
+                  <td>
+                    <ul>
+                      <li *ngFor="let test of reg.testresults.split(',')">{{test}}</li>
+                    </ul>
+                  </td>
+                  <td>{{reg.gender}}</td>
+                  <td>
+                    <span *ngIf="reg.isVaccinated==false">N</span>
+                    <span *ngIf="reg.isVaccinated==true">Y</span>
+                  </td>
+
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!patientReg?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

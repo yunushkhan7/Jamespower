@@ -1,0 +1,33 @@
+<mat-toolbar>
+    <mat-toolbar-row>
+        <button mat-icon-button class="menu" (click)="toggleSideBar()">
+      <mat-icon class="menuicon">menu</mat-icon>
+    </button>
+        <!-- <span class="m-0 pl-1 zsoon">{{bindingvalue}}</span> -->
+        <span class="m-0 pl-1 zsoon">SJPS</span>
+        <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
+            <ul fxLayout="row" fxLayout="20px" class="m-2 p-1">
+                <li>
+                    <label class="user">{{userDetails.userName}}</label>
+                    <button mat-button [matMenuTriggerFor]="menu" class="person-button" matTooltip="User Profile">
+            <mat-icon class="mb-2">person_outline</mat-icon>
+          </button>
+                    <mat-menu #menu="matMenu">
+                        <!-- <button mat-menu-item class="key-button" routerLink="/changepassword">
+              <mat-icon color="primary"> vpn_key</mat-icon>
+              Change Password
+            </button> -->
+                        <button mat-menu-item class="account-button" routerLink="/profile">
+              <mat-icon color="primary">account_circle</mat-icon>
+              User profile
+              </button>
+                        <button (click)="signOut()" mat-menu-item class="exit-button" routerLink="/login">
+              <mat-icon color="primary">exit_to_app</mat-icon>
+              Sign Out
+            </button>
+                    </mat-menu>
+                </li>
+            </ul>
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>

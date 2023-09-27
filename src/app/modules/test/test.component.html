@@ -1,0 +1,387 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid" *ngIf="edittest == false && addtest == false">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2 class="user">Medical-Tests</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="adduser" (click)="AddTest()">
+            <i class="fa fa-plus"></i> Add Test
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('eventName')">Event Name&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('eventTest')">Event Test &nbsp;<i class="fa fa-sort"></i> </th>
+                  <!-- <th (click)="sort('testCode')">eOrdering Test Code&nbsp;<i class="fa fa-sort"></i> </th> -->
+                  <!-- <th (click)="sort('specimen')">eOrdering Specimen Codes&nbsp;<i class="fa fa-sort"></i> </th> -->
+                  <th (click)="sort('currency')">Currency&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('price')">Price&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('mandatory')">Is Mandatory&nbsp;<i class="fa fa-sort"></i> </th>
+                  <!-- <th (click)="sort('modifiedDate')">Last edited on&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('modifiedBy')">Last edited by&nbsp;<i class="fa fa-sort"></i> </th> -->
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let test of testarr
+                  | paginate: { itemsPerPage: pageno, currentPage: q }
+                  | filter: searchText | orderBy: key: !reverse; let i=index;">
+                  <td>{{test.eventName}}</td>
+                  <td>{{test.eventTest}}</td>
+                  <!-- <td>{{test.testCode}}</td>
+                  <td>{{test.specimen}}</td> -->
+                  <td>{{test.currency}}</td>
+                  <td>{{test.price}}</td>
+                  <td>{{test.mandatory}}</td>
+
+                  <!-- <td>{{test.modifiedDate}}</td>
+                  <td>{{test.modifiedBy}}</td> -->
+                  <td>
+                    <i class="fa fa-edit text-primary" title="edit" (click)="EditTest(test)"></i>
+                    <i class="fa fa-trash text-danger ml-1" title="delete" (click)="DeleteTest(test.testId)"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!testarr?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- adduser starts -->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="addtest == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Add Medical Test</h2>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Select Event</mat-label>
+              <mat-select name="eventId" [formControl]="Select" [errorStateMatcher]="matcher"
+                [(ngModel)]="addtestt.eventId">
+                <mat-option *ngFor="let event of eventarr" [value]="event.id">{{event.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Select.hasError('required')">Event is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Test Name</mat-label>
+              <input matInput placeholder="Enter Event test" [formControl]="EventTest" [errorStateMatcher]="matcher"
+                name="eventTest" [(ngModel)]="addtestt.eventTest" type="text" />
+              <mat-error *ngIf="EventTest.hasError('required')">test name is required </mat-error>
+              <mat-error *ngIf="EventTest.hasError('pattern')"> Enter Valid Name </mat-error>
+              <mat-error *ngIf="EventTest.hasError('whitespace') && !EventTest.hasError('required')"> spaces is not
+                accept </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Currency</mat-label>
+              <mat-select name="currency" [formControl]="Currency" [errorStateMatcher]="matcher"
+                [(ngModel)]="addtestt.currency">
+                <mat-option value="SGD">SGD</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Currency.hasError('required')"> Currency is required </mat-error>
+            </mat-form-field>
+          </form>
+          <!-- <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Test Code</mat-label>
+              <input matInput placeholder="Enter test code" [formControl]="TestCode" [errorStateMatcher]="matcher"
+                [(ngModel)]="addtestt.testCode" name="testCode" type="text" />
+              <mat-error *ngIf="TestCode.hasError('required')">test code is required </mat-error>
+            </mat-form-field>
+          </form> -->
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Price</mat-label>
+              <input matInput placeholder="Enter Price" name="price" [formControl]="Price" [errorStateMatcher]="matcher"
+                [(ngModel)]="addtestt.price" (keypress)="keyPressAlphaNumeric($event)" type="text" />
+              <mat-error *ngIf="Price.hasError('required')"> Price is required </mat-error>
+              <mat-error *ngIf="Price.hasError('pattern')"> price should be senisitive </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Is Mandatory</mat-label>
+              <mat-select [formControl]="Mandatory" [errorStateMatcher]="matcher" [(ngModel)]="addtestt.mandatory"
+                name="mandatory">
+                <mat-option value="Y">Yes</mat-option>
+                <mat-option value="N">No</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Mandatory.hasError('required')"> IsMandatory is required </mat-error>
+            </mat-form-field>
+          </form>
+          <!-- <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Is Mandatory</mat-label>
+              <mat-select [formControl]="Mandatory" [errorStateMatcher]="matcher" [(ngModel)]="addtestt.mandatory"
+                name="mandatory">
+                <mat-option value="Y">Yes</mat-option>
+                <mat-option value="N">No</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Mandatory.hasError('required')"> IsMandatory is required </mat-error>
+            </mat-form-field>
+          </form> -->
+        </div>
+        <div class="col-12 col-md-6">
+          <!-- <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Notify eOrdering</mat-label>
+              <mat-select [formControl]="Mandatory" [errorStateMatcher]="matcher" [(ngModel)]="addtestt.mandatory"
+                name="mandatory">
+                <mat-option value="Y">Yes</mat-option>
+                <mat-option value="N">No</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Mandatory.hasError('required')"> Notify eordering is required </mat-error>
+            </mat-form-field>
+          </form> -->
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <!-- <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Currency</mat-label>
+              <mat-select name="currency" [formControl]="Currency" [errorStateMatcher]="matcher"
+                [(ngModel)]="addtestt.currency">
+                <mat-option value="SGD">SGD</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Currency.hasError('required')"> Currency is required </mat-error>
+            </mat-form-field>
+          </form> -->
+        </div>
+        <div class="col-12 col-md-6">
+          <!-- <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Price</mat-label>
+              <input matInput placeholder="Enter Price" name="price" [formControl]="Price" [errorStateMatcher]="matcher"
+                [(ngModel)]="addtestt.price" (keypress)="keyPressAlphaNumeric($event)" type="text" />
+              <mat-error *ngIf="Price.hasError('required')"> Price is required </mat-error>
+              <mat-error *ngIf="Price.hasError('pattern')"> price should be senisitive </mat-error>
+            </mat-form-field>
+          </form> -->
+        </div>
+      </div>
+
+      <div class="text-right">
+        <button color="primary" class="m-1" mat-raised-button (click)="SubmitTest(addtestt)">Save</button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- adduser ends -->
+
+<!-- edit user starts -->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="edittest == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Edit Medical Test</h2>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Select Event</mat-label>
+              <mat-select [formControl]="Select" [errorStateMatcher]="matcher" [(ngModel)]="edittestt.eventId"
+                name="eventId">
+                <mat-option *ngFor="let event of eventarr" [value]="event.id">
+                  {{event.name}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="Select.hasError('required')"> Event is required </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Test Name</mat-label>
+              <input matInput type="text" name="eventTest" placeholder="Enter test name" [formControl]="EventTest"
+                [errorStateMatcher]="matcher" [(ngModel)]="edittestt.eventTest" />
+              <mat-error *ngIf="EventTest.hasError('required')"> Event test is required </mat-error>
+              <mat-error *ngIf="EventTest.hasError('pattern')"> Enter Valid Name </mat-error>
+              <mat-error *ngIf="EventTest.hasError('whitespace') && !EventTest.hasError('required')"> spaces is not
+                accept </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Currency</mat-label>
+              <mat-select [formControl]="Currency" [errorStateMatcher]="matcher" [(ngModel)]="edittestt.currency"
+                name="currency">
+                <mat-option value="SGD">SGD</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Currency.hasError('required')"> Currency is required </mat-error>
+            </mat-form-field>
+          </form>
+          <!-- <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Test code</mat-label>
+              <input matInput type="text" placeholder="Enter test code" [formControl]="TestCode"
+                [errorStateMatcher]="matcher" [(ngModel)]="edittestt.testCode" name="testCode" />
+              <mat-error *ngIf="TestCode.hasError('required')"> Test code is required </mat-error>
+            </mat-form-field>
+          </form> -->
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Price</mat-label>
+              <input matInput placeholder="Enter Price" name="price" maxlength="8" [formControl]="Price"
+                [errorStateMatcher]="matcher" [(ngModel)]="edittestt.price" (keypress)="keyPressAlphaNumeric($event)"
+                type="text" />
+              <mat-error *ngIf="Price.hasError('required')"> Price is required </mat-error>
+              <mat-error *ngIf="Price.hasError('pattern')"> Enter Valid Price </mat-error>
+              <mat-error *ngIf="Price.hasError('whitespace') && !Price.hasError('required')"> spaces is not accept
+              </mat-error>
+            </mat-form-field>
+          </form>
+          <!-- <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Specimen Code</mat-label>
+              <input matInput placeholder="Enter Specimen" name="specimen" [formControl]="Specimen"
+                [errorStateMatcher]="matcher" [(ngModel)]="edittestt.specimen" type="text" />
+              <mat-error *ngIf="Specimen.hasError('required')"> Specimen is required </mat-error>
+            </mat-form-field>
+          </form> -->
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Is Mandatory</mat-label>
+              <mat-select name="mandatory" [formControl]="Mandatory" [errorStateMatcher]="matcher"
+                [(ngModel)]="edittestt.mandatory">
+                <mat-option value="Y">Yes</mat-option>
+                <mat-option value="N"> No</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Mandatory.hasError('required')">IsMandatory is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <!-- <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Notify eOrdering</mat-label>
+              <mat-select name="mandatory" [formControl]="Mandatory" [errorStateMatcher]="matcher"
+                [(ngModel)]="edittestt.mandatory">
+                <mat-option value="Y">Yes</mat-option>
+                <mat-option value="N"> No</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Mandatory.hasError('required')">notify eOrdering is required</mat-error>
+            </mat-form-field>
+          </form> -->
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <!-- <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Currency</mat-label>
+              <mat-select [formControl]="Currency" [errorStateMatcher]="matcher" [(ngModel)]="edittestt.currency"
+                name="currency">
+                <mat-option value="SGD">SGD</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Currency.hasError('required')"> Currency is required </mat-error>
+            </mat-form-field>
+          </form> -->
+        </div>
+        <div class="col-12 col-md-6">
+          <!-- <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Price</mat-label>
+              <input matInput placeholder="Enter Price" name="price" maxlength="8" [formControl]="Price"
+                [errorStateMatcher]="matcher" [(ngModel)]="edittestt.price" (keypress)="keyPressAlphaNumeric($event)"
+                type="text" />
+              <mat-error *ngIf="Price.hasError('required')"> Price is required </mat-error>
+              <mat-error *ngIf="Price.hasError('pattern')"> Enter Valid Price </mat-error>
+              <mat-error *ngIf="Price.hasError('whitespace') && !Price.hasError('required')"> spaces is not accept
+              </mat-error>
+            </mat-form-field>
+          </form> -->
+        </div>
+      </div>
+
+      <div class="text-right">
+        <button color="primary" class="m-1" mat-raised-button (click)="UpdateTest(edittestt)"> Update </button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- edit user ends -->

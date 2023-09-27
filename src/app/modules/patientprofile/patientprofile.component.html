@@ -1,0 +1,177 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid xyz">
+  <mat-card class="maincard cardborder">
+    <form class="form-inline">
+      <h2>{{profiledetails.patientFullName}}</h2>
+      <div class="row">
+        <div class="col-md-3">
+          <img src="{{imgsrc}}" class="img" width="50%" alt="">
+        </div>
+        <div class="col-md-9">
+          <div class="row space-y">
+
+            <div class="col-md-12 col-lg-4 col-xl-4 col-sm-12">
+              <div class="form-group">
+                <label class="col-form-label">Name</label>
+                <input [(ngModel)]="profiledetails.patientFullName" name='patientFullName' type="text" readonly
+                  class="form-control" placeholder="Name">
+              </div>
+            </div>
+
+            <div class="col-md-12 col-lg-4 col-xl-4 col-sm-12">
+              <div class="form-group">
+                <label class=" col-form-label">Gender</label>
+                <input [(ngModel)]="profiledetails.gender" name='gender' type="text" readonly class="form-control"
+                  placeholder="Gender">
+              </div>
+            </div>
+
+            <div class="col-md-12 col-lg-4 col-xl-4 col-sm-12">
+              <div class="form-group">
+                <label class="col-form-label">DOB</label>
+                <input [(ngModel)]="profiledetails.dateofbirth" name='dateofbirth' type="text" readonly
+                  class="form-control" placeholder="Date of Birth">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row space-y">
+
+            <div class="col-md-12 col-lg-4 col-xl-4 col-sm-12">
+              <div class="form-group">
+                <label class="col-form-label">Id#</label>
+                <input [(ngModel)]="profiledetails.id" name='id' type="text" readonly class="form-control"
+                  placeholder="Id">
+              </div>
+            </div>
+
+            <div class="col-md-12 col-lg-4 col-xl-4 col-sm-12">
+              <div class="form-group">
+                <label class="col-form-label">Passport</label>
+                <input [(ngModel)]="profiledetails.passport" name='passport' type="text" readonly
+                  class="form-control" placeholder="Passport">
+              </div>
+            </div>
+
+            <div class="col-md-12 col-lg-4 col-xl-4 col-sm-12">
+              <div class="form-group">
+                <label class="col-form-label">Phone# </label>
+                <input [(ngModel)]="profiledetails.patientMobileNo" name='patientMobileNo' type="text" readonly
+                  class="form-control" placeholder="Phone">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row space-y">
+
+            <div class="col-md-12 col-lg-4 col-xl-4 col-sm-12">
+              <div class="form-group">
+                <label class=" col-form-label">Email</label>
+                <input [(ngModel)]="profiledetails.patientEmail" name='patientEmail' type="text" readonly
+                  class="form-control" placeholder="Email">
+              </div>
+            </div>
+
+            <div class="col-md-12 col-lg-4 col-xl-4 col-sm-12">
+              <div class="form-group">
+                <label class="col-form-label">Vaccinated On</label>
+                <input [(ngModel)]="profiledetails.vaccinationOn" name='vaccinationOn' class="form-control"
+                placeholder="Vacinated On" readonly>
+              </div>
+            </div>
+
+            <div class="col-md-12 col-lg-4 col-xl-4 col-sm-12" *ngIf="!paperpin">
+              <div class="form-group">
+                <p (click)="GetVaccinationRecord(myDialog1)"><i class="fa fa-paperclip adj" aria-hidden="true"></i>
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-card>
+  <hr />
+</div>
+<!-- table ends -->
+
+<ng-template #myDialog1 >
+    <mat-dialog-content class="xyz" style="width: 1250px; height: 480px; background: rgba(247, 244, 244, 0.7); ">
+      <!-- <span matDialogClose style="float: right;"><i class="fa fa-times" aria-hidden="true"></i></span> -->
+      <div class="container-fluid">
+        <div class="row">
+          <span class="border border-dark">
+            <div class="col-md-4">
+              <img src="{{vacimg}}" class="adjimg" >
+            </div>
+          </span>
+          <div class="col-md-6" style="margin-left: 1%;">
+            <br>
+            <h1><b>Uploaded By :</b> {{uploadby}}</h1><br>
+            <h1><b>Uploaded On :</b> {{uploadon}}</h1><br>
+            <h1><b>Uploaded From :</b> {{uploadfrom}}</h1><br>
+            <div>
+              <button class="decbtn" mat-raised-button matDialogClose (click)="Cancel()"> Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+</ng-template>
+
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h2 style="color: red"><br>Novis App Registration logs</h2>
+      </mat-panel-title>
+      <!-- Registration Logs Component -->
+    </mat-expansion-panel-header>
+    <app-reglogs></app-reglogs>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<!-- <hr/> -->
+<!--
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+          <h2 style="color: red"><br>eOrdering - Lab Orders</h2>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-e-order></app-e-order>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<hr>
+
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+          <h2 style="color: red"><br> Accredify Certificates</h2>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-accridifycertificate></app-accridifycertificate>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<hr>
+
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+          <h2 style="color: red"><br> RMG Notifications</h2>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  <app-rmgnotify></app-rmgnotify>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<br> <br><br><br> -->
+<!-- table ends -->

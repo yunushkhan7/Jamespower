@@ -1,0 +1,274 @@
+<ngx-spinner> </ngx-spinner>
+<!-- table  starts-->
+<div class="container-fluid" *ngIf="editzone == false && addzone == false">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h2>Patient Registrations</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <div class="mt-4"></div>
+
+                    <select class="form-control keyword" (change)="keyword($event)">
+            <option value="0">Please select</option>
+            <option value="1">Patient Name</option>
+            <option value="2">Id</option>
+            <option value="3">ART Full No</option>
+            <option value="4">location</option>
+            <option value="5">deviceName</option>
+            <option value="7">Registration Time</option>
+            <option value="8">Registered By</option>
+          </select>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <div *ngIf="Patient == true">
+                        <div class="mt-4"></div>
+
+                        <input type="text" name="patientName" class="form-control" placeholder="Enter Patient Name" [(ngModel)]="Patients.patientName" (keyup)="Patientname($event)" />
+                    </div>
+                    <div *ngIf="Identity == true">
+                        <div class="mt-4"></div>
+
+                        <input type="text" name="id" class="form-control" placeholder="Enter Identity no" [(ngModel)]="Patients.id" (keyup)="Identityno($event)" />
+                    </div>
+                    <div *ngIf="Artnumber == true">
+                        <div class="mt-4"></div>
+
+                        <input type="text" name="artFormNo" class="form-control" placeholder="Enter art full no" [(ngModel)]="Patients.artFormNo" (keyup)="ARTNo($event)" />
+                    </div>
+                    <div *ngIf="registerationTime == true">
+                        <div class="mt-4"></div>
+
+                        <input [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" placeholder="Click to set date and time" class="form-control" [(ngModel)]="Patients.registrationTime" (ngModelChange)="RegistrationTime($event)">
+                        <owl-date-time #dt1></owl-date-time>
+                    </div>
+                    <div *ngIf="Serology == true">
+                        <div class="mt-4"></div>
+                        <input type="text" name="artFormNo" class="form-control" placeholder="Enter Device no" [(ngModel)]="Patients.deviceName" (keyup)="device($event)" />
+
+
+                    </div>
+                    <div *ngIf="Pcr == true">
+                        <div class="mt-4"></div>
+                        <input type="text" name="registeredBy" class="form-control" placeholder="Enter Registered By" [(ngModel)]="Patients.registeredBy" (keyup)="register($event)" />
+
+
+                    </div>
+                    <!-- <div *ngIf="mandatoryTest == true">
+                        <div class="mt-4"></div>
+
+                        <select class="form-control" [(ngModel)]="Screening.mandatoryTestday" (change)="Mandatory($event)">
+              <option value="">Please select</option>
+              <option value="{{mandatory.Mandatory}}" *ngFor="let mandatory of MandatoryList">{{mandatory.Mandatory}}</option>
+              <option value="{{mandatory.MandatoryCode}}" *ngFor="let mandatory of MandatoryList1">{{mandatory.MandatoryCode}}</option>
+            </select>
+                    </div> -->
+                    <div *ngIf="Location == true">
+                        <div class="mt-4"></div>
+                        <input type="text" name="location" class="form-control" placeholder="Enter location" [(ngModel)]="Patients.location" (keyup)="Locations($event)" />
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <button mat-raised-button color="primary" class="btn" (click)="Refresh()">Refresh</button>
+                </div>
+            </div>
+
+            <button mat-raised-button class="btn1" (click)="DownloadPatientExcel()">Download</button>
+            <hr />
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <select class="form-control entries" (change)="onChange($event.target.value)">
+            <!-- <option>Select Entries</option> -->
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+                </div>
+                <div class="col-12 col-md-3 ml-auto">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label> <i class="fa fa-search"></i> Search </mat-label>
+                            <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText" autocomplete="off" />
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-stripped table-bordered">
+                            <thead>
+                                <tr>
+                                    <!-- <th>Sl No</th> -->
+                                    <th (click)="sort('patientDetailsId')">Application Id&nbsp;<i class="fa fa-sort"></i></th>
+
+                                    <th (click)="sort('patientName')">Name&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('id')">ID #&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('artFormNo')">ART Full&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('location')">Location&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('eventName')">Event&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('deviceName')">Device Name&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('registrationTime')">Registration Time&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('registeredBy')">Registration By&nbsp;<i class="fa fa-sort"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let patient of patients | paginate: { itemsPerPage: pageno, currentPage: q }
+                      | filter: searchText | orderBy: key: reverse">
+                                    <!-- <td>{{ (pageno.currentPage - 1) * pageno.itemsPerPage + i+1 }}</td> -->
+                                    <td>{{patient.patientDetailsId}}</td>
+
+                                    <td>{{patient.patientName}}</td>
+                                    <td>{{patient.id}}</td>
+
+                                    <td>{{patient.artFormNo}}</td>
+
+                                    <td>{{patient.location}}</td>
+                                    <td>{{patient.eventName}}</td>
+
+                                    <td>{{patient.deviceName}}</td>
+                                    <td>{{patient.registrationTime}}</td>
+                                    <td>{{patient.registeredBy}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="20">
+                                        <div *ngIf="!patients?.length" style="text-align: center">
+                                            No records found
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- add zone -->
+<mat-card class="maincard" *ngIf="addzone == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Add Zones</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center align-self-center">
+            <div class="col-12 col-md-5">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width1">
+                        <mat-label>Zone Code</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let zone of Zones" [value]="zone.value" style="font-size: 16px">
+                                {{ zone.viewValue }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-5">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Country</mat-label>
+                        <input matInput placeholder="Enter The Name" />
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+        <div class="row justify-content-center align-self-center">
+            <div class="col-12 col-md-5">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Zone Name</mat-label>
+                        <input matInput placeholder="Enter The Name" />
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-5">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>City</mat-label>
+                        <input matInput placeholder="Enter The Name" />
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="text-right">
+        <button mat-raised-button color="primary" class="m-1">Save</button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+    </div>
+</mat-card>
+<!-- add zone ends -->
+
+<!-- edit zone starts -->
+<mat-card class="maincard" *ngIf="editzone == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Edit Zones</h2>
+            </div>
+        </div>
+
+        <!-- justify-content-center align-self-center -->
+
+        <div class="row justify-content-center align-self-center">
+            <div class="col-12 col-md-5">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width1">
+                        <mat-label>Zone Code</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let zone of Zones" [value]="zone.value" style="font-size: 16px">
+                                {{ zone.viewValue }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-5">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Country</mat-label>
+                        <input matInput placeholder="Enter The Name" />
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row justify-content-center align-self-center">
+            <div class="col-12 col-md-5">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Zone Name</mat-label>
+                        <input matInput placeholder="Enter The Name" />
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-5">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>City</mat-label>
+                        <input matInput placeholder="Enter The Name" />
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="text-right">
+        <button mat-raised-button color="primary" class="m-1">Save</button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+    </div>
+</mat-card>
+<!-- edit zones ends -->

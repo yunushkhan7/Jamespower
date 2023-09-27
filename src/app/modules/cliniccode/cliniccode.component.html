@@ -1,0 +1,156 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid" *ngIf="addclinic == false && editclinic == false">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2 class="user">Clinic Codes</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="addcountry" (click)="AddClinic()">
+            <i class="fa fa-plus"></i> Add Clinic
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th  (click)="sort('raceCode')">eOrdering Clinic HCI&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th  (click)="sort('raceDescripiton')">eOrdering Clinic Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let clinic of clinics
+                | paginate: { itemsPerPage: pageno, currentPage: q }
+                | filter: searchText | orderBy: key: !reverse" >
+                  <td>{{clinic.clinicHCI}}</td>
+                  <td>{{clinic.clinicName}}</td>
+                  <td>
+                    <i class="fa fa-edit text-primary" title="edit" (click)="EditClinic(clinic)"></i>
+                    <i class="fa fa-trash text-danger ml-1" title="delete" (click)="DeleteClinic(clinic.id)"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!clinics?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- adduser starts -->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="addclinic == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Add Clinic Details</h2>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>eOrdering Clinic Code</mat-label>
+              <input matInput placeholder="Enter Clinic Code" type="text" [formControl]="ClinicCode" [errorStateMatcher]="matcher"
+              [(ngModel)]="insertclinic.clinicHCI" name="clinicHCI" />
+              <mat-error *ngIf="ClinicCode.hasError('required')">eOrdering clinic code is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>eOrdering Clinic Name</mat-label>
+              <input matInput placeholder="Enter Cinic name" type="text" [formControl]="ClinicName" [errorStateMatcher]="matcher"
+              [(ngModel)]="insertclinic.clinicName" name="clinicName"/>
+              <mat-error *ngIf="ClinicName.hasError('required')">eOrdering clinic name is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="text-right">
+        <button color="primary" class="m-1" mat-raised-button (click)="SaveClinic(insertclinic)"> Save </button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- adduser ends -->
+
+<!-- edit user starts -->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="editclinic == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Edit Clinic Details</h2>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>eOrdering Clinic Code</mat-label>
+              <input matInput placeholder="Enter Clinic Code" type="text" [formControl]="ClinicCode" [errorStateMatcher]="matcher"
+               [(ngModel)]="updateclinic.clinicHCI" name="clinicHCI"/>
+               <mat-error *ngIf="ClinicCode.hasError('required')">eOrdering clinic code is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>eOrdering Clinic Name</mat-label>
+              <input matInput placeholder="Enter Clinic Name" type="text-area"  [formControl]="ClinicName" [errorStateMatcher]="matcher"
+              [(ngModel)]="updateclinic.clinicName" name="clinicName"/>
+              <mat-error *ngIf="ClinicName.hasError('required')">eOrdering clinic name is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="text-right">
+        <button color="primary" class="m-1" mat-raised-button (click)="UpdateClinic(updateclinic)"> Update </button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- edit user ends -->

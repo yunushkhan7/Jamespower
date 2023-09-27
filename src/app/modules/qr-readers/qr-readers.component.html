@@ -1,0 +1,177 @@
+<ngx-spinner></ngx-spinner>
+<!-- table starts -->
+<div class="container-fluid" *ngIf="editlocation == false && addlocation == false">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h2>QR Readers</h2>
+                </div>
+                <div class="col-12 col-md-6">
+                    <button mat-raised-button color="primary" class="addcustomer" (click)="AddLocation()">
+            <i class="fa fa-plus"></i> Add QR Reader
+          </button>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+                </div>
+                <div class="col-12 col-md-3 ml-auto">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label><i class="fa fa-search"></i> Search</mat-label>
+                            <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText" autocomplete="off" />
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-stripped table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <!-- <th (click)="sort('name')">No &nbsp;<i class="fa fa-sort"></i></th> -->
+                                    <th (click)="sort('address')">Name&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('remarks')">Hostname&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('name')">Port&nbsp;<i class="fa fa-sort"></i></th>
+
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" *ngFor="let qr of qrList
+                  | paginate: { itemsPerPage: pageno, currentPage: q }
+                  | filter: searchText  | orderBy: key: !reverse; let i=index">
+                                    <td>{{qr.name}}</td>
+                                    <td>{{qr.hostName}}</td>
+                                    <td>{{qr.port}}</td>
+                                    <td>
+                                        <i style="cursor: pointer;" class="fa fa-check-circle-o text-success" title="device status" (click)="CheckDeviceStatus(qr)"></i>
+                                        <i class="fa fa-edit text-primary ml-1" disabled title="edit" (click)="EditQr(qr)"></i>
+                                        <i class="fa fa-trash text-danger ml-1" title="delete" (click)="DeleteQr(qr.id)"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="20">
+                                        <div *ngIf="!qrList?.length" style="text-align: center">
+                                            No records found
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- add location starts -->
+<mat-card class="maincard" *ngIf="addlocation == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2> Add QR Reader </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Name</mat-label>
+                        <input matInput placeholder="Enter Name" name="name" [formControl]="Name" [errorStateMatcher]="matcher" [(ngModel)]="insertQR.name" type="text" />
+                        <mat-error *ngIf="Name.hasError('required')">Name is required</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Host Name</mat-label>
+                        <input matInput placeholder="Enter QR reader IP Address" name="hostName" [formControl]="HostName" [errorStateMatcher]="matcher" [(ngModel)]="insertQR.hostName" type="text" />
+                        <mat-error *ngIf="HostName.hasError('required')"> Host Name is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Port</mat-label>
+                        <input matInput placeholder="Enter QR reader port number" name="port" [formControl]="Port" [errorStateMatcher]="matcher" [(ngModel)]="insertQR.port" (keypress)="keyPressContact($event)" />
+                        <mat-error *ngIf="Port.hasError('required')"> port is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <button mat-raised-button color="primary" class="m-1" (click)="saveQr(insertQR)">Save</button>
+            <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+        </div>
+    </div>
+</mat-card>
+
+<!-- edit location -->
+<mat-card class="maincard" *ngIf="editlocation == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Edit Location</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Name</mat-label>
+                        <input matInput placeholder="Enter Name" name="name" [formControl]="Name" [(ngModel)]="update.name" type="text" />
+                        <mat-error *ngIf="Name.hasError('required')">Name is required</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Host Name</mat-label>
+                        <input matInput placeholder="Enter Host Name" name="hostName" [formControl]="HostName" [(ngModel)]="update.hostName" type="text" />
+                        <mat-error *ngIf="HostName.hasError('required')"> Host name is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Port</mat-label>
+                        <input matInput placeholder="Enter the remarks" name="port" [formControl]="Port" [(ngModel)]="update.port" (keypress)="keyPressContact($event)" />
+                        <mat-error *ngIf="Port.hasError('required')"> port is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <button mat-raised-button color="primary" class="m-1" (click)="updateQr(update)">Update</button>
+            <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+        </div>
+    </div>
+</mat-card>

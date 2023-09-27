@@ -1,0 +1,161 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2>Activity Log</h2>
+        </div>
+      </div>
+      <hr />
+      <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel (opened)="setStep1(0)" (closed)="panelOpenState1 = false" hideToggle>
+          <mat-expansion-panel-header #panelH1 (click)="panelH1._toggle()">
+            <mat-panel-title> Internal Logs </mat-panel-title>
+            <mat-icon matTooltip="download" (click)="DownloadActivityExcel(filterjson)" class="mat-icon">file_download
+            </mat-icon>
+            <mat-icon matTooltip="expand_more" *ngIf="!panelOpenState1" (click)="panelH1._toggle()">expand_more
+            </mat-icon>
+            <mat-icon matTooltip="expand_less" *ngIf="panelOpenState1" (click)="panelH1._toggle()">expand_less
+            </mat-icon>
+          </mat-expansion-panel-header>
+          <form [formGroup]="InternalLogsForm">
+            <div class="row mb-2">
+              <div class="col-md">
+                <select class="form-control" [(ngModel)]="reqjson.selectedSource" name="selectedSource"
+                  formControlName="SelectedSource" [ngClass]="{
+                    'is-error': submitted && f.SelectedSource.errors
+                  }">
+                  <option value="{{ system.selectedSource }}" *ngFor="let system of StaticData">
+                    {{ system.dropdownname }}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.SelectedDate.errors" class="req">
+                  Please Select
+                </div>
+              </div>
+              <div class="col-md">
+                <input [owlDateTime]="dt0" [max]="getTodaydata" [owlDateTimeTrigger]="dt0" placeholder="Select Date"
+                  class="form-control" [(ngModel)]="reqjson.selectedDate" name="activityOn" [ngClass]="{
+                    'is-error': submitted && f.SelectedDate.errors
+                  }" formControlName="SelectedDate" />
+                <div *ngIf="submitted && f.SelectedDate.errors" class="req">
+                  Date is required
+                </div>
+                <owl-date-time [pickerType]="'calendar'" #dt0></owl-date-time>
+              </div>
+              <div class="col-md">
+                <button mat-raised-button color="primary" class="filter" (click)="SearchInternalLogs(reqjson)">
+                  Search
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <hr />
+      <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" (closed)="panelOpenState = false" hideToggle>
+          <mat-expansion-panel-header #panelH (click)="panelH._toggle()">
+            <mat-panel-title> Filters </mat-panel-title>
+            <mat-icon matTooltip="refresh" (click)="Refresh()" class="mat-icon adj">refresh</mat-icon>
+            <mat-icon matTooltip="expand_more" *ngIf="!panelOpenState" (click)="panelH._toggle()">expand_more</mat-icon>
+            <mat-icon matTooltip="expand_less" *ngIf="panelOpenState" (click)="panelH._toggle()">expand_less</mat-icon>
+          </mat-expansion-panel-header>
+          <form>
+            <div class="row mb-2">
+              <div class="col-md">
+                <select class="form-control" [(ngModel)]="filterjson.systemType" name="systemType">
+                  <option [ngValue]="null">Source</option>
+                  <option value="{{ system.systemtype }}" *ngFor="let system of SystemList">
+                    {{ system.systemtype }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md">
+                <input type="text" class="form-control" placeholder="Module" [(ngModel)]="filterjson.moduleName"
+                  name="moduleName" />
+              </div>
+              <div class="col-md">
+                <input class="shadow-input1" name="activityOn" [(ngModel)]="filterjson.activityOn"
+                  [owlDateTime]="dt1" />
+                <input [owlDateTimeTrigger]="dt1" name="activityOn" placeholder="Date and time" type="text"
+                  class="date-picker date-field hasDatepicker form-control"
+                  [value]="filterjson.activityOn | dateFilter: 'dd-MM-yy hh:mm'" />
+                <owl-date-time #dt1></owl-date-time>
+              </div>
+              <div class="col-md">
+                <input type="text" name="userName" class="form-control" placeholder="Username" name="userName"
+                  [(ngModel)]="filterjson.userName" />
+              </div>
+              <div class="col-md">
+                <button mat-raised-button color="primary" class="filter" (click)="SearchFilter(filterjson)">
+                  Search
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <br />
+      <div class="row">
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('systemType')">
+                    Source&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th (click)="sort('moduleName')">
+                    Module&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th (click)="sort('activityOn')">
+                    Capture Date & Time&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th (click)="sort('otherInfo')">
+                    Information&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th (click)="sort('userName')">
+                    Username&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="
+                    let log of logs | filter: searchText | orderBy: key:!reverse">
+                  <td>{{ log.systemType }}</td>
+                  <td>{{ log.moduleName }}</td>
+                  <td>{{ log.activityOn }}</td>
+                  <td>{{ log.otherInfo }}</td>
+                  <td>{{ log.userName }}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td *ngIf="!logs?.length" colspan="20">
+                    <div style="text-align: center">No records found</div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <mat-paginator #paginator [length]="paginationDetails?.totalDocs" [pageSize]="paginationData?.limit"
+              [pageSizeOptions]="[5, 10, 25, 50, 75]" (page)="pageChanged($event)">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

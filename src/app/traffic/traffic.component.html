@@ -1,0 +1,185 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2>Monthly Traffic</h2>
+        </div>
+      </div>
+      <hr />
+      <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" (closed)="panelOpenState = false" hideToggle>
+          <mat-expansion-panel-header #panelH (click)="panelH._toggle()">
+            <mat-panel-title> Filters </mat-panel-title>
+            <mat-icon matTooltip="refresh" (click)="Refresh()" class="mat-icon adj">refresh</mat-icon>
+            <mat-icon matTooltip="download" (click)="DownloadExcel()" class="mat-icon">
+              file_download
+            </mat-icon>
+            <mat-icon matTooltip="expand_more" *ngIf="!panelOpenState" (click)="panelH._toggle()">expand_more</mat-icon>
+            <mat-icon matTooltip="expand_less" *ngIf="panelOpenState" (click)="panelH._toggle()">expand_less</mat-icon>
+          </mat-expansion-panel-header>
+          <form>
+            <div class="row mb-2">
+              <!-- <div class="col-md">
+                <select class="form-control" [(ngModel)]="filterjson.systemType" name="systemType">
+                  <option [ngValue]="null">Source</option>
+                  <option value="{{ system.systemtype }}" *ngFor="let system of SystemList">
+                    {{ system.systemtype }}
+                  </option>
+                </select>
+              </div> -->
+              <!-- <div class="col-md">
+                <input type="text" class="form-control" placeholder="Module" [(ngModel)]="filterjson.moduleName"
+                  name="moduleName" />
+              </div> -->
+
+
+              <div class="col-md">
+                <input type="month" class="form-control" id="start" name="start" [max]="fromMax" [value]="fromValue"
+                  (change)="fromSelect($event)">
+              </div>
+
+
+              <div class="col-md">
+                <input type="month" class="form-control" id="start" name="start" [min]="toMin" [max]="toMax"
+                  [value]="toValue" (change)="toSelect($event)">
+              </div>
+
+
+
+              <!-- <div class="col-md">
+                <input class="shadow-input1" name="toMonthStart" [(ngModel)]="filterjson.toMonthStart"
+                  [owlDateTime]="dt" />
+                <input placeholder="From Month" name="toMonthStart" [owlDateTimeTrigger]="dt"
+                  class="date-picker date-field hasDatepicker form-control" [value]="filterjson.toMonthStart">
+
+                <owl-date-time [pickerType]="'calendar'" [startView]="'year'"
+                  (yearSelected)="fromchosenYearHandler($event)" (monthSelected)="fromchosenMonthHandler($event, dt)"
+                  #dt></owl-date-time>
+              </div> -->
+
+              <!-- <div class="col-md">
+                <input class="shadow-input1" name="toMonthEnd" [(ngModel)]="filterjson.toMonthEnd"
+                  [owlDateTime]="dt1" />
+                <input [owlDateTimeTrigger]="dt1" name="toMonthEnd" placeholder="To Month"
+                  class="date-picker date-field hasDatepicker form-control" [value]="filterjson.toMonthEnd" />
+                <owl-date-time [pickerType]="'calendar'" [startView]="'year'"
+                  (yearSelected)="tochosenYearHandler($event)" (monthSelected)="tochosenMonthHandler($event, dt1)" #dt1>
+                </owl-date-time>
+              </div> -->
+              <div class="col-md">
+                <button mat-raised-button color="primary" class="filter" (click)="SearchFilter()">
+                  Search
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <br />
+      <div class="row">
+        <div class="col-12 col-md-3 ml-auto">
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <mat-card class="card1">
+            <h3>Monthly Traffic
+            </h3>
+            <canvas id="canvas" height="100"></canvas>
+          </mat-card>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive xyz">
+
+            <table class="table table-stripped table-bordered w-25">
+              <thead>
+                <tr class="text-center">
+                  <th class="p-4"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center">
+                  <td class="text-left"><b style="color: blue;" class="line">__</b>
+                    Weekday Bookings</td>
+                </tr>
+                <tr class="text-center">
+                  <td  class="text-left" style="text-align: start;"><b style="color: lightgreen;" class="line">__</b>
+                    Weekday Visitor
+                  </td>
+                </tr>
+                <tr class="text-center">
+                  <td  class="text-left"><b style="color: orange;" class="line">__</b>
+                    Weekend Bookings </td>
+                </tr>
+                <tr class="text-center">
+                  <td  class="text-left" style="text-align: start;"><b style="color: gray;" class="line">__</b>
+                    Weekend Visitor</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Do Work Here -->
+            <!-- <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center" >
+                  <th (click)="sort('otherInfo')">
+                    May-22&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th (click)="sort('otherInfo')">
+                    Jun-22&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th (click)="sort('otherInfo')">
+                    Jul-22&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th (click)="sort('otherInfo')">
+                    Aug-22&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                  <th (click)="sort('otherInfo')">
+                    Sep-22&nbsp;<i class="fa fa-sort"></i>
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr class="text-center" *ngFor="let item of items">
+                  <td>{{item}}</td>
+                  <td>{{item}}</td>
+                  <td>{{item}}</td>
+                  <td>{{item}}</td>
+                  <td>{{item}}</td>
+                </tr>
+              </tbody>
+            </table> -->
+            <table class="table table-stripped table-bordered " *ngFor="let item of tabledata; let i=index">
+              <tr>
+                <th>{{item?.month}}</th>
+              </tr>
+              <tr>
+                <td>{{item?.wdayBookings}}</td>
+              </tr>
+              <tr>
+                <td>{{item?.wdayVisitors}}</td>
+              </tr>
+              <tr>
+                <td>{{item?.wendBookings}}</td>
+              </tr>
+              <tr>
+                <td>{{item?.wendVisitors}}</td>
+              </tr>
+            </table>
+            <!-- <mat-paginator #paginator [length]="paginationDetails?.totalDocs" [pageSize]="paginationData?.limit"
+              [pageSizeOptions]="[5, 10, 25, 50, 75]" (page)="pageChanged($event)">
+            </mat-paginator> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

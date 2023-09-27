@@ -1,0 +1,288 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h2 style="color: red;"><br>SFTP Server</h2>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="container-fluid">
+      <mat-card class="maincard">
+        <div class="container-fluid">
+          <form [formGroup]="SftpForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>Host</h3>
+                    <input type="text" class="form-control" formControlName="Host"
+                       placeholder="Enter Host"
+                      [ngClass]="{ 'is-invalid': sftpserversubmitted && f.Host.errors }">
+                    <div *ngIf="sftpserversubmitted && f.Host.errors" class="invalid-feedback">
+                      <div *ngIf="f.Host.errors.required">Host is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>Username</h3>
+                    <input type="text" class="form-control" formControlName="UserName"
+                      placeholder="Enter Username"
+                      [ngClass]="{ 'is-invalid': sftpserversubmitted && f.UserName.errors }" />
+                    <div *ngIf="sftpserversubmitted && f.UserName.errors" class="invalid-feedback">
+                      <div *ngIf="f.UserName.errors.required">username is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>Poll Interval</h3>
+                    <input type="text" class="form-control" formControlName="PollInterval"
+                    placeholder="Enter Poll Interval"
+                    [ngClass]="{ 'is-invalid': sftpserversubmitted && f.PollInterval.errors }">
+                    <div *ngIf="sftpserversubmitted && f.PollInterval.errors" class="invalid-feedback">
+                      <div *ngIf="f.PollInterval.errors.required">Poll Interval is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>Port</h3>
+                    <input type="text" class="form-control" formControlName="Port"
+                      placeholder="Enter port"
+                      [ngClass]="{ 'is-invalid': sftpserversubmitted && f.Port.errors }">
+                    <div *ngIf="sftpserversubmitted && f.Port.errors" class="invalid-feedback">
+                      <div *ngIf="f.Port.errors.required">port is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>SFTP Server Private Key</h3>
+                    <input type="text" class="form-control" formControlName="PrivateKey"
+                      placeholder="Enter SFTP Server Private Key"
+                      [ngClass]="{ 'is-invalid': sftpserversubmitted && f.PrivateKey.errors }" />
+                    <div *ngIf="sftpserversubmitted && f.PrivateKey.errors" class="invalid-feedback">
+                      <div *ngIf="f.PrivateKey.errors.required">SFTP server private key is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>SFTP Server Private Key Passphrase</h3>
+                    <input type="text" class="form-control" formControlName="PrivateKey_Passphrase"
+                    placeholder="Enter SFTP Server Private Key Passphrase"
+                    [ngClass]="{ 'is-invalid': sftpserversubmitted && f.PrivateKey_Passphrase.errors }">
+                    <div *ngIf="sftpserversubmitted && f.PrivateKey_Passphrase.errors" class="invalid-feedback">
+                      <div *ngIf="f.PrivateKey_Passphrase.errors.required"> SFTP server private key Passphrase is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br><br>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="buttons">
+                  <button mat-raised-button color="primary" class="mr-1" (click)="UpdateEorderDetais()">
+                    Update
+                  </button>
+                  <button mat-raised-button color="info" class="ml-1" (click)="Reset()">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </mat-card>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+<hr>
+
+
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h2 style="color: red;"><br>Health Providers</h2>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="container-fluid">
+      <mat-card class="maincard">
+        <div class="container-fluid">
+          <form [formGroup]="HealthProviderForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>Health Provider Name</h3>
+                    <input type="text" class="form-control" formControlName="HealthProviderName"
+                       placeholder="Enter Health Provider Name"
+                      [ngClass]="{ 'is-invalid': healthprovidersubmitted && g.HealthProviderName.errors }">
+                    <div *ngIf="healthprovidersubmitted && g.HealthProviderName.errors" class="invalid-feedback">
+                      <div *ngIf="g.HealthProviderName.errors.required">Health provider name is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>SFTP “to-process” orders Folder</h3>
+                    <input type="text" class="form-control" formControlName="SFTPToProccess"
+                      placeholder="Enter SFTP to-Proccess"
+                      [ngClass]="{ 'is-invalid': healthprovidersubmitted && g.SFTPToProccess.errors }" />
+                    <div *ngIf="healthprovidersubmitted && g.SFTPToProccess.errors" class="invalid-feedback">
+                      <div *ngIf="g.SFTPToProccess.errors.required">SFTP to-Proccess is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>PGP Public Key</h3>
+                    <input type="text" class="form-control" formControlName="PGPPublicKey"
+                    placeholder="Enter PGP public key"
+                    [ngClass]="{ 'is-invalid': healthprovidersubmitted && g.PGPPublicKey.errors }">
+                    <div *ngIf="healthprovidersubmitted && g.PGPPublicKey.errors" class="invalid-feedback">
+                      <div *ngIf="g.PGPPublicKey.errors.required">PGP public key is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>PGP Key Issuer </h3>
+                    <input type="text" class="form-control" formControlName="PGPKeyIssuer"
+                      placeholder="Enter PGP Key Issuer"
+                      [ngClass]="{ 'is-invalid': healthprovidersubmitted && g.PGPKeyIssuer.errors }">
+                    <div *ngIf="healthprovidersubmitted && g.PGPKeyIssuer.errors" class="invalid-feedback">
+                      <div *ngIf="g.PGPKeyIssuer.errors.required">PGP Key Issuer is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>SFTP “to-archive” orders Folder</h3>
+                    <input type="text" class="form-control" formControlName="SFTPToAchive"
+                      placeholder="Enter SFTP “to-archive” orders Folder"
+                      [ngClass]="{ 'is-invalid': healthprovidersubmitted && g.SFTPToAchive.errors }" />
+                    <div *ngIf="healthprovidersubmitted && g.SFTPToAchive.errors" class="invalid-feedback">
+                      <div *ngIf="g.SFTPToAchive.errors.required">SFTP “to-archive” orders Folder is required</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-4">
+                  <div class="col-md-10">
+                    <h3>PGP Passphrase</h3>
+                    <input type="text" class="form-control" formControlName="PGPPasspharse"
+                    placeholder="Enter PGP Passphrase"
+                    [ngClass]="{ 'is-invalid': healthprovidersubmitted && g.PGPPasspharse.errors }">
+                    <div *ngIf="healthprovidersubmitted && g.PGPPasspharse.errors" class="invalid-feedback">
+                      <div *ngIf="g.PGPPasspharse.errors.required"> PGP Passphrase is required</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br><br>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="buttons">
+                  <button mat-raised-button color="primary" class="mr-1" (click)="UpdateHealthProvider()">
+                    Update
+                  </button>
+                  <button mat-raised-button color="info" class="ml-1" (click)="Reset()">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </mat-card>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+<hr>
+
+
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h2 class="user" style="color:red"><br>SFTP Logs</h2>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="container-fluid">
+      <mat-card class="maincard">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12 col-md-2">
+              <select class="form-control entries" (change)="onChange($event.target.value)">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="25">25</option>
+                <option [ngValue]="50">50</option>
+                <option [ngValue]="75">75</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-3 ml-auto">
+              <form class="example-form">
+                <mat-form-field class="example-full-width">
+                  <mat-label><i class="fa fa-search"></i> Search</mat-label>
+                  <input matInput placeholder="Enter Value" value="" name="search" autocomplete="off" />
+                </mat-form-field>
+              </form>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <div class="table-responsive">
+                <table class="table table-stripped table-bordered">
+                  <thead>
+                    <tr class="text-center">
+                      <th (click)="sort('modifiedDate')"> Date and Time&nbsp;<i class="fa fa-sort"></i> </th>
+                      <th (click)="sort('action')"> Action&nbsp;<i class="fa fa-sort"></i></th>
+                      <th (click)="sort('message')"> Message&nbsp;<i class="fa fa-sort"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center" *ngFor="let data of []
+                  ">
+                     <td></td>
+                     <td></td>
+                     <td></td>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <!-- <td colspan="20">
+                        <div *ngIf="![]?.length" style="text-align: center">
+                          No records found
+                        </div>
+                      </td> -->
+                    </tr>
+                  </tfoot>
+                </table>
+                <!-- <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+

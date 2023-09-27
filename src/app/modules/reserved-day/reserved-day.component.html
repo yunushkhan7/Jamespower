@@ -1,0 +1,519 @@
+<ngx-spinner></ngx-spinner>
+<!-- table starts -->
+<div class="container-fluid" *ngIf="editlocation == false && addlocation == false">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row" *ngIf="!editlocation  && !addlocation ">
+        <div class="col-lg-6">
+          <input id="single" class="radioInput" (click)="singleClick()" [checked]="Single" type="radio">
+          <label for="single" class="radio   pl-3">Reserved Days</label>
+
+
+        </div>
+        <div class="col-lg-6">
+          <input id="rec" class="radioInput" (click)="recClick()" [checked]="Rec" type="radio">
+          <label for="rec" class="radio  pl-3">Recurrent Days</label>
+        </div>
+      </div>
+      <div *ngIf="singleForm">
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <h2>Reserved Days</h2>
+          </div>
+          <div class="col-12 col-md-6">
+            <button mat-raised-button color="primary" class="addcustomer" (click)="AddLocation()">
+              <i class="fa fa-plus"></i> Add Reserved Day
+            </button>
+          </div>
+        </div>
+
+
+        <hr />
+
+
+        <div class="row">
+          <div class="col-12 col-md-2">
+            <select class="form-control entries" (change)="onChange($event.target.value)">
+              <option [ngValue]="5">5</option>
+              <option [ngValue]="10">10</option>
+              <option [ngValue]="25">25</option>
+              <option [ngValue]="50">50</option>
+              <option [ngValue]="75">75</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-3 ml-auto">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label><i class="fa fa-search"></i> Search</mat-label>
+                <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                  autocomplete="off" />
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="table-responsive">
+              <table class="table table-stripped table-bordered">
+                <thead>
+                  <tr class="text-center">
+                    <th (click)="sort('locationName')">Location&nbsp;<i class="fa fa-sort"></i></th>
+                    <th (click)="sort('dateTimeStart')">Date & Time Start&nbsp;<i class="fa fa-sort"></i></th>
+                    <th (click)="sort('dateTimeEnd')">Date & Time End&nbsp;<i class="fa fa-sort"></i></th>
+                    <th (click)="sort('remarks')">Remarks&nbsp;<i class="fa fa-sort"></i></th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="text-center" *ngFor="let res of reservedList
+                  | paginate: { itemsPerPage: pageno, currentPage: q }
+                  | filter: searchText  | orderBy: key: !reverse">
+                    <td>{{res.locationName}}</td>
+                    <td>{{res.dateTimeStart }}</td>
+                    <td>{{res.dateTimeEnd }}</td>
+                    <td>{{res.remarks}}</td>
+                    <td>
+                      <i class="fa fa-edit text-primary" style="cursor: pointer" title="edit"
+                        (click)="EditDays(res)"></i>
+                      <i class="fa fa-trash text-danger ml-1" style="cursor: pointer" title="delete"
+                        (click)="DeleteDay(res.id)"></i>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="20">
+                      <div *ngIf="reservedList.length==0" style="text-align: center">
+                        No records found
+                      </div>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+              <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="recForm" class="mt-2">
+
+        <!-- <mat-card class="maincardDays"> -->
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <h2 *ngIf="!addWeeks && !editWeeks">Days of the Week</h2>
+            <h2 *ngIf="addWeeks">Add week Days</h2>
+            <h2 *ngIf="editWeeks">Edit Week Days</h2>
+          </div>
+          <div class="col-12 col-md-6">
+            <button mat-raised-button color="primary" class="addcustomer" (click)="AddWeekdays()"
+              *ngIf="!addWeeks && !editWeeks">
+              <i class="fa fa-plus"></i> Add Week Days
+            </button>
+          </div>
+
+        </div>
+        <hr />
+
+
+        <div class="row" *ngIf="!addWeeks && !editWeeks">
+          <div class="col-12 col-md-2">
+            <select class="form-control entries" (change)="onChange($event.target.value)">
+              <option [ngValue]="5">5</option>
+              <option [ngValue]="10">10</option>
+              <option [ngValue]="25">25</option>
+              <option [ngValue]="50">50</option>
+              <option [ngValue]="75">75</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-3 ml-auto">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label><i class="fa fa-search"></i> Search</mat-label>
+                <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                  autocomplete="off" />
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+        <div class="table-responsive" *ngIf="!addWeeks && !editWeeks">
+          <table class="table table-stripped table-bordered">
+            <thead>
+              <tr class="text-center">
+                <th (click)="sort('dateTimeStart')">Week Days&nbsp;<i class="fa fa-sort"></i></th>
+                <th (click)="sort('locationName')">Location&nbsp;<i class="fa fa-sort"></i></th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center" *ngFor="let week of wList
+              | paginate: { itemsPerPage: pageno, currentPage: q }
+              | filter: searchText  | orderBy: key: !reverse">
+                <td><span *ngIf="week.weekDayNo.includes('0')">Sunday</span>
+                  <span *ngIf="week.weekDayNo.includes('1')">Monday</span>
+                  <span *ngIf="week.weekDayNo.includes('2')">Tuesday</span>
+                  <span *ngIf="week.weekDayNo.includes('3')">Wednesday</span>
+                  <span *ngIf="week.weekDayNo.includes('4')">Thursday</span>
+                  <span *ngIf="week.weekDayNo.includes('5')">Friday</span>
+                  <span *ngIf="week.weekDayNo.includes('6')">Saturday</span>
+                </td>
+                <!-- <td *ngIf="week.weekDayNo.includes('1')"></td> -->
+                <!-- <td *ngIf="week.weekDayNo.includes('2')">monday</td>
+                                <td *ngIf="week.weekDayNo.includes('3')">tuesday</td>
+                                <td *ngIf="week.weekDayNo.includes('4')">wednesday</td>
+                                <td *ngIf="week.weekDayNo.includes('5')">thursday</td>
+                                <td *ngIf="week.weekDayNo.includes('6')">friday</td>
+                                <td *ngIf="week.weekDayNo.includes('7')">saturday</td> -->
+
+                <!-- <td>{{weekName}}</td> -->
+                <td>{{week.locationName}}</td>
+
+                <td>
+                  <i class="fa fa-edit text-primary" style="cursor: pointer" title="edit" (click)="EditWeeks(week)"></i>
+                  <i class="fa fa-trash text-danger ml-1" style="cursor: pointer" title="delete"
+                    (click)="DeleteWeeks(week.id)"></i>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="20">
+                  <div *ngIf="wList.length==0" style="text-align: center">
+                    No records found
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+          <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+        </div>
+
+        <div class="table-responsive " *ngIf="addWeeks">
+          <table class="table table-stripped table-bordered days mt-3">
+            <thead>
+              <tr class="text-center">
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center"><input type="checkbox" (click)="checkWeek(0)"></td>
+                <td class="text-center"><input type="checkbox" (click)="checkWeek(1)"></td>
+                <td class="text-center"><input type="checkbox" (click)="checkWeek(2)"></td>
+                <td class="text-center"><input type="checkbox" (click)="checkWeek(3)"></td>
+                <td class="text-center"><input type="checkbox" (click)="checkWeek(4)"></td>
+                <td class="text-center"><input type="checkbox" (click)="checkWeek(5)"></td>
+                <td class="text-center"><input type="checkbox" (click)="checkWeek(6)"></td>
+                <td><select name="id" [(ngModel)]="location" class="form-control" [class.error]="Error"
+                    ((change)="select($event.target.value)">
+                    <option value="please" selected>Please Select</option>
+                    <!-- <option value="0">All</option> -->
+                    <option value="{{location.id}}" *ngFor="let location of locationarrDays">{{location.locationName }}
+                    </option>
+                  </select>
+
+                </td>
+
+              </tr>
+            </tbody>
+
+            <!-- <tfoot>
+                                <tr>
+                                    <td colspan="20">
+                                        <div *ngIf="reservedList.length==0" style="text-align: center">
+                                            No records found
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot> -->
+          </table>
+          <p *ngIf="Error" class="text-danger">Please Select Day Or Days And Location***</p>
+
+          <!-- <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls> -->
+          <div class="text-right mt-3">
+            <button mat-raised-button color="primary" class="m-1" (click)="saveWeeks()">Save</button>
+            <button mat-raised-button color="warn" (click)="CancelWeeks()">Close</button>
+          </div>
+        </div>
+        <div class="table-responsive " *ngIf="editWeeks">
+          <table class="table table-stripped table-bordered days mt-3">
+            <thead>
+              <tr class="text-center">
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center"><input type="checkbox" [checked]="editWeek.weekDayNo.includes('0')"
+                    (click)="checkWeek(0)"></td>
+                <td class="text-center"><input type="checkbox" [checked]="editWeek.weekDayNo.includes('1')"
+                    (click)="checkWeek(1)"></td>
+                <td class="text-center"><input type="checkbox" [checked]="editWeek.weekDayNo.includes('2')"
+                    (click)="checkWeek(2)"></td>
+                <td class="text-center"><input type="checkbox" [checked]="editWeek.weekDayNo.includes('3')"
+                    (click)="checkWeek(3)"></td>
+                <td class="text-center"><input type="checkbox" [checked]="editWeek.weekDayNo.includes('4')"
+                    (click)="checkWeek(4)"></td>
+                <td class="text-center"><input type="checkbox" [checked]="editWeek.weekDayNo.includes('5')"
+                    (click)="checkWeek(5)"></td>
+                <td class="text-center"><input type="checkbox" [checked]="editWeek.weekDayNo.includes('6')"
+                    (click)="checkWeek(6)"></td>
+                <td><select name="id" [(ngModel)]="Location" name="Location" class="form-control">
+                    <option value="please" selected>Please Select</option>
+                    <!-- <option value="0">All</option> -->
+                    <option value="{{location.id}}" *ngFor="let location of locationarrDays">{{location.locationName }}
+                    </option>
+                  </select></td>
+              </tr>
+            </tbody>
+            <!-- <tfoot>
+                                <tr>
+                                    <td colspan="20">
+                                        <div *ngIf="reservedList.length==0" style="text-align: center">
+                                            No records found
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot> -->
+          </table>
+          <div class="text-right mt-3">
+            <button mat-raised-button color="primary" class="m-1" (click)="updateWeeks()">Save</button>
+            <button mat-raised-button color="warn" (click)="CancelWeeks()">Close</button>
+          </div>
+          <!-- <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls> -->
+        </div>
+        <table>
+
+        </table>
+        <!-- </mat-card> -->
+
+
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- add location starts -->
+<mat-card class="maincard" *ngIf="addlocation == true">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Add Reserved Days</h2>
+      </div>
+    </div>
+
+
+    <div *ngIf="singleForm">
+      <div class="row  date-fled">
+
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Location</mat-label>
+              <!-- <input matInput placeholder="Enter the remarks" [formControl]="Remarks" name="remarks"
+              [(ngModel)]="insertDays.remarks" type="text" /> -->
+              <mat-select name="locationId" [formControl]="LocationId" [errorStateMatcher]="matcher"
+                (selectionChange)="getHolidays($event.value)" [(ngModel)]="insertDays.locationId">
+                <mat-option *ngFor="let location of locationarr" [value]="location.id">
+                  {{ location.locationName }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="Remarks.hasError('required')"> Location is required </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+
+        <div class="col-12 col-md-6 ">
+          <form class="example-form">
+            <!-- <mat-form-field class="example-full-width">
+              <mat-label>Date & Time Start</mat-label>
+              <input matInput [min]="todayDate" [matDatepicker]="picker1" [matDatepickerFilter]="myHolidayFilter"
+                [formControl]="DateTimeStart" readonly [(ngModel)]="insertDays.dateTimeStart" name="dateTimeStart"
+                (dateChange)="DateChangedStart($event)">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+              <mat-error *ngIf="DateTimeStart.hasError('required')"> Date & Time Start is required </mat-error>
+            </mat-form-field> -->
+
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Date & Time Start</mat-label>
+              <input matInput [min]="todayDate" [ngxMatDatetimePicker]="picker1"
+                [ngxMatDatetimePickerFilter]="myHolidayFilter" [formControl]="DateTimeStart"
+                [(ngModel)]="insertDays.dateTimeStart" name="dateTimeStart" (dateChange)="DateChangedStart($event)">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker1></ngx-mat-datetime-picker>
+              <mat-error *ngIf="DateTimeStart.hasError('required')"> Date & Time Start is required </mat-error>
+            </mat-form-field>
+
+          </form>
+        </div>
+
+
+      </div>
+
+      <div class="row">
+
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <!-- <mat-form-field class="example-full-width">
+              <mat-label>Date & Time End</mat-label>
+              <input matInput [min]="maxDate" [matDatepicker]="picker2" [matDatepickerFilter]="myHolidayFilter2"
+                [formControl]="DateTimeEnd" readonly [(ngModel)]="insertDays.dateTimeEnd" name="dateTimeEnd">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+              <mat-error *ngIf="DateTimeEnd.hasError('required')"> Date & Time End is required </mat-error>
+            </mat-form-field> -->
+
+            <mat-form-field class="example-full-width" >
+              <mat-label>Date & Time End</mat-label>
+              <input matInput [min]="maxDate" [ngxMatDatetimePicker]="picker2" [formControl]="DateTimeEnd" class="xyz"
+                [ngxMatDatetimePickerFilter]="myHolidayFilter2" [(ngModel)]="insertDays.dateTimeEnd" name="dateTimeEnd">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker2></ngx-mat-datetime-picker>
+              <mat-error *ngIf="DateTimeEnd.hasError('required')"> Date & Time Start is required </mat-error>
+            </mat-form-field>
+
+
+            
+
+          </form>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Remarks</mat-label>
+              <input matInput placeholder="Enter the remarks" [formControl]="Remarks" name="remarks"
+                [(ngModel)]="insertDays.remarks" type="text" />
+              <mat-error *ngIf="Remarks.hasError('required')"> Remark is required </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <button mat-raised-button color="primary" class="m-1" (click)="saveDays(insertDays)">Save</button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+      </div>
+
+    </div>
+
+
+  </div>
+</mat-card>
+
+<!-- edit location -->
+<mat-card class="maincard" *ngIf="editlocation == true">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Edit Reserved Days</h2>
+      </div>
+    </div>
+
+
+
+    <div class="row">
+
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Location</mat-label>
+            <!-- <input matInput placeholder="Enter the remarks" [formControl]="Remarks" name="remarks"
+              [(ngModel)]="insertDays.remarks" type="text" /> -->
+            <mat-select name="locationId" [formControl]="LocationId" [errorStateMatcher]="matcher"
+              (selectionChange)="egetHolidays($event.value)" [(ngModel)]="updateDays.locationId">
+              <mat-option *ngFor="let location of locationarr" [value]="location.id">
+                {{ location.locationName }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="Remarks.hasError('required')"> Location is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <!-- <mat-form-field class="example-full-width">
+            <mat-label> Date Time Start </mat-label>
+            <input matInput [min]="todayDate" [matDatepicker]="picker1" [matDatepickerFilter]="emyHolidayFilter"
+              [formControl]="DateTimeStart" [(ngModel)]="updateDays.dateTimeStart" name="dateTimeStart"
+              (dateChange)="eDateChangedStart($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-error *ngIf="DateTimeStart.hasError('required')"> Date Time Start is required </mat-error>
+          </mat-form-field> -->
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Date & Time Start</mat-label>
+            <input matInput [min]="todayDate" [ngxMatDatetimePicker]="picker1"
+              [ngxMatDatetimePickerFilter]="emyHolidayFilter" [formControl]="DateTimeStart"
+              [(ngModel)]="updateDays.dateTimeStart" name="dateTimeStart" (dateChange)="eDateChangedStart($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker1></ngx-mat-datetime-picker>
+            <mat-error *ngIf="DateTimeStart.hasError('required')"> Date & Time Start is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <!-- <mat-form-field class="example-full-width">
+            <mat-label>Date Time End</mat-label>
+            <input matInput [min]="emaxDate" [matDatepicker]="picker2" [matDatepickerFilter]="emyHolidayFilter2"
+              [formControl]="DateTimeEnd" [(ngModel)]="updateDays.dateTimeEnd" name="dateTimeEnd">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+            <mat-error *ngIf="DateTimeEnd.hasError('required')"> Date Time End is required </mat-error>
+          </mat-form-field> -->
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Date & Time End</mat-label>
+            <input matInput [min]="emaxDate" [ngxMatDatetimePicker]="picker2" [formControl]="DateTimeEnd"
+              [ngxMatDatetimePickerFilter]="emyHolidayFilter2" [(ngModel)]="updateDays.dateTimeEnd" name="dateTimeEnd">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker2></ngx-mat-datetime-picker>
+            <mat-error *ngIf="DateTimeEnd.hasError('required')"> Date & Time Start is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+
+
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Remarks</mat-label>
+            <input matInput placeholder="Enter the remarks" [formControl]="Remarks" name="remarks"
+              [(ngModel)]="updateDays.remarks" type="text" />
+            <mat-error *ngIf="Remarks.hasError('required')"> Remark is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+
+    <div class="text-right">
+      <button mat-raised-button color="primary" class="m-1" (click)="UpdateDays(updateDays)">Update</button>
+      <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+    </div>
+  </div>
+</mat-card>

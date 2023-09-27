@@ -1,0 +1,85 @@
+<div class="container-fluid">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <!-- <div class="row">
+        <div class="col-12 col-md-6">
+          <h2 class="user">Health Certificates</h2>
+        </div>
+      </div> -->
+      <!-- <br> -->
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('name')"> Batch No&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('timestamp')"> Time Stamp&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('courseCode')"> Course Code&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('batchStatus')"> Batch Status&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('certHash')"> Certificate Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('certId')"> Certificate Id&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('email')"> Recipient Email&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('cclresults')">CC Email&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('cclresults')"> Issue On&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('issuedOn')"> Share link&nbsp;<i class="fa fa-sort"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let cert of healthcerts
+                | paginate: { itemsPerPage: pageno, currentPage: p, id: 'p' }
+                | filter: searchText | orderBy: key: !reverse">
+                  <td>{{cert.name}}</td>
+                  <td>{{cert.timestamp}}</td>
+                  <td>{{cert.courseCode}}</td>
+                  <td>{{cert.batchStatus}}</td>
+                  <td>{{cert.certHash}}</td>
+                  <td>{{cert.certId}}</td>
+                  <td>{{cert.email}}</td>
+                  <td>
+                    <ul>
+                      <li *ngFor="let ccemail of cert.cclresults.split(',')">{{ccemail}}</li>
+                    </ul>
+                  </td>
+                  <td>{{cert.issuedOn}}</td>
+                  <td><a style="color: blue;" href="{{cert.shareLink}}" target="blank">link</a></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!healthcerts?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right" (pageChange)="p = $event" id = "p"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

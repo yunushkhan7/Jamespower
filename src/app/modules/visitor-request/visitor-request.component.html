@@ -1,0 +1,255 @@
+<div *ngIf="novisProj">
+  <ngx-spinner> </ngx-spinner>
+  <div class="container-fluid" *ngIf="editzone == false && addzone == false">
+    <mat-card class="maincard">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <h2>Visitor Access Request</h2>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="hide_show">
+              <button *ngIf="!Show" mat-raised-button color="primary" class="adduser" (click)="HideandShow()">
+                Hide/Show Column
+              </button>
+              <button *ngIf="Show" mat-raised-button color="warn" class="adduser rounded-pill" (click)="HideandShow()">
+                <mat-icon>close</mat-icon>
+              </button>
+              <ng-container *ngIf="Show">
+                <mat-card class="mat-card-container">
+                  <section class="example-section">
+                    <h4>Select your Column(s):</h4>
+                    <div *ngFor="let item of ShowandHideArray">
+                      <p class="mat_checkbox">
+                        <mat-checkbox [(ngModel)]="item.ischecked">{{item.name}}</mat-checkbox>
+                      </p>
+                    </div>
+                  </section>
+                </mat-card>
+              </ng-container>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- <div class="row" *ngIf="Show">
+          <div class="col-12 col-md-6">
+          </div>
+          <div class="col-12 col-md-6">
+
+          </div>
+        </div> -->
+        <hr>
+
+        <mat-accordion class="example-headers-align" multi>
+          <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" (closed)="panelOpenState = false"
+            hideToggle>
+            <mat-expansion-panel-header #panelH (click)="panelH._toggle()">
+              <mat-panel-title> Filters </mat-panel-title>
+              <mat-icon matTooltip="refresh" (click)="Refresh()" class="mat-icon adj">refresh</mat-icon>
+              <mat-icon matTooltip="download" (click)="DownloadExcel(filtervisitor)" class="mat-icon">
+                file_download
+              </mat-icon>
+              <mat-icon matTooltip="expand_more" *ngIf="!panelOpenState" (click)="panelH._toggle()">expand_more
+              </mat-icon>
+              <mat-icon matTooltip="expand_less" *ngIf="panelOpenState" (click)="panelH._toggle()">expand_less
+              </mat-icon>
+            </mat-expansion-panel-header>
+
+            <form>
+              <div class="row mb-2">
+                <div class="col-md-3">
+                  <input type="text" name="name" [(ngModel)]="filtervisitor.name" placeholder="Name"
+                    class="form-control" [disabled]="!ShowandHideArray[1].ischecked">
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="email" [(ngModel)]="filtervisitor.email" placeholder="Visitor Email"
+                    class="form-control" [disabled]="!ShowandHideArray[2].ischecked">
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="phone" [(ngModel)]="filtervisitor.phone" placeholder="Visitor Phone No"
+                    class="form-control" [disabled]="!ShowandHideArray[3].ischecked">
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="location" [(ngModel)]="filtervisitor.location" placeholder="Location"
+                    class="form-control" [disabled]="!ShowandHideArray[4].ischecked">
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-md-3">
+                  <input type="text" name="pax" [(ngModel)]="filtervisitor.pax" placeholder="Pax"
+                    (keypress)="keyPressContact($event)" class="form-control"
+                    [disabled]="!ShowandHideArray[6].ischecked">
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="bookingcode" [(ngModel)]="filtervisitor.bookingcode"
+                    placeholder="Booking Code" class="form-control" [disabled]="!ShowandHideArray[7].ischecked">
+                </div>
+                <div class="col-md-3">
+                  <input class="shadow-input1" name="visitdates" [(ngModel)]="filtervisitor.visitdates"
+                    [readonly]="!ShowandHideArray[9].ischecked" [owlDateTime]="dt2"
+                    [disabled]="!ShowandHideArray[9].ischecked" />
+                  <input [readonly]="!ShowandHideArray[9].ischecked" [owlDateTimeTrigger]="dt2" name="visitdates"
+                    placeholder="Visit Dates" type="text" class="date-picker date-field hasDatepicker form-control"
+                    [value]="filtervisitor?.visitdates | dateFilter: 'dd/MM/yyyy'"
+                    [disabled]="!ShowandHideArray[9].ischecked" />
+                  <owl-date-time #dt2 [pickerType]="'calendar'" [disabled]="!ShowandHideArray[9].ischecked">
+                  </owl-date-time>
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="status" [(ngModel)]="filtervisitor.BookingStatus"
+                    placeholder="Booking Status" class="form-control" [disabled]="!ShowandHideArray[11].ischecked">
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-md-3">
+                  <input class="shadow-input1" name="checkinTime" [(ngModel)]="filtervisitor.checkinTime"
+                    [selectMode]="'range'" [readonly]="!ShowandHideArray[13].ischecked" [owlDateTime]="dt3"
+                    [disabled]="!ShowandHideArray[13].ischecked" />
+                  <input [readonly]="!ShowandHideArray[13].ischecked" [owlDateTimeTrigger]="dt3" name="checkinTime"
+                    placeholder="Check In Time" type="text" class="date-picker date-field hasDatepicker form-control"
+                    (keydown)="KeyPressed($event)" [value]="filtervisitor?.checkinTime | dateFilter: 'dd/MM/yyyy HH:mm'"
+                    [disabled]="!ShowandHideArray[13].ischecked" />
+                  <owl-date-time #dt3 [disabled]="!ShowandHideArray[13].ischecked"></owl-date-time>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3">
+                  <button mat-raised-button color="primary" class="filter" (click)="SearchFilter(filtervisitor)">
+                    Search
+                  </button>
+                </div>
+              </div>
+
+
+              <!-- <div class="row mb-2">
+                <div class="col-md-3">
+                  <input [owlDateTime]="dt3" [owlDateTimeTrigger]="dt3" placeholder="Visit Slot"
+                  class="form-control" [(ngModel)]="filtervisitor.dateofbirth" name="dateofbirth">
+                <owl-date-time #dt3 [pickerType]="'time'"></owl-date-time>
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="mobileNo" [(ngModel)]="filtervisitor.mobileNo"
+                    placeholder="Invitation Status" class="form-control">
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="vehicleNo" [(ngModel)]="filtervisitor.vehicleNo" placeholder="Event Type"
+                    class="form-control">
+                </div>
+                <div class="col-md-3">
+                  <button mat-raised-button color="primary" class="filter" (click)="SearchFilter(filtervisitor)"> Search
+                  </button>
+                </div>
+              </div> -->
+
+              <!-- <div class="row">
+                <div class="col-md-3">
+                  <input type="text" name="medicalTests" [(ngModel)]="filterpatients.medicalTests"
+                    placeholder="Medical Tests" class="form-control">
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="gender" [(ngModel)]="filterpatients.gender" placeholder="Gender"
+                    class="form-control">
+                </div>
+                <button mat-raised-button color="primary" class="filter" (click)="SearchFilter(filterpatients)"> Search
+                </button>
+              </div> -->
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <hr />
+
+        <div class="row">
+          <div class="col-12 col-md-3 ml-auto">
+            <form class="example-form">
+              <mat-form-field class="example-full-width">
+                <mat-label> <i class="fa fa-search"></i> Search </mat-label>
+                <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                  autocomplete="off" />
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="table-responsive">
+              <table class="table table-stripped table-bordered">
+                <thead>
+                  <tr>
+                    <th *ngIf="ShowandHideArray[0].ischecked" (click)="sort('id')">Invitation Id&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[1].ischecked" (click)="sort('name ')">Name&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[2].ischecked" (click)="sort('emailAddress')">Visitor Email&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[3].ischecked" (click)="sort('mobileNumber')">Visitor Phone No&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[4].ischecked" (click)="sort('locationName')">Location&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[5].ischecked" (click)="sort('nationality')">Nationality&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[6].ischecked" (click)="sort('numberofPax')">Pax&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[7].ischecked" (click)="sort('bookingReference')">Booking Code&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[8].ischecked" (click)="sort('registrationTime')">
+                      Registration Date & Time&nbsp;<i class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[9].ischecked" (click)="sort('visitDate')"> Visit Date&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[10].ischecked" (click)="sort('visitTime')"> Visit Slot &nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[11].ischecked" (click)="sort('status ')">Booking Status&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[12].ischecked" (click)="sort('eventType ')">Event Type&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th *ngIf="ShowandHideArray[13].ischecked" (click)="sort('checkInTime ')">Check In Time&nbsp;<i
+                        class="fa fa-sort"></i></th>
+                    <th (click)="sort('vehicleNo')">Action&nbsp;<i class="fa fa-sort"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let visitorreq of patients
+                      | filter: searchText | orderBy: key: !reverse">
+                    <td *ngIf="ShowandHideArray[0].ischecked">{{visitorreq.id}}</td>
+                    <td *ngIf="ShowandHideArray[1].ischecked">{{visitorreq.name}}</td>
+                    <td *ngIf="ShowandHideArray[2].ischecked">{{visitorreq.emailAddress}}
+                    <td *ngIf="ShowandHideArray[3].ischecked">{{visitorreq.mobileNumber}}</td>
+                    <td *ngIf="ShowandHideArray[4].ischecked">{{visitorreq.locationName}}</td>
+                    <td *ngIf="ShowandHideArray[5].ischecked">{{visitorreq.nationality}}</td>
+                    <td *ngIf="ShowandHideArray[6].ischecked">{{visitorreq.numberofPax}}</td>
+                    <td *ngIf="ShowandHideArray[7].ischecked">{{visitorreq.bookingReference}}</td>
+                    <td *ngIf="ShowandHideArray[8].ischecked">{{visitorreq.registrationTime}}</td>
+                    <td *ngIf="ShowandHideArray[9].ischecked">{{visitorreq.visitDate}}</td>
+                    <td *ngIf="ShowandHideArray[10].ischecked">{{visitorreq.visitTime}}</td>
+                    <td *ngIf="ShowandHideArray[11].ischecked">{{visitorreq.status}}</td>
+                    <td *ngIf="ShowandHideArray[12].ischecked">{{visitorreq.eventType}}</td>
+                    <td *ngIf="ShowandHideArray[13].ischecked">{{visitorreq.checkInTime}}</td>
+
+                    <td><i *ngIf="visitorreq.isVisibleResendEmail" style="cursor: pointer"
+                        (click)="SendEmail(visitorreq.id)" class="fa fa-paper-plane" aria-hidden="true"></i></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="20">
+                      <div *ngIf="!patients?.length" style="text-align: center">
+                        No records found
+                      </div>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+
+            </div>
+            <mat-paginator #paginator [length]="paginationDetails?.totalDocs" [pageSize]="paginationData?.limit"
+              [pageSizeOptions]="[5,10,25,50,75]" (page)="pageChanged($event)">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

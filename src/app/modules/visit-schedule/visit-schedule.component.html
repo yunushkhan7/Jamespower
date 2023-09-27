@@ -1,0 +1,460 @@
+<ngx-spinner></ngx-spinner>
+<!-- table starts -->
+<div class="container-fluid" *ngIf="editlocation == false && addlocation == false">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2>Visit Schedule</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="addcustomer" (click)="AddLocation()">
+            <i class="fa fa-plus"></i> Add Visit Schedule
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('scheduleName')">Schedule Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('dateStart')">Date Start&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('dateEnd')">Date End&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('firstSlot')">First Slot&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('lastSlot')">Last Slot&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('slotDuration')">Slot Duration&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('paxperSlot')">Pax Capacity&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('paxperSlot')">Pax Per Booking&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('paxperSlot')">Time Threshold&nbsp;<i class="fa fa-sort"></i></th>
+
+                  <th (click)="sort('paxperSlot')">Date Threshold&nbsp;<i class="fa fa-sort"></i></th>
+
+
+                  <th (click)="sort('locationId')">Location&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('remarks')">Remarks&nbsp;<i class="fa fa-sort"></i></th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let visit of scheduleList
+                  | paginate: { itemsPerPage: pageno, currentPage: q }
+                  | filter: searchText  | orderBy: key: !reverse">
+                  <td>{{visit.scheduleName}}</td>
+                  <td>{{visit.dateStart }}</td>
+                  <td>{{visit.dateEnd }}</td>
+                  <td>{{visit.firstSlot}}</td>
+                  <td>{{visit.lastSlot}}</td>
+                  <td>{{visit.slotDuration}}</td>
+                  <td>{{visit.paxCapacity}}</td>
+                  <td>{{visit.paxperSlot}}</td>
+                  <td>{{visit.timeThreshold}}</td>
+
+                  <td>{{visit.dateThreshold}}</td>
+                  <td>{{visit.locationName}}</td>
+                  <td>{{visit.remarks}}</td>
+                  <td>
+                    <i style="cursor: pointer;" class="fa fa-edit text-primary" title="edit"
+                      (click)="EditLocation(visit)"></i>
+                    <i style="cursor: pointer;" class="fa fa-trash text-danger ml-1" title="delete"
+                      (click)="deleteSchedule(visit.id)"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="scheduleList.length==0" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <br>
+          <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- add location starts -->
+<mat-card class="maincard" *ngIf="addlocation == true">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Add Schedule</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Schedule Name</mat-label>
+            <input matInput placeholder="Enter Schedule Name" name="scheduleName" [formControl]="Schedule_Name"
+              [(ngModel)]="insertVisit.scheduleName" type="text" />
+            <mat-error *ngIf="Schedule_Name.hasError('required')">Schedule Name is required</mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Date Start</mat-label>
+            <input matInput [min]="todayDate" [matDatepicker]="picker1" [formControl]="DateStart"
+              [(ngModel)]="insertVisit.dateStart" name="dateStart" (dateChange)="DateChangedStart($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-error *ngIf="DateStart.hasError('required')"> Date Start is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Date End</mat-label>
+            <input matInput [min]="maxDate" [matDatepicker]="picker2" [formControl]="DateEnd"
+              [(ngModel)]="insertVisit.dateEnd" name="dateEnd" (dateChange)="DateChangeEnd($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+            <mat-error *ngIf="DateEnd.hasError('required')"> Date End is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>First Slot</mat-label>
+            <!-- <input matInput [format]="24" [min]="CurrentTime" [ngxTimepicker]="timepicker1" name="firstSlot"
+              [(ngModel)]="insertVisit.firstSlot" [formControl]="FirstSlot"> -->
+            <input matInput [format]="24" [max]="minTimedump2" [ngxTimepicker]="timepicker1" name="firstSlot"
+              [(ngModel)]="insertVisit.firstSlot" [formControl]="FirstSlot">
+            <ngx-material-timepicker #timepicker1 (timeChanged)="TimeChanged1($event)"
+              (timeSet)="SetTimeFirstSlot($event)"></ngx-material-timepicker>
+            <mat-error *ngIf="FirstSlot.hasError('required')"> First Slot is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Last Slot</mat-label>
+            <!-- <input matInput [format]="24" [min]="minTime" [ngxTimepicker]="timepicker2" name="lastSlot"
+              [(ngModel)]="insertVisit.lastSlot" [formControl]="LastSlot" /> -->
+            <input matInput [format]="24" [min]="minTimedump1" [ngxTimepicker]="timepicker2" name="lastSlot"
+              [(ngModel)]="insertVisit.lastSlot" [formControl]="LastSlot" />
+            <ngx-material-timepicker #timepicker2 (timeChanged)="TimeChanged2($event)"
+              (timeSet)="SetTimeLastSlot($event)"></ngx-material-timepicker>
+            <mat-error *ngIf="LastSlot.hasError('required')">Last Slot is required</mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Slot Duration</mat-label>
+            <input matInput placeholder="Enter Duration" [formControl]="SlotDuration" name="slotDuration"
+              (keyup)="slotDurationKeyUp($event)" (keypress)="keyPressContact($event)" maxlength="3"
+              [(ngModel)]="insertVisit.slotDuration" type="text" />
+            <mat-error *ngIf="SlotDuration.hasError('required')">Slot Duration is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Pax Capacity</mat-label>
+            <input matInput placeholder="Enter Pax Capacity" [formControl]="PaxCapacity" type="text"
+              (keyup)="paxCapacityKeyUp($event)" (keypress)="keyPressContact($event)"
+              [(ngModel)]="insertVisit.paxCapacity" />
+            <mat-error *ngIf="PaxCapacity.hasError('required')"> Pax Capacity is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Pax Per Booking</mat-label>
+            <input matInput placeholder="Enter Pax Per Booking" [formControl]="PaxPerSlot" name="paxperSlot"
+              (keyup)="CompareValue($event)" (keypress)="keyPressContact($event)" [(ngModel)]="insertVisit.paxperSlot"
+              type="text" [max]="capval" />
+            <mat-error *ngIf="PaxPerSlot.hasError('required')"> Pax Per Booking is required </mat-error>
+          </mat-form-field>
+          <p *ngIf="_isError" class="iserror">hint: pax per booking should be lesser then or equal pax capacity</p>
+        </form>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="isVisibleThreshould">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Time Threshold </mat-label>
+            <input matInput placeholder="Enter Time Pax Threshold" [formControl]="TimeThreshould" type="text"
+              (keyup)="CompareValue1($event)" (keypress)="keyPressContact($event)"
+              [(ngModel)]="insertVisit.timeThreshold" />
+            <mat-error *ngIf="TimeThreshould.hasError('required')"> Time Threshold is required </mat-error>
+          </mat-form-field>
+          <p *ngIf="_isError1" class="iserror">hint: pax per booking cannot be more than pax capacity</p>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Date Threshold </mat-label>
+            <input matInput placeholder="Enter Date Pax Threshold" [formControl]="DateThreshould" type="text"
+              (keyup)="DateThreshouldVal($event)" (keypress)="keyPressContact($event)"
+              [(ngModel)]="insertVisit.dateThreshold" />
+            <span matSuffix>{{lablevariable}}</span>
+            <mat-error *ngIf="DateThreshould.hasError('required')"> Date Threshold is required </mat-error>
+          </mat-form-field>
+          <p *ngIf="_IsDateThreshouldValid" class="iserror">hint:Date Pax Threshold cannot be more than Total Pax
+            Capacity
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Location</mat-label>
+            <mat-select name="locationId" [formControl]="LocationId" [errorStateMatcher]="matcher"
+              [(ngModel)]="insertVisit.locationId">
+              <mat-option *ngFor="let location of locationarr" [value]="location.id">
+                {{ location.locationName }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="LocationId.hasError('required')"> Location is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Remarks</mat-label>
+            <input matInput placeholder="Enter Remarks" [formControl]="Remarks" name="remarks"
+              [(ngModel)]="insertVisit.remarks" type="text" />
+            <mat-error *ngIf="Remarks.hasError('required')"> Remark is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+    <div class="text-right">
+      <button mat-raised-button color="primary" class="m-1" (click)="submitSchedule(insertVisit)">Save</button>
+      <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+    </div>
+  </div>
+</mat-card>
+
+<!-- edit location -->
+<mat-card class="maincard" *ngIf="editlocation == true">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Edit Schedule</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Schedule Name</mat-label>
+            <input matInput placeholder="Enter Schedule Name" name="scheduleName" [formControl]="Schedule_Name"
+              [(ngModel)]="updateVisit.scheduleName" type="text" />
+            <mat-error *ngIf="Schedule_Name.hasError('required')">Schedule Name is required</mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Date Start</mat-label>
+            <input matInput [min]="todayDate" [matDatepicker]="picker1" [formControl]="DateStart"
+              [(ngModel)]="updateVisit.dateStart" name="dateStart" (dateChange)="eDateChangedStart($event.value)">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-error *ngIf="DateStart.hasError('required')"> Date Start is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Date End</mat-label>
+            <input matInput [min]="emaxDate" [max]="eminTimedump2" [matDatepicker]="picker2" [formControl]="DateEnd"
+              [(ngModel)]="updateVisit.dateEnd" name="dateEnd" (dateChange)="eDateChangeEnd($event.value)">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+            <mat-error *ngIf="DateEnd.hasError('required')"> Date End is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>First Slot</mat-label>
+            <!-- <input matInput [format]="24" [min]="CurrentTime" [ngxTimepicker]="timepicker1" name="firstSlot"
+              [(ngModel)]="updateVisit.firstSlot" [formControl]="FirstSlot"> -->
+            <input matInput [format]="24" [min]="eminTimedump1" [ngxTimepicker]="timepicker1" name="firstSlot"
+              [(ngModel)]="updateVisit.firstSlot" [formControl]="FirstSlot">
+            <ngx-material-timepicker #timepicker1 (timeChanged)="e_TimeChanged1($event)"
+              (timeSet)="e_SetTimeFirstSlot($event)"></ngx-material-timepicker>
+            <mat-error *ngIf="FirstSlot.hasError('required')"> First Slot is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Last Slot</mat-label>
+            <!-- <input matInput [min]="eminTime" [format]="24" [ngxTimepicker]="timepicker2" name="lastSlot"
+              [(ngModel)]="updateVisit.lastSlot" [formControl]="LastSlot" /> -->
+            <input matInput [format]="24" [ngxTimepicker]="timepicker2" name="lastSlot"
+              [(ngModel)]="updateVisit.lastSlot" [formControl]="LastSlot" />
+            <ngx-material-timepicker #timepicker2 (timeChanged)="e_TimeChanged2($event)"
+              (timeSet)="e_SetTimeLastSlot($event)"></ngx-material-timepicker>
+            <mat-error *ngIf="LastSlot.hasError('required')">Last Slot is required</mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Slot Duration</mat-label>
+            <input matInput placeholder="Enter Duration" [formControl]="SlotDuration" name="slotDuration"
+              (keyup)="e_slotDurationKeyUp($event)" (keypress)="keyPressContact($event)" maxlength="3"
+              [(ngModel)]="updateVisit.slotDuration" type="text" />
+            <mat-error *ngIf="SlotDuration.hasError('required')">Slot Duration is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Pax Capacity</mat-label>
+            <input matInput placeholder="Enter Pax Capacity" [formControl]="PaxCapacity" type="text"
+              (keyup)="e_paxCapacityKeyUp($event)" (keypress)="keyPressContact($event)"
+              [(ngModel)]="updateVisit.paxCapacity" />
+            <mat-error *ngIf="PaxCapacity.hasError('required')"> Pax Capacity is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Pax Per Booking</mat-label>
+            <input matInput placeholder="Enter Pax Per Booking" [formControl]="PaxPerSlot" name="paxperSlot"
+              (keyup)="eCompareValue($event)" (keypress)="keyPressContact($event)" [(ngModel)]="updateVisit.paxperSlot"
+              type="text" />
+            <mat-error *ngIf="PaxPerSlot.hasError('required')"> Pax Per Booking is required </mat-error>
+          </mat-form-field>
+          <p *ngIf="_eisError" class="iserror">hint: pax per booking should be lesser then or equal pax capacity</p>
+        </form>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="e_isVisibleThreshould">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Time Threshold </mat-label>
+            <input matInput placeholder="Enter Time Pax Threshold" [formControl]="TimeThreshould" type="text"
+              (keyup)="CompareValue1($event)" (keypress)="keyPressContact($event)"
+              [(ngModel)]="updateVisit.timeThreshold" />
+            <mat-error *ngIf="TimeThreshould.hasError('required')"> Time Threshold is required </mat-error>
+          </mat-form-field>
+          <p *ngIf="_eisError1" class="iserror"> time threshold should be lesser then pax capacity</p>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Date Threshold </mat-label>
+            <input matInput placeholder="Enter Date Pax Threshold" [formControl]="DateThreshould" type="text"
+              (keyup)="DateThreshouldVal($event)" (keypress)="keyPressContact($event)"
+              [(ngModel)]="updateVisit.dateThreshold" />
+            <span matSuffix>{{lablevariable}}</span>
+            <mat-error *ngIf="DateThreshould.hasError('required')"> Date Threshold is required </mat-error>
+          </mat-form-field>
+          <p *ngIf="_eIsDateThreshouldValid" class="iserror"> Date Pax Threshold cannot be more than Total Pax Capacity
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Location</mat-label>
+            <mat-select name="locationId" [formControl]="LocationId" [errorStateMatcher]="matcher"
+              [(ngModel)]="updateVisit.locationId">
+              <mat-option *ngFor="let location of locationarr" [value]="location.id">
+                {{ location.locationName }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="LocationId.hasError('required')"> Location is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-12 col-md-6">
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Remarks</mat-label>
+            <input matInput placeholder="Enter Remarks" [formControl]="Remarks" name="remarks"
+              [(ngModel)]="updateVisit.remarks" type="text" />
+            <mat-error *ngIf="Remarks.hasError('required')"> Remark is required </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+
+    </div>
+    <div class="text-right">
+      <button mat-raised-button color="primary" class="m-1" (click)="UpdateSchedule(updateVisit)">Update</button>
+      <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+    </div>
+  </div>
+</mat-card>

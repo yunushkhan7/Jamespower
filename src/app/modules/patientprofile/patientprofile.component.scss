@@ -1,0 +1,65 @@
+.img {
+  margin-left: 30% !important;
+}
+
+.decbtn {
+  background-color: white;
+  border-color: black;
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: 100% !important;
+    margin-top: 25% !important;
+    width: 23% !important;
+}
+
+.adjimg{
+  width: 296px;
+  height: 400px !important;
+}
+
+// mat-dialog-content{
+//   background-color: rgba(255, 255, 255, 0.7) !important;
+// }
+.xyz{
+  transform: none;
+  background: transparent;
+}
+.adj {
+  // margin-top: 40% !important;
+  margin-left: -100% !important;
+  zoom: 1.5 !important;
+}
+
+.col-form-label {
+  width: 35%;
+}
+
+.form-control {
+  width: 60%;
+}
+
+@media (min-width: 768px) {
+  .form-group {
+    margin-top: 8px;
+  }
+}
+
+@media (min-width: 576px) {
+  .form-group {
+    margin-top: 8px;
+  }
+}
+
+@media (min-width: 1199.98px) {
+  .space-y {
+    margin-top: 15px;
+  }
+}
+
+
+  ::ng-deep mat-dialog-container {
+    background-color: transparent !important;
+  }
+
+
+

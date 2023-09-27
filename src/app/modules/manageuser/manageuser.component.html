@@ -1,0 +1,253 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid" *ngIf="edituser == false && adduser == false">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h2 class="user">Manage User</h2>
+                </div>
+                <div class="col-12 col-md-6">
+                    <button mat-raised-button color="primary" class="adduser" (click)="AddUser()">
+            <i class="fa fa-plus adjplus"></i> Add User
+          </button>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <select class="form-control entries" (change)="onChange($event.target.value)">
+            <!-- <option>Select Entries</option> -->
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+
+          </select>
+                </div>
+                <div class="col-12 col-md-3 ml-auto">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label><i class="fa fa-search"></i> Search</mat-label>
+                            <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText" autocomplete="off" />
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-stripped table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <th (click)="sort('userName')">User Name&nbsp;<i class="fa fa-sort"></i> </th>
+                                    <th (click)="sort('email')">Email&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('userStatus')">Status&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('mobileNo')">Contact&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('roleName')">Role&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('lastLoginOn')">Last Login On&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" *ngFor="let user of usersList
+                | paginate: { itemsPerPage: pageno, currentPage: q }
+                | filter: searchText | orderBy: key: !reverse">
+                                    <td>{{ user.userName }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.userStatus }}</td>
+                                    <td>{{ user.mobileNo }}</td>
+                                    <td>{{ user.roleName }}</td>
+                                    <td>{{ user.lastLoginOn }}</td>
+                                    <td>
+                                        <i class="fa fa-edit text-primary" title="edit" (click)="EditUser(user)"></i>
+                                        <i class="fa fa-trash text-danger ml-1" title="delete" (click)="DeleteUser(user.userGuid)"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="20">
+                                        <div *ngIf="!usersList?.length" style="text-align: center">
+                                            No records found
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- adduser starts -->
+<div class="container-fluid">
+    <mat-card class="maincard" *ngIf="adduser == true">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Add Users</h2>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12 col-md-6">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>User Name</mat-label>
+                            <input matInput placeholder="Enter The User Name" [formControl]="FirstName" [errorStateMatcher]="matcher" name="userName" type="text" [(ngModel)]="addusers.userName" (keypress)="keyPressAlphaNumeric($event)" />
+                            <mat-error *ngIf="FirstName.hasError('required')">Name is required</mat-error>
+                            <mat-error *ngIf="FirstName.hasError('pattern')">Enter Valid Name</mat-error>
+                            <mat-error *ngIf="FirstName.hasError('whitespace') && !FirstName.hasError('required')">spaces is not accept
+                            </mat-error>
+                        </mat-form-field>
+                    </form>
+                </div>
+                <div class="col-12 col-md-6">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Role</mat-label>
+                            <mat-select name="roleId" [formControl]="roletype" [errorStateMatcher]="matcher" [(ngModel)]="addusers.roleId">
+                                <mat-option *ngFor="let role of roles" [value]="role.roleId">
+                                    {{ role.roleName }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="usertype.hasError('required')"> Role is required </mat-error>
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Mail Address</mat-label>
+                            <input matInput placeholder="Enter The Mail Address" [formControl]="Emails" [errorStateMatcher]="matcher" name="email" [(ngModel)]="addusers.email" />
+                            <mat-error *ngIf="Emails.hasError('required')"> Email is required </mat-error>
+                            <mat-error *ngIf="Emails.hasError('pattern')"> Enter Valid Email </mat-error>
+                        </mat-form-field>
+                    </form>
+                </div>
+                <div class="col-12 col-md-6">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Password</mat-label>
+                            <input matInput placeholder="Enter The Password" [formControl]="Password" [errorStateMatcher]="matcher" name="password" [(ngModel)]="addusers.password" type="password" />
+                            <mat-error *ngIf="Password.hasError('required')">
+                                Password should be minimum 14 characters with 1 upper case, 1 lower case, 1 digit and 1 special character
+                            </mat-error>
+                            <mat-error *ngIf="Password.hasError('minLength')">
+                                Password should be minimum 14 characters with 1 upper case, 1 lower case, 1 digit and 1 special character
+                            </mat-error>
+                            <mat-error *ngIf="Password.hasError('pattern')">
+                                Password should be minimum 14 characters with 1 upper case, 1 lower case, 1 digit and 1 special character
+                            </mat-error>
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Contact</mat-label>
+                            <input matInput placeholder="Enter The Contact Number" maxlength="10" (keypress)="keyPressContact($event)" name="mobileNo" [(ngModel)]="addusers.mobileNo" type="text" (keyup)="onKey($event)" />
+                            <!-- <mat-error *ngIf="contact.hasError('required')"> Mobile no is required </mat-error> -->
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+            <div class="text-right">
+                <button color="primary" class="m-2" mat-raised-button (click)="SubmitUsers(addusers)"> Save </button>
+                <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<!-- adduser ends -->
+
+<!-- edit user starts -->
+<div class="container-fluid">
+    <mat-card class="maincard" *ngIf="edituser == true">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Edit Users</h2>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-12 col-md-6">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>User Name</mat-label>
+                            <input matInput placeholder="Enter The User Name" name="userName" [(ngModel)]="editusers.userName" [formControl]="FirstName" [errorStateMatcher]="matcher" type="text" (keypress)="keyPressAlphaNumeric($event)" />
+                            <mat-error *ngIf="FirstName.hasError('required')">User Name is required </mat-error>
+                            <mat-error *ngIf="FirstName.hasError('pattern')"> Enter Valid User Name </mat-error>
+                        </mat-form-field>
+                    </form>
+                </div>
+                <div class="col-12 col-md-6">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Role</mat-label>
+                            <mat-select name="roleId" [(ngModel)]="editusers.roleId" [formControl]="roletype" [errorStateMatcher]="matcher">
+                                <mat-option *ngFor="let role of roles" [value]="role.roleId">
+                                    {{ role.roleName }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="roletype.hasError('required')"> roletype is required </mat-error>
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Mail Address</mat-label>
+                            <input matInput placeholder="Enter The Mail Address" [formControl]="Emails" [errorStateMatcher]="matcher" name="email" [(ngModel)]="editusers.email" />
+                            <mat-error *ngIf="Emails.hasError('required')"> Email is required </mat-error>
+                            <mat-error *ngIf="Emails.hasError('pattern')"> Enter Valid Email </mat-error>
+                        </mat-form-field>
+                    </form>
+                </div>
+                <div class="col-12 col-md-6">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Contact</mat-label>
+                            <input matInput placeholder="Enter The Contact Number" name="mobileNo" maxlength="10" (keypress)="keyPressContact($event)" [(ngModel)]="editusers.mobileNo" type="text" />
+                            <!-- <mat-error *ngIf="contact.hasError('required')">
+                                Mobile no is required
+                            </mat-error> -->
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Status</mat-label>
+                            <mat-select name="userStatus" [(ngModel)]="editusers.userStatus" [formControl]="userstatus" [errorStateMatcher]="matcher">
+                                <mat-option *ngFor="let status of StatusList" [value]="status.StatusCode">{{status.Status}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="userstatus.hasError('required')"> userstatus is required </mat-error>
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <button mat-raised-button color="primary" class="m-1" (click)="UpdateUser(editusers)"> Update </button>
+            <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+        </div>
+    </mat-card>
+</div>

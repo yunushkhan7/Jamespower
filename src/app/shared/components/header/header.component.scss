@@ -1,0 +1,71 @@
+ul li {
+    list-style-type: none;
+}
+
+.user {
+    margin-top: 12px;
+    font-size: 1.3rem;
+    font-family: sans-serif;
+    color: white;
+}
+
+mat-toolbar {
+    background: linear-gradient(to left, rgba(40, 82, 122), rgba(21, 151, 187));
+    //     background-color: red;
+}
+
+mat-icon {
+    font-size: 25px;
+    color: white;
+}
+
+button {
+    outline: none;
+}
+
+.rotate {
+    animation: rotation 4s infinite linear;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+// .help:hover {
+//     transform: translate(-39deg);
+// }
+.menuicon {
+    color: black;
+}
+
+.menu {
+    outline: none;
+    background-color: #fff;
+}
+
+.zsoon {
+    font-size: 1.3rem;
+    font-family: sans-serif;
+    color: white;
+}
+
+.person-button {
+    outline: none;
+}
+
+.account-button {
+    outline: none;
+}
+
+.exit-button {
+    outline: none;
+}
+
+.key-button {
+    outline: none;
+}

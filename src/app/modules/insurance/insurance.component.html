@@ -1,0 +1,192 @@
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid" *ngIf="addInsurance == false && editInsurance == false">
+  <mat-card class="maincard">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h2 class="user">Insurance Companies</h2>
+        </div>
+        <div class="col-12 col-md-6">
+          <button mat-raised-button color="primary" class="addcountry" (click)="AddInsurance()">
+            <i class="fa fa-plus"></i> Add Insurance Company
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12 col-md-2">
+          <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-3 ml-auto">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label><i class="fa fa-search"></i> Search</mat-label>
+              <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText"
+                autocomplete="off" />
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-stripped table-bordered">
+              <thead>
+                <tr class="text-center">
+                  <th (click)="sort('userName')">Company Code&nbsp;<i class="fa fa-sort"></i> </th>
+                  <th (click)="sort('email')">Company Name&nbsp;<i class="fa fa-sort"></i></th>
+                  <th (click)="sort('email')">Active&nbsp;<i class="fa fa-sort"></i></th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center" *ngFor="let insurance of insurances
+                 | paginate: { itemsPerPage: pageno, currentPage: q }
+                | filter: searchText | orderBy: key: !reverse" >
+                  <td>{{insurance.companyCode}}</td>
+                  <td>{{insurance.companyName}}</td>
+                  <td *ngIf="insurance.active">Yes</td>
+                  <td *ngIf="!insurance.active">No</td>
+                  <td>
+                    <i class="fa fa-edit text-primary" title="edit" (click)="EditInsurance(insurance)"></i>
+                    <i class="fa fa-trash text-danger ml-1" title="delete" (click)="DeleteInsurance(insurance.id)"></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="20">
+                    <div *ngIf="!insurances?.length" style="text-align: center">
+                      No records found
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- table ends -->
+
+<!-- adduser starts -->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="addInsurance == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Add Insurance Details</h2>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Company Code</mat-label>
+              <input matInput placeholder="Enter Company Code" type="text" [formControl]="CompanyCode" [errorStateMatcher]="matcher"
+               [(ngModel)]="insert_insurance.companyCode" name="companyCode"/>
+               <mat-error *ngIf="CompanyCode.hasError('required')">company code is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Company Name</mat-label>
+              <input matInput placeholder="Enter Company Name" type="text" [formControl]="CompanyName" [errorStateMatcher]="matcher"
+               [(ngModel)]="insert_insurance.companyName" name="companyName"/>
+               <mat-error *ngIf="CompanyName.hasError('required')">company name is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Active</mat-label>
+              <mat-select [formControl]="Active"  [errorStateMatcher]="matcher"
+              [(ngModel)]="insert_insurance.active" name="active" >
+                <mat-option value = "yes">Yes</mat-option>
+                <mat-option value = "no">No</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Active.hasError('required')"> Active is Required </mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <button color="primary" class="m-1" mat-raised-button (click)="SaveInsurance(insert_insurance)"> Save </button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- adduser ends -->
+
+<!-- edit user starts -->
+<div class="container-fluid">
+  <mat-card class="maincard" *ngIf="editInsurance == true">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2>Edit Insurance Details</h2>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Company Code</mat-label>
+              <input matInput placeholder="Enter Company Code" type="text" [formControl]="CompanyCode" [errorStateMatcher]="matcher"
+              [(ngModel)]="update_insurance.companyCode" name="companyCode"/>
+              <mat-error *ngIf="CompanyCode.hasError('required')">Company code is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Company Name</mat-label>
+              <input matInput placeholder="Enter Company Name" type="text" [formControl]="CompanyName" [errorStateMatcher]="matcher"
+              [(ngModel)]="update_insurance.companyName" name="companyName" />
+              <mat-error *ngIf="CompanyName.hasError('required')">Company name is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-md-6">
+          <form class="example-form">
+            <mat-form-field class="example-full-width" >
+              <mat-label>Active</mat-label>
+              <mat-select [(ngModel)]="update_insurance.active" name="active" [formControl]="Active" [errorStateMatcher]="matcher">
+                <mat-option  value = "yes">Yes</mat-option>
+                <mat-option  value = "no">No</mat-option>
+              </mat-select>
+              <mat-error *ngIf="Active.hasError('required')">Active is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <button color="primary" class="m-1" mat-raised-button (click)="UpdateInsurance(update_insurance)"> Update </button>
+        <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+<!-- edit user ends -->

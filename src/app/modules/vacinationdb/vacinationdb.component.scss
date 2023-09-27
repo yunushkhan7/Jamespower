@@ -1,0 +1,189 @@
+mat-card {
+  width: 100%;
+}
+
+button {
+  outline: none;
+}
+
+.example-card {
+  max-width: 400px;
+  margin: 3px;
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.example-form {
+  min-width: 100px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+mat-icon {
+  cursor: pointer;
+  font-size: 1rem;
+  outline: none;
+}
+
+.maincard {
+  box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.15);
+  border-radius: 22px;
+  clear: both;
+}
+
+.upload {
+  float: right;
+}
+
+.zsoonimg {
+  border-radius: 50%;
+}
+
+.example-full-width1 {
+  width: 100%;
+}
+
+.btn {
+  margin-top: 28px;
+  left: 225%;
+}
+
+.imgTable1 {
+  width: 39px;
+  height: 39px;
+}
+
+.btn1 {
+  background-color: #388e3c;
+  color: white;
+  bottom: 36px;
+  float: right;
+}
+
+.design {
+  float: right;
+}
+
+.design1 {
+  background-color: green;
+  color: white;
+  margin-left: 65% !important;
+}
+
+.filter {
+  position: relative;
+  left: 52%;
+  width: 21.2%;
+}
+
+.maincard {
+  box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.15);
+  border-radius: 22px;
+  clear: both;
+}
+
+.example-action-buttons {
+  padding-bottom: 20px;
+}
+.btn-design{
+  margin-left: 62% !important;
+}
+.buttons1 {
+  float: left;
+  margin-top: 10px;
+}
+.bgbtncol{
+  background-color: #02c0fa
+}
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.example-headers-align .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.mat-icon {
+  font-size: 25px;
+  margin-right: 2% !important;
+}
+
+.buttons {
+  float: right;
+  margin-top: 12px;
+}
+
+.fontsty {
+  font-size: 16px;
+  line-height: 1.4;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.fa-circle:before {
+  content: "\f111";
+  zoom: 0.6;
+}
+
+// .fa-check-circle:before {
+//   content: "\f058";
+//   color: green;
+//   zoom: 1.5;
+// }
+
+// .fa-times-circle:before {
+//   content: "\f057";
+//   zoom: 1.5;
+//   color: red;
+// }
+
+::ng-deep mat-dialog-container{
+  transform: none !important;
+  border-radius: 14px !important;
+  box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px !important;
+  background: white !important;
+}
+.spin{
+  margin-left: 43% !important;
+}
+.uploadrec{
+  background-color: rgb(71, 193, 241);
+}
+.file{
+  cursor: pointer;
+}
+.adj {
+  margin-right: 2% !important;
+}
+.adjbtn {
+  margin-top: -4% !important;
+}
+.adjplus {
+  margin-top: -4% !important;
+}
+.btn-downloadtemp {
+  color: white;
+  background-color: green;
+}
+.btn-upload {
+  background-color: purple;
+  color: white;
+  height: 39px !important;
+}
+
+.alignp{
+    margin-left: 10% !important;
+    margin-top: -22px !important;
+}

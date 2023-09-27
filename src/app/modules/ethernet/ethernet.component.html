@@ -1,0 +1,256 @@
+<ngx-spinner></ngx-spinner>
+<!-- table starts -->
+<div class="container-fluid" *ngIf="editlocation == false && addlocation == false">
+    <mat-card class="maincard">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h2>Ethernet I/O Settings</h2>
+                </div>
+                <div class="col-12 col-md-6">
+                    <button mat-raised-button color="primary" class="addcustomer" (click)="AddEithernet()">
+            <i class="fa fa-plus"></i> Add Ethernet I/O
+          </button>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <select class="form-control entries" (change)="onChange($event.target.value)">
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="75">75</option>
+          </select>
+                </div>
+                <div class="col-12 col-md-3 ml-auto">
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label><i class="fa fa-search"></i> Search</mat-label>
+                            <input matInput placeholder="Enter Value" value="" name="search" [(ngModel)]="searchText" autocomplete="off" />
+                        </mat-form-field>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-stripped table-bordered">
+                            <thead>
+                                <tr class="text-center">
+                                    <th (click)="sort('name')">Name&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('hostName')">Hostname&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('port')">Port&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('delaySeconds')">Delay Seconds&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('outPUtAction')">Channel&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th (click)="sort('outPUtAction')">Status&nbsp;<i class="fa fa-sort"></i></th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" *ngFor="let eth of ethernetList
+                  | paginate: { itemsPerPage: pageno, currentPage: q }
+                  | filter: searchText  | orderBy: key: !reverse;">
+                                    <td>{{eth.name}}</td>
+                                    <td>{{eth.hostName}}</td>
+                                    <td>{{eth.port}}</td>
+                                    <td>{{eth.delaySeconds}}</td>
+                                    <td>{{eth.channel}}</td>
+                                    <td>
+                                        <p *ngIf="eth.status">Opened</p>
+                                        <p *ngIf="!eth.status">Closed</p>
+                                    </td>
+                                    <td>
+                                        <i style="cursor: pointer;" class="fa fa-check-circle-o text-success" title="device status" (click)="CheckDeviceStatus(eth)"></i>
+                                        <i class="fa fa-edit text-primary ml-1" disabled title="edit" (click)="EditEithernet(eth)"></i>
+                                        <i class="fa fa-trash text-danger ml-1" title="delete" (click)="DeleteEthernet(eth.id)"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="20">
+                                        <div *ngIf="!ethernetList?.length" style="text-align: center">
+                                            No records found
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <pagination-controls style="float: right" (pageChange)="q = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>
+<!-- table ends -->
+
+<mat-card class="maincard" *ngIf="addlocation == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Add Ethernet I/O </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Name</mat-label>
+                        <input matInput placeholder="Enter Name" name="name" [formControl]="Name" [errorStateMatcher]="matcher" [(ngModel)]="insertEthernet.name" type="text" />
+                        <mat-error *ngIf="Name.hasError('required')">Name is required</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Host Name</mat-label>
+                        <input matInput placeholder="Enter Host Name" name="address" [formControl]="HostName" [errorStateMatcher]="matcher" [(ngModel)]="insertEthernet.hostName" type="text" />
+                        <mat-error *ngIf="HostName.hasError('required')"> Host Name is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Port</mat-label>
+                        <input matInput placeholder="Enter I/O box port number" name="port" [formControl]="Port" [errorStateMatcher]="matcher" [(ngModel)]="insertEthernet.port" (keypress)="keyPressContact($event)" />
+                        <mat-error *ngIf="Port.hasError('required')"> Port is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Delay Seconds</mat-label>
+                        <input matInput placeholder="Enter I/O box delay time" name="delaySeconds" [formControl]="DelaySeconds" [errorStateMatcher]="matcher" [(ngModel)]="insertEthernet.delaySeconds" (keypress)="keyPressContact($event)" />
+                        <mat-error *ngIf="DelaySeconds.hasError('required')"> Delay seconds is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Channel</mat-label>
+                        <mat-select name="channel" [(ngModel)]="insertEthernet.channel" [formControl]="Channel" [errorStateMatcher]="matcher">
+                            <mat-option value="1">1</mat-option>
+                            <mat-option value="2">2</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Channel.hasError('required')"> Channel is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Status</mat-label>
+                        <mat-select name="status" [(ngModel)]="insertEthernet.status" [formControl]="Status" [errorStateMatcher]="matcher">
+                            <mat-option value="true">Open</mat-option>
+                            <mat-option value="false">Close</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Status.hasError('required')"> Status is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+
+        </div>
+        <div class="text-right">
+            <button mat-raised-button color="primary" class="m-1" (click)="SaveEthernet(insertEthernet)">Save</button>
+            <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+        </div>
+    </div>
+</mat-card>
+
+<!-- edit location -->
+<mat-card class="maincard" *ngIf="editlocation == true">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Edit Ethernet I/O</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Name</mat-label>
+                        <input matInput placeholder="Enter Name" name="name" [formControl]="Name" [errorStateMatcher]="matcher" [(ngModel)]="updateEthernet.name" type="text" />
+                        <mat-error *ngIf="Name.hasError('required')">Name is required</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Host Name</mat-label>
+                        <input matInput placeholder="Enter Host Name" name="address" [formControl]="HostName" [errorStateMatcher]="matcher" [(ngModel)]="updateEthernet.hostName" type="text" />
+                        <mat-error *ngIf="HostName.hasError('required')"> Host Name is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Port</mat-label>
+                        <input matInput placeholder="Enter Port" name="port" [formControl]="Port" [errorStateMatcher]="matcher" [(ngModel)]="updateEthernet.port" (keypress)="keyPressContact($event)" />
+                        <mat-error *ngIf="Port.hasError('required')"> Port is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Delay Seconds</mat-label>
+                        <input matInput placeholder="Enter I/O box delay time" name="delaySeconds" [formControl]="DelaySeconds" [errorStateMatcher]="matcher" [(ngModel)]="updateEthernet.delaySeconds" (keypress)="keyPressContact($event)" />
+                        <mat-error *ngIf="DelaySeconds.hasError('required')"> Delay seconds is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Channel</mat-label>
+                        <mat-select name="channel" [(ngModel)]="updateEthernet.channel" [formControl]="Channel" [errorStateMatcher]="matcher">
+                            <mat-option value="1">1</mat-option>
+                            <mat-option value="2">2</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Channel.hasError('required')"> Channel is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Status</mat-label>
+                        <mat-select name="status" [(ngModel)]="updateEthernet.status" [formControl]="Status" [errorStateMatcher]="matcher">
+                            <mat-option value="true">Open</mat-option>
+                            <mat-option value="false">Close</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Status.hasError('required')"> Status is required </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <button mat-raised-button color="primary" class="m-1" (click)="UpdateEthernet(updateEthernet)">Update</button>
+            <button mat-raised-button color="warn" (click)="Cancel()">Close</button>
+        </div>
+    </div>
+</mat-card>
